@@ -19,3 +19,19 @@ learn some of them as a side effect.
 A git repository should contain all the files that are needed to build the
 project, and nothing else.  Simply put, don't commit the compiler's output.
 Here's a non-exhaustive list of what should go in a repository, and what shouldn't.
+
+### DO commit:
+  * Your source code
+  * Your IDE's project file(for example, the .sln file in Visual Studio)
+  * Any required DLLs that aren't managed by a package manager
+  * Any images, sounds, etc. that are required for the program to work
+
+### Do NOT commit:
+  * The compiled output of your program
+  * User settings for your IDE or text editor(yes, I've seen this happen before)
+  * Any DLLs or packages that ARE handled by a package manager
+  * Anything that depends on the full file-path of your project.
+    * After all, the path "C:/Users/Bob/Documents/" is going to be different on
+      each person's computer.
+  * Any necessary third-party programs that get installed somewhere other than
+    the project directory.
