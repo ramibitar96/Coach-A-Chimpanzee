@@ -47,3 +47,17 @@ conflict.
 By contrast, images and the like only change when someone edits them directly,
 and it's rare for two people to be making changes to the same image at the same
 time.
+
+### About packages
+A "package" is a term for a shared library of code made by a third party, that
+many projects use.  Some programming languages have a special "package manager"
+utility, which keeps track of what packages your project needs.  For example,
+JavaScript/Node.js has NPM, C# has NuGet, and Rust has Cargo.
+
+Package managers allow us to include external code in our project, *without needing
+to commit it in our repository*.  Whenever you install a package with a package
+manager, it simply lists that package as a dependency in your project file.
+Then when you compile, it downloads all of the necessary files for you.
+
+This means we should NOT commit packages in our repository.  We should only commit
+the list of dependencies, and then the package manager will take care of the rest.
