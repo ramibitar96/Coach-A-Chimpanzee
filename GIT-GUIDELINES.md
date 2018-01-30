@@ -13,6 +13,19 @@ headaches. This guide is intended to teach some good practices and keep everyone
 on the same page.  It is NOT intended to teach you commands, although you might
 learn some of them as a side effect.
 
+# Avoiding Merge Conflicts
+Merge conflicts WILL happen, but there are some things we can do to reduce their
+frequency.
+* Prefer small, frequent commits over large, infrequent ones.  The more changes
+ you pack into a single commit, the harder it is to merge that commit.
+* Keep your branch up-to-date.  If everyone else is making changes and you're not
+  merging them into your branch, then merging will be hard.
+* Don't make random, unrelated edits.  Nothing is more infuriating than getting
+  a merge conflict because someone accidentally pressed the space bar while they
+  were reading your code.
+
+  TODO: More tips
+
 
 # What belongs in a git repository?
 
