@@ -35,3 +35,15 @@ Here's a non-exhaustive list of what should go in a repository, and what shouldn
       each person's computer.
   * Any necessary third-party programs that get installed somewhere other than
     the project directory.
+
+### About binary files
+You may have heard that binary files---such as images or DLLs---should never be
+committed and that your repo should only contain text files.  Well, that's not
+exactly accurate.  When people say this, they really mean you shouldn't commit
+the output of your compiler.  This is because any change to any source file will
+cause the executable to change, which will *always* produce an unnecessary merge
+conflict.
+
+By contrast, images and the like only change when someone edits them directly,
+and it's rare for two people to be making changes to the same image at the same
+time.
