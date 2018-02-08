@@ -13,9 +13,11 @@ headaches. This guide is intended to teach some good practices and keep everyone
 on the same page.  It is NOT intended to teach you commands, although you might
 learn some of them as a side effect.
 
+
 # Avoiding Merge Conflicts
 Merge conflicts WILL happen, but there are some things we can do to reduce their
 frequency.
+
 * Prefer small, frequent commits over large, infrequent ones.  The more changes
  you pack into a single commit, the harder it is to merge that commit.
 * Keep your branch up-to-date.  If everyone else is making changes and you're not
@@ -23,8 +25,6 @@ frequency.
 * Don't make random, unrelated edits.  Nothing is more infuriating than getting
   a merge conflict because someone accidentally pressed the space bar while they
   were reading your code.
-
-  TODO: More tips
 
 
 # What belongs in a git repository?
@@ -74,3 +74,14 @@ Then when you compile, it downloads all of the necessary files for you.
 
 This means we should NOT commit packages in our repository.  We should only commit
 the list of dependencies, and then the package manager will take care of the rest.
+
+
+# Branching
+In this project, I suggest we use the "feature branch" workflow.
+* Each time we start work on a new feature, we make a new branch off of master.
+    We never work directly on master.
+* When we're done with that feature and we're sure it doesn't break anything, we
+  merge it back into master.
+* Look at my process for writing this document to see feature branching in action.
+
+TODO: Explain this better.
