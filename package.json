@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/ramibitar96/Coach-A-Chimpanzee/issues"
   },
-  "homepage": "https://github.com/ramibitar96/Coach-A-Chimpanzee#readme"
+  "homepage": "https://github.com/ramibitar96/Coach-A-Chimpanzee#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
 }
