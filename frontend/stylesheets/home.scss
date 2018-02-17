@@ -1,0 +1,34 @@
+
+.main {
+	.intro {
+		position:fixed;
+		display:block;
+		width:100%;
+		z-index:1;
+		margin-top: 25vh;
+
+		p {
+			text-align: center;
+		}
+	}
+
+	.section {
+		height: 100vh;
+
+		&.left {
+			background-color: red;
+		}
+
+		&.right {
+			background-color: blue;
+		}
+
+		.button-div {
+			margin-top: 40vh;
+
+			.button {
+				width: 100%;
+			}
+		}
+	}
+}

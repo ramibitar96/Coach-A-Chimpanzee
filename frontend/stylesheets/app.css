@@ -1,5 +1,25 @@
-.red {
-  background-color: red;
-  height: 100px; }
+.log-in-form {
+  border: 1px solid grey;
+  padding: 10px;
+  border-radius: 10px; }
+
+.main .intro {
+  position: fixed;
+  display: block;
+  width: 100%;
+  z-index: 1;
+  margin-top: 25vh; }
+  .main .intro p {
+    text-align: center; }
+.main .section {
+  height: 100vh; }
+  .main .section.left {
+    background-color: red; }
+  .main .section.right {
+    background-color: blue; }
+  .main .section .button-div {
+    margin-top: 40vh; }
+    .main .section .button-div .button {
+      width: 100%; }
 
 /*# sourceMappingURL=app.css.map */
