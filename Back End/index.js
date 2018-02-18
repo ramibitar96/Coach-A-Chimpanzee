@@ -1,9 +1,8 @@
 // Imports
-import sqlite from 'sqlite';
-import fs from 'fs';						// Used by execute_sql_script
-import strip from 'sql-strip-comments';		// Used by execute_sql_script
-
-var express = require('express');
+const sqlite = require('sqlite');
+const fs = require('fs');						// Used by execute_sql_script
+const strip = require('sql-strip-comments');	// Used by execute_sql_script
+const express = require('express');
 
 
 // Whenever someone requests any file, we respond with "Hello World"
