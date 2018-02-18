@@ -36,44 +36,64 @@
 
 
 
-<div class="tab large-4 medium-4 large-centered medium-centered columns">
-  <button class="tablinks" onclick="OpenPrefForm(event, 'Student')" id="defaultOpen">Student</button>
+<div class="tab large-6 medium-6 large-centered medium-centered columns">
+  <button class="tablinks" onclick="OpenPrefForm(event, 'General')" id="defaultOpen">General</button>
+  <button class="tablinks" onclick="OpenPrefForm(event, 'Student')" >Student</button>
   <button class="tablinks" onclick="OpenPrefForm(event, 'Coach')">Coach</button>
 </div>
 
-<div id="Student" class="tabcontent large-4 medium-4 large-centered medium-centered columns">
-  <h3>Edit your preferences as a Student</h3>
-  <form id="coachPref">
+<div id="General" class="tabcontent large-6 medium-6 large-centered medium-centered columns">
+      <h3>Edit your general information</h3>
+      <form id="generalInfo">
         <div class="container">
-
             <label><b>Summoner Name:</b></label>
             <input id="SummonerName" type="text" placeholder="Summoner Name" name="SummName">
 
-            <label><b>Your Current Rank:</b></label>
-            <input id="currentRank" type="text" placeholder="(ex: Diamond 5)">
+            <p>Your Current Elo:<p>
+            <select name="rank">
+                <option value="1"> Bronze</option>
+                <option value="2"> Silver</option>
+                <option value="3"> Gold</option>
+                <option value="4"> Platinum</option>
+                <option value="5"> Diamond</option>
+                <option value="6"> Master</option>
+                <option value="7"> Challenger</option>
+            </select>
+            
 
+            <button type="submit">Save Changes</button>
+        </div>
+    </form>
+
+</div>
+
+<div id="Student" class="tabcontent large-6 medium-6 large-centered medium-centered columns">
+
+  <h3>Edit your preferences as a Student</h3>
+  <form id="studentPref">
+        <div class="container">
             <fieldset>
                 <legend>Choose what you would like to improve on</legend>
 
-                <input type="checkbox" id="LastHitting" name="expertise" value="LastHitting">
+                <input type="checkbox" id="LastHitting" name="focus" value="LastHitting">
                 <label for="coding">Last Hitting</label>
 
-                <input type="checkbox" id="Macro" name="expertise" value="macro">
+                <input type="checkbox" id="Macro" name="focus" value="Macro">
                 <label for="music">Macro</label>
 
-                <input type="checkbox" id="MapAwareness" name="expertise" value="Map">
+                <input type="checkbox" id="MapAwareness" name="focus" value="Map">
                 <label for="coding">Map Awareness</label>
 
-                <input type="checkbox" id="Skillshots" name="expertise" value="Skillshots">
+                <input type="checkbox" id="Skillshots" name="focus" value="Skillshots">
                 <label for="music">Skillshots (Offense/Defence)</label>
 
-                <input type="checkbox" id="freezing" name="expertise" value="freezing">
+                <input type="checkbox" id="freezing" name="focus" value="Freezing">
                 <label for="coding">Freezing Waves</label>
 
-                <input type="checkbox" id="matchups" name="expertise" value="matchups">
+                <input type="checkbox" id="matchups" name="focus" value="Matchups">
                 <label for="music">Matchups</label>
 
-                <input type="checkbox" id="SetUp" name="expertise" value="SetUp">
+                <input type="checkbox" id="SetUp" name="focus" value="SetUp">
                 <label for="music">Set-up</label>
             </fieldset>
 
@@ -93,16 +113,9 @@
     </form>
 </div>
 
-<div id="Coach" class="tabcontent large-4 medium-4 large-centered medium-centered columns">
+<div id="Coach" class="tabcontent large-6 medium-6 large-centered medium-centered columns">
   <h3>Edit your preferences as a Coach</h3>
       <form id="coachPref">
-        <div class="container">
-
-            <label><b>Summoner Name:</b></label>
-            <input id="SummonerName" type="text" placeholder="Summoner Name" name="SummName">
-
-            <label><b>Your Current Rank:</b></label>
-            <input id="currentRank" type="text" placeholder="(ex: Diamond 5)">
 
             <fieldset>
                 <legend>Choose your Expertise</legend>
@@ -110,7 +123,7 @@
                 <input type="checkbox" id="LastHitting" name="expertise" value="LastHitting">
                 <label for="coding">Last Hitting</label>
 
-                <input type="checkbox" id="Macro" name="expertise" value="macro">
+                <input type="checkbox" id="Macro" name="expertise" value="Macro">
                 <label for="music">Macro</label>
 
                 <input type="checkbox" id="MapAwareness" name="expertise" value="Map">
@@ -119,10 +132,10 @@
                 <input type="checkbox" id="Skillshots" name="expertise" value="Skillshots">
                 <label for="music">Skillshots (Offense/Defence)</label>
 
-                <input type="checkbox" id="freezing" name="expertise" value="freezing">
+                <input type="checkbox" id="freezing" name="expertise" value="Freezing">
                 <label for="coding">Freezing Waves</label>
 
-                <input type="checkbox" id="matchups" name="expertise" value="matchups">
+                <input type="checkbox" id="matchups" name="expertise" value="Matchups">
                 <label for="music">Matchups</label>
 
                 <input type="checkbox" id="SetUp" name="expertise" value="SetUp">
