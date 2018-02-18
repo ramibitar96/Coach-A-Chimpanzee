@@ -1,15 +1,29 @@
-.log-in-form {
-  border: 1px solid grey;
-  padding: 10px;
-  border-radius: 10px; }
+.top-bar {
+  z-index: 1;
+  position: fixed;
+  width: 100%; }
+  .top-bar .log-in-form {
+    border: 1px solid grey;
+    padding: 10px;
+    border-radius: 10px; }
 
 .main .intro {
+  margin-top: 200px; }
+.main .faq-link {
+  margin-top: 500px; }
+  .main .faq-link > div {
+    position: relative;
+    width: fit-content;
+    margin: 0 auto; }
+  .main .faq-link.tab-title > a {
+    width: 150px;
+    margin: 0 auto; }
+.main .center-text {
   position: fixed;
   display: block;
   width: 100%;
-  z-index: 1;
-  margin-top: 25vh; }
-  .main .intro p {
+  z-index: 1; }
+  .main .center-text h2, .main .center-text a {
     text-align: center; }
 .main .section {
   height: 100vh; }
@@ -18,7 +32,7 @@
   .main .section.right {
     background-color: blue; }
   .main .section .button-div {
-    margin-top: 40vh; }
+    margin-top: 300px; }
     .main .section .button-div .button {
       width: 100%; 
 }

@@ -1,5 +1,11 @@
-.log-in-form {
-	border: 1px solid grey;
-	padding: 10px;
-	border-radius: 10px;
+.top-bar {
+	z-index:1;
+	position:fixed;
+	width:100%;
+
+	.log-in-form {
+		border: 1px solid grey;
+		padding: 10px;
+		border-radius: 10px;
+	}
 }

@@ -2,13 +2,14 @@ import queue
 from enum import Enum
 
 class Rank(Enum):
-	Bronze = 0
-	Silver = 1
-	Gold = 2
-	Platinum = 3
-	Diamond = 4
-	Master = 5
-	Challenger = 6
+	Any = 0
+	Bronze = 1
+	Silver = 2
+	Gold = 3
+	Platinum = 4
+	Diamond = 5
+	Master = 6
+	Challenger = 7
 
 # Placeholder for testing purposes
 class Skills(Enum):
@@ -33,7 +34,7 @@ class Skill(Enum):
 	lasthitting = 0
 	macroplay = 1
 	mapawareness = 2
-	dodging = 3
+	skillshots = 3
 	freezing = 4
 	matchups = 5
 	setup = 6

@@ -1,0 +1,9 @@
+* First, make sure Node.js is installed.
+
+* Next, navigate to the "Back End" folder.
+
+* Run "npm install" to download all of the dependencies, if you haven't already.
+	* Any time a new package is installed(ie: when a new dependency is added to project.json), you'll need to run this.
+	* This is because the packages are not stored in the repository.  See "GIT-GUIDELINES.md" for more information.
+
+* Run "node index.js" to start the server.
