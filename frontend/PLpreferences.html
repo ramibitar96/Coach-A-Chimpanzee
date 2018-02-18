@@ -73,28 +73,31 @@
   <form id="studentPref">
         <div class="container">
             <fieldset>
-                <legend>Choose what you would like to improve on</legend>
+                <legend>Choose what you would like to improve on (Note: If you choose the Everything option don't pick others)</legend>
+
+                <input type="checkbox" id="Everything" name="focus" value="Everything">
+                <label for = "Everything">Everything!</label>
 
                 <input type="checkbox" id="LastHitting" name="focus" value="LastHitting">
-                <label for="coding">Last Hitting</label>
+                <label for = "LastHitting">Last Hitting</label>
 
-                <input type="checkbox" id="Macro" name="focus" value="Macro">
-                <label for="music">Macro</label>
+                <input type ="checkbox" id="Macro" name="focus" value="Macro">
+                <label for = "Macro">Macro</label>
 
                 <input type="checkbox" id="MapAwareness" name="focus" value="Map">
-                <label for="coding">Map Awareness</label>
+                <label for = "MapAwareness">Map Awareness</label>
 
                 <input type="checkbox" id="Skillshots" name="focus" value="Skillshots">
-                <label for="music">Skillshots (Offense/Defence)</label>
+                <label for = "Skillshots">Skillshots (Offense/Defence)</label>
 
-                <input type="checkbox" id="freezing" name="focus" value="Freezing">
-                <label for="coding">Freezing Waves</label>
+                <input type="checkbox" id="Freezing" name="focus" value="Freezing">
+                <label for = "Freezing">Freezing Waves</label>
 
-                <input type="checkbox" id="matchups" name="focus" value="Matchups">
-                <label for="music">Matchups</label>
+                <input type="checkbox" id="Matchups" name="focus" value="Matchups">
+                <label for = "Matchups">Matchups</label>
 
                 <input type="checkbox" id="SetUp" name="focus" value="SetUp">
-                <label for="music">Set-up</label>
+                <label for = "SetUp">Set-up</label>
             </fieldset>
 
             <p>Select the minimum rank you would like your coach to be (Example: Selecting Platinum would allow anyone who is Platinum 5 or higher to coach you).</p>
@@ -118,32 +121,35 @@
       <form id="coachPref">
 
             <fieldset>
-                <legend>Choose your Expertise</legend>
+                <legend>Choose your Expertise (Note: If you choose the Everything option don't pick others)</legend>
 
-                <input type="checkbox" id="LastHitting" name="expertise" value="LastHitting">
-                <label for="coding">Last Hitting</label>
+                <input type="checkbox" id="EverythingC" name="focus" value="EverythingC">
+                <label for = "EverythingC">Everything!</label>
 
-                <input type="checkbox" id="Macro" name="expertise" value="Macro">
-                <label for="music">Macro</label>
+                <input type="checkbox" id="LastHittingC" name="expertise" value="LastHittingC">
+                <label for = "LastHittingC">Last Hitting</label>
 
-                <input type="checkbox" id="MapAwareness" name="expertise" value="Map">
-                <label for="coding">Map Awareness</label>
+                <input type="checkbox" id="MacroC" name="expertise" value="MacroC">
+                <label for = "MacroC">Macro</label>
 
-                <input type="checkbox" id="Skillshots" name="expertise" value="Skillshots">
-                <label for="music">Skillshots (Offense/Defence)</label>
+                <input type="checkbox" id="MapAwarenessC" name="expertise" value="MapC">
+                <label for = "MapAwarenessC">Map Awareness</label>
 
-                <input type="checkbox" id="freezing" name="expertise" value="Freezing">
-                <label for="coding">Freezing Waves</label>
+                <input type="checkbox" id="SkillshotsC" name="expertise" value="SkillshotsC">
+                <label for = "SkillshotsC">Skillshots (Offense/Defence)</label>
 
-                <input type="checkbox" id="matchups" name="expertise" value="Matchups">
-                <label for="music">Matchups</label>
+                <input type="checkbox" id="FreezingC" name="expertise" value="FreezingC">
+                <label for = "FreezingC">Freezing Waves</label>
 
-                <input type="checkbox" id="SetUp" name="expertise" value="SetUp">
-                <label for="music">Set-up</label>
+                <input type="checkbox" id="MatchupsC" name="expertise" value="MatchupsC">
+                <label for = "MatchupsC">Matchups</label>
+
+                <input type="checkbox" id="SetUpC" name="expertise" value="SetUpC">
+                <label for = "SetUpC">Set-up</label>
             </fieldset>
 
             <p>Select the minimum rank you would like to coach (Example: Selecting Silver would allow anyone who is Silver 5 or higher to be your student).</p>
-            <select name="minRank">
+            <select name="minRankC">
                 <option value="0" selected = "selected"> No Preference</option>
                 <option value="1"> Bronze</option>
                 <option value="2"> Silver</option>
