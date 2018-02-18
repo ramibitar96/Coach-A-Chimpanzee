@@ -1,0 +1,11 @@
+* First, make sure Node.js is installed.
+
+* Next, navigate to the "Back End" folder.
+
+* Run "npm install" to download all of the dependencies, if you haven't already.
+	* Any time a new package is installed(ie: when a new dependency is added to project.json), you'll need to run this.
+	* This is because the packages are not stored in the repository.  See GIT-GUIDELINES.md for more information.
+
+* Run "npm start" to start the server.
+	* You may be wondering why you can't run "node index.js".  This is because we're using a node.js plugin called
+		"Babel", and the "npm start" command is configured to ensure Babel gets started.
