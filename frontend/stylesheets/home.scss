@@ -1,13 +1,32 @@
 
 .main {
 	.intro {
+		margin-top: 200px;
+	}
+
+	.faq-link {
+		margin-top: 500px;
+
+		> div {
+			position: relative;
+			width: fit-content;
+			margin: 0 auto;
+		}
+
+		&.tab-title > a {
+			width: 150px;
+			margin: 0 auto;
+		}
+
+	}
+
+	.center-text {
 		position:fixed;
 		display:block;
 		width:100%;
 		z-index:1;
-		margin-top: 25vh;
 
-		p {
+		h2, a {
 			text-align: center;
 		}
 	}
@@ -24,7 +43,7 @@
 		}
 
 		.button-div {
-			margin-top: 40vh;
+			margin-top: 300px;
 
 			.button {
 				width: 100%;
