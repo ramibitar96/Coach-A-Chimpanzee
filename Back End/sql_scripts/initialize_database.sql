@@ -35,3 +35,26 @@ CREATE TABLE IF NOT EXISTS coaching_session
 	FOREIGN KEY(coach_user_id) REFERENCES user(user_id)
 );
 
+CREATE TABLE IF NOT EXISTS skill
+(
+	skill_id int PRIMARY KEY,
+	skill_name varchar
+);
+
+CREATE TABLE IF NOT EXISTS coachee_skills
+(
+	coachee_user_id int,
+	skill_id int,
+	FOREIGN KEY(coachee_user_id) REFERENCES user(user_id),
+	FOREIGN KEY(skill_id) REFERENCES skill(skill_id)
+);
+
+CREATE TABLE IF NOT EXISTS coach_skills
+(
+	coach_user_id int,
+	skill_id int,
+	FOREIGN KEY(coach_user_id) REFERENCES user(user_id),
+	FOREIGN KEY(skill_id) REFERENCES skill(skill_id)
+);
+
+-- TODO: coach and coachee preferences
