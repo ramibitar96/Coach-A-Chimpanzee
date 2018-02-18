@@ -1,3 +1,10 @@
--- Will this comment get stripped?
-CREATE TABLE if not exists player_scores (playerid int, score int);
-INSERT INTO player_scores (playerid, score) VALUES (0, 100);
+CREATE TABLE if not exists user
+(
+	user_id int PRIMARY KEY,
+	summoner_id int,
+	user_name varchar,
+	email varchar,
+	hashed_salted_password varbinary,
+	password_salt varbinary
+);
+

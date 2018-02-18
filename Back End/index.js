@@ -25,17 +25,12 @@ app.listen(3000, function()
 // Initializes the database, creating all the tables and stuff.
 async function initialize_database()
 {
+	// Connect to the database
 	let dbPromise = sqlite.open('./database_contents/experiment_database.sqlite', {Promise});
 	const db = await dbPromise;
 
 	// Create the table
 	await execute_sql_script("./sql_scripts/initialize_database.sql", db);
-
-	// Read data from the table
-	let result = await db.get("SELECT * FROM player_scores;");
-
-	// Print the read data
-	console.log(result);
 }
 
 // Executes the SQL script specified by filePath.
