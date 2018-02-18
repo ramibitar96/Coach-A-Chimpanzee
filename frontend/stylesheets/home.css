@@ -1,8 +1,3 @@
-.log-in-form {
-  border: 1px solid grey;
-  padding: 10px;
-  border-radius: 10px; }
-
 .main .intro {
   position: fixed;
   display: block;
@@ -20,8 +15,6 @@
   .main .section .button-div {
     margin-top: 40vh; }
     .main .section .button-div .button {
-      width: 100%; 
-}
+      width: 100%; }
 
-
-/*# sourceMappingURL=app.css.map */
+/*# sourceMappingURL=home.css.map */

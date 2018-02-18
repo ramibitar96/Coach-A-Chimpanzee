@@ -1,0 +1,169 @@
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preference Page</title>
+    <link rel="stylesheet" href="stylesheets/foundation.css">
+    <link rel="stylesheet" href="stylesheets/app.css">
+    <link rel="stylesheet" href="stylesheets/tabs.css">
+    <link rel="stylesheet" href="stylesheets/backgrounds.css">
+  </head>
+  <body background="bgimage.jpg">
+
+      <nav class="top-bar" data-topbar role="navigation">
+        <ul class="title-area">
+          <li class="name">
+            <h1><a href="#">My Site</a></h1>
+          </li>
+     <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+          <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+       </ul>
+
+  <section class="top-bar-section">
+    <!-- Right Nav Section -->
+      <ul class="right">
+          <a href="#">Queue</a>>
+          <a href="#">Logout</a>
+            <div class="logout">
+              <form class="log-out-form">
+              </form>
+            </div>
+      </ul>
+    </section>
+</nav>
+
+
+
+<div class="tab large-4 medium-4 large-centered medium-centered columns">
+  <button class="tablinks" onclick="OpenPrefForm(event, 'Student')" id="defaultOpen">Student</button>
+  <button class="tablinks" onclick="OpenPrefForm(event, 'Coach')">Coach</button>
+</div>
+
+<div id="Student" class="tabcontent large-4 medium-4 large-centered medium-centered columns">
+  <h3>Edit your preferences as a Student</h3>
+  <form id="coachPref">
+        <div class="container">
+
+            <label><b>Summoner Name:</b></label>
+            <input id="SummonerName" type="text" placeholder="Summoner Name" name="SummName">
+
+            <label><b>Your Current Rank:</b></label>
+            <input id="currentRank" type="text" placeholder="(ex: Diamond 5)">
+
+            <fieldset>
+                <legend>Choose what you would like to improve on</legend>
+
+                <input type="checkbox" id="LastHitting" name="expertise" value="LastHitting">
+                <label for="coding">Last Hitting</label>
+
+                <input type="checkbox" id="Macro" name="expertise" value="macro">
+                <label for="music">Macro</label>
+
+                <input type="checkbox" id="MapAwareness" name="expertise" value="Map">
+                <label for="coding">Map Awareness</label>
+
+                <input type="checkbox" id="Skillshots" name="expertise" value="Skillshots">
+                <label for="music">Skillshots (Offense/Defence)</label>
+
+                <input type="checkbox" id="freezing" name="expertise" value="freezing">
+                <label for="coding">Freezing Waves</label>
+
+                <input type="checkbox" id="matchups" name="expertise" value="matchups">
+                <label for="music">Matchups</label>
+
+                <input type="checkbox" id="SetUp" name="expertise" value="SetUp">
+                <label for="music">Set-up</label>
+            </fieldset>
+
+            <p>Select the minimum rank you would like your coach to be (Example: Selecting Platinum would allow anyone who is Platinum 5 or higher to coach you).</p>
+            <select name="minRank">
+                <option value="0" selected = "selected"> No Preference</option>
+                <option value="1"> Bronze</option>
+                <option value="2"> Silver</option>
+                <option value="3"> Gold</option>
+                <option value="4"> Platinum</option>
+                <option value="5"> Diamond</option>
+                <option value="6"> Master</option>
+                <option value="7"> Challenger</option>
+            </select>
+            <button type="submit">Save Changes</button>
+        </div>
+    </form>
+</div>
+
+<div id="Coach" class="tabcontent large-4 medium-4 large-centered medium-centered columns">
+  <h3>Edit your preferences as a Coach</h3>
+      <form id="coachPref">
+        <div class="container">
+
+            <label><b>Summoner Name:</b></label>
+            <input id="SummonerName" type="text" placeholder="Summoner Name" name="SummName">
+
+            <label><b>Your Current Rank:</b></label>
+            <input id="currentRank" type="text" placeholder="(ex: Diamond 5)">
+
+            <fieldset>
+                <legend>Choose your Expertise</legend>
+
+                <input type="checkbox" id="LastHitting" name="expertise" value="LastHitting">
+                <label for="coding">Last Hitting</label>
+
+                <input type="checkbox" id="Macro" name="expertise" value="macro">
+                <label for="music">Macro</label>
+
+                <input type="checkbox" id="MapAwareness" name="expertise" value="Map">
+                <label for="coding">Map Awareness</label>
+
+                <input type="checkbox" id="Skillshots" name="expertise" value="Skillshots">
+                <label for="music">Skillshots (Offense/Defence)</label>
+
+                <input type="checkbox" id="freezing" name="expertise" value="freezing">
+                <label for="coding">Freezing Waves</label>
+
+                <input type="checkbox" id="matchups" name="expertise" value="matchups">
+                <label for="music">Matchups</label>
+
+                <input type="checkbox" id="SetUp" name="expertise" value="SetUp">
+                <label for="music">Set-up</label>
+            </fieldset>
+
+            <p>Select the minimum rank you would like to coach (Example: Selecting Silver would allow anyone who is Silver 5 or higher to be your student).</p>
+            <select name="minRank">
+                <option value="0" selected = "selected"> No Preference</option>
+                <option value="1"> Bronze</option>
+                <option value="2"> Silver</option>
+                <option value="3"> Gold</option>
+                <option value="4"> Platinum</option>
+                <option value="5"> Diamond</option>
+                <option value="6"> Master</option>
+                <option value="7"> Challenger</option>
+            </select>
+            <button type="submit">Save Changes</button>
+        </div>
+    </form>
+</div>
+
+    <script>
+        function OpenPrefForm(evt, PrefPage) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+               tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(PrefPage).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+        document.getElementById("defaultOpen").click();
+    </script>
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/vendor/what-input.js"></script>
+    <script src="js/vendor/foundation.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
