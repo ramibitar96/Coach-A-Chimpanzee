@@ -21,8 +21,23 @@ async function initialize_database()
 // See "REGISTER_USER_PROTOCOL.txt" for more info.
 async function register_user(username, password, email, summoner_id)
 {
-	// TODO: Return 2 if email is invalid
-	// TODO: Return 1 if username already exists
+	// See REGISTER_USER_PROTOCOL.txt for a list of error codes.
+	const ErrorCodeEnum = 
+	{
+		SUCCESS: 0,
+		USERNAME_EXISTS: 1,
+		EMAIL_INVALID: 2,
+		BAD_JSON_OBJECT: 3
+	};
+
+	// TODO: Error if email is invalid
+
+	// Error if username already exists
+	let user = await db.get("SELECT user_name FROM user WHERE user_name = ?;", username);
+	if (user !== undefined)
+	{
+		return ErrorCodeEnum.USERNAME_EXISTS;
+	}
 
 	// TODO: Use a proper hashing algorithm
 	let salt = "salt";
