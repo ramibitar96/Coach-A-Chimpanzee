@@ -1,17 +1,22 @@
 # Registering a new user
 
 To register a new user, the client should send a POST request over HTTPS.
+
+The request's packet MUST have its Content-Type set to "application/json",
+or else expressjs will reject it.
+
 The request's body should be a JSON object with the following format:
 
 {
-	"username": <username>
-	"password": <password>
-	"email": <email address>
-	"summoner_id": <summoner id, as a number>
+	"username": "mike_wizowski",
+	"password": "ceilia",
+	"email": "mwizowski@monstersinc.com",
+	"summoner_id": 2319
 }
 
 Do not bother encrypting the password yourself; HTTPS will encrypt all
 packets for us.
+
 
 The server will then reply with a JSON object of the following format:
 
@@ -27,4 +32,5 @@ operation.  See the following table to learn what each error code means.
 | 0			 	| successful (no error)		|
 | 1				| username already exists	|
 | 2				| email address invalid		|
+| 3				| json object did not contain the required fields	|
 | anything else	| currently unused			|
