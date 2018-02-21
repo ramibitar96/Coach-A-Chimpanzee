@@ -28,7 +28,7 @@ app.post('/register', async function(req, res)
 
 	console.log(req.body);
 
-	// Error if it's a bad json object
+	// Error if the body's json object is missing a property.
 	let requiredProperties = 
 	[
 		"username",
@@ -45,9 +45,9 @@ app.post('/register', async function(req, res)
 		}
 	}
 
-	//res.send({error_code: ErrorCodeEnum.BAD_JSON_OBJECT});
-	
-	res.send("valid json object");
+	// Try to register the user
+	let errorCode = await dbUtils.register_user(req.body.username, req.body.password, req.body.email, req.body.summoner_id);
+	res.send({error_code: errorCode});
 });
 
 main();
