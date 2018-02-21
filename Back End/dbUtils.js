@@ -34,7 +34,7 @@ async function register_user(username, password, email, summoner_id)
 		INSERT INTO user
 		(
 			user_name,
-			password_hash,
+			hashed_salted_password,
 			password_salt,
 			email,
 			summoner_id
