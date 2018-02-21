@@ -5,15 +5,8 @@ const dbUtils = require('./dbUtils.js');
 
 var app = express();
 
-// Tell expressjs that we want it to parse the request bodies as json.
-app.use(bodyParser.json());
-
-
-// Whenever someone requests any file, we respond with "Hello World"
-app.get('/', function (req, res)
-{
-	res.send('Hello World!');
-});
+app.use(bodyParser.json());					// Tell expressjs that we want it to parse the request bodies as json.
+app.use(express.static("../frontend"));		// Tell expressjs that we want to serve all static files(.html, images, etc) from this folder.
 
 app.post('/register', async function(req, res)
 {
