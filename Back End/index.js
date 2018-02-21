@@ -1,46 +1,57 @@
 // Imports
-const sqlite = require('sqlite');
-const fs = require('fs');						// Used by execute_sql_script
-const strip = require('sql-strip-comments');	// Used by execute_sql_script
 const express = require('express');
+const bodyParser = require('body-parser');
+const dbUtils = require('./dbUtils.js');
 
-
-// Whenever someone requests any file, we respond with "Hello World"
 var app = express();
-app.get('/', function (req, res)
+
+app.use(bodyParser.json());					// Tell expressjs that we want it to parse the request bodies as json.
+app.use(express.static("../frontend"));		// Tell expressjs that we want to serve all static files(.html, images, etc) from this folder.
+
+app.post('/register', async function(req, res)
 {
-	res.send('Hello World!');
+	// See REGISTER_USER_PROTOCOL.txt for a list of error codes.
+	const ErrorCodeEnum = 
+	{
+		SUCCESS: 0,
+		USERNAME_EXISTS: 1,
+		EMAIL_INVALID: 2,
+		BAD_JSON_OBJECT: 3
+	};
+
+	console.log(req.body);
+
+	// Error if the body's json object is missing a property.
+	let requiredProperties = 
+	[
+		"username",
+		"password",
+		"email",
+		"summoner_id"
+	];
+	for (let i = 0; i < requiredProperties.length; i++)
+	{
+		if (!req.body.hasOwnProperty(requiredProperties[i]))
+		{
+			res.send({error_code: ErrorCodeEnum.BAD_JSON_OBJECT});
+			return;
+		}
+	}
+
+	// Try to register the user
+	let errorCode = await dbUtils.register_user(req.body.username, req.body.password, req.body.email, req.body.summoner_id);
+	res.send({error_code: errorCode});
 });
 
-// Start handling requests
-app.listen(3000, function()
+main();
+async function main()
 {
-	console.log('Listening on port 3000!');
-});
+	// Initialize the database, if it hasn't been already.
+	dbUtils.initialize_database();
 
-
-// TODO: move these functions off to a separate file.
-// will do this once I learn how.
-
-// Initializes the database, creating all the tables and stuff.
-async function initialize_database()
-{
-	// Connect to the database
-	let dbPromise = sqlite.open('./database_contents/experiment_database.sqlite', {Promise});
-	const db = await dbPromise;
-
-	// Create the table
-	await execute_sql_script("./sql_scripts/initialize_database.sql", db);
-}
-
-// Executes the SQL script specified by filePath.
-// Returns a Promise<sqlite.Statement> when it's done.
-// filePath's type is string.  db's type is sqlite.Database
-async function execute_sql_script(filePath, db)		
-{
-	let sqlText = fs.readFileSync(filePath, 'utf8');	// Read the SQL file into a string
-	let noComments = strip(sqlText);					// Remove all comments so sqlite can execute it.
-
-	// Execute it.
-	return db.exec(noComments);
+	// Start handling requests
+	app.listen(3000, function()
+	{
+		console.log('Listening on port 3000!');
+	});
 }

@@ -1,10 +1,20 @@
 .main .intro {
+  margin-top: 200px; }
+.main .faq-link {
+  margin-top: 500px; }
+  .main .faq-link > div {
+    position: relative;
+    width: fit-content;
+    margin: 0 auto; }
+  .main .faq-link.tab-title > a {
+    width: 150px;
+    margin: 0 auto; }
+.main .center-text {
   position: fixed;
   display: block;
   width: 100%;
-  z-index: 1;
-  margin-top: 25vh; }
-  .main .intro p {
+  z-index: 1; }
+  .main .center-text h2, .main .center-text a {
     text-align: center; }
 .main .section {
   height: 100vh; }
@@ -13,8 +23,41 @@
   .main .section.right {
     background-color: blue; }
   .main .section .button-div {
-    margin-top: 40vh; }
+    margin-top: 300px; }
     .main .section .button-div .button {
       width: 100%; }
+
+.faq-container {
+  margin-top: 100px; }
+  .faq-container .faq-title {
+    height: 50px; }
+    .faq-container .faq-title h2 {
+      font-size: 24px;
+      line-height: 50px;
+      margin: 0; }
+    .faq-container .faq-title .tabs a {
+      padding: 0px 10px;
+      line-height: 50px;
+      vertical-align: middle;
+      background-color: transparent; }
+  .faq-container .faq-content .faq-question {
+    color: white;
+    background-color: grey;
+    padding-left: 10px; }
+    .faq-container .faq-content .faq-question p {
+      font-size: 18px;
+      line-height: 30px;
+      margin-bottom: 0; }
+  .faq-container .faq-content .faq-answer {
+    border-left: grey 1px solid;
+    border-right: grey 1px solid;
+    border-bottom: grey 1px solid;
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px; }
+    .faq-container .faq-content .faq-answer p {
+      font-size: 16px;
+      line-height: 20px;
+      margin-bottom: 0; }
 
 /*# sourceMappingURL=home.css.map */
