@@ -1,0 +1,9 @@
+Here is a list of error codes sent by the server.
+
+| Error code    | Meaning                   |
+|---            |---                        |
+| 0             | successful (no error)     |
+| 1             | username already exists   |
+| 2             | email address invalid     |
+| 3             | json object did not contain the required fields    |
+| 4             | incorrect password        |
