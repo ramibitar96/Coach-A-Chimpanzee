@@ -11,6 +11,7 @@ app.use(bodyParser.json());					// Tell expressjs that we want it to parse the r
 app.use(express.static("../frontend"));		// Tell expressjs that we want to serve all static files(.html, images, etc) from this folder.
 
 // Handles registration requests
+// TODO: Have the user give their summoner name and then look up the summoner id over Riot's api
 app.post('/register', async function(req, res)
 {
 	// See AUTHENTICATION_PROTOCOLS.txt for a list of error codes.
@@ -50,7 +51,7 @@ app.post('/register', async function(req, res)
 // Handles log in requests
 app.post('/login', async function(req, res)
 {
-
+    // TODO: Get look up the us
 });
 
 
