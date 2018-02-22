@@ -14,15 +14,6 @@ app.use(express.static("../frontend"));		// Tell expressjs that we want to serve
 // TODO: Have the user give their summoner name and then look up the summoner id over Riot's api
 app.post('/register', async function(req, res)
 {
-	// See AUTHENTICATION_PROTOCOLS.txt for a list of error codes.
-	const ErrorCodeEnum =
-	{
-		SUCCESS: 0,
-		USERNAME_EXISTS: 1,
-		EMAIL_INVALID: 2,
-		BAD_JSON_OBJECT: 3
-	};
-
 	console.log(req.body);
 
 	// Error if the body's json object is missing a property.
@@ -51,7 +42,7 @@ app.post('/register', async function(req, res)
 // Handles log in requests
 app.post('/login', async function(req, res)
 {
-    // TODO: Get look up the us
+    // TODO: Error if bad JSON.
 });
 
 
