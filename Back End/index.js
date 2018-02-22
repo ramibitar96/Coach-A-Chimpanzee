@@ -2,16 +2,18 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const dbUtils = require('./dbUtils.js');
+const auth = require('./authenticationUtils.js');
 
 var app = express();
 
 app.use(bodyParser.json());					// Tell expressjs that we want it to parse the request bodies as json.
 app.use(express.static("../frontend"));		// Tell expressjs that we want to serve all static files(.html, images, etc) from this folder.
 
+// Handles registration requests
 app.post('/register', async function(req, res)
 {
-	// See REGISTER_USER_PROTOCOL.txt for a list of error codes.
-	const ErrorCodeEnum = 
+	// See AUTHENTICATION_PROTOCOLS.txt for a list of error codes.
+	const ErrorCodeEnum =
 	{
 		SUCCESS: 0,
 		USERNAME_EXISTS: 1,
@@ -22,7 +24,7 @@ app.post('/register', async function(req, res)
 	console.log(req.body);
 
 	// Error if the body's json object is missing a property.
-	let requiredProperties = 
+	let requiredProperties =
 	[
 		"username",
 		"password",
@@ -39,15 +41,24 @@ app.post('/register', async function(req, res)
 	}
 
 	// Try to register the user
-	let errorCode = await dbUtils.register_user(req.body.username, req.body.password, req.body.email, req.body.summoner_id);
+	let errorCode = await auth.register_user(req.body.username, req.body.password, req.body.email, req.body.summoner_id);
 	res.send({error_code: errorCode});
 });
 
+
+// Handles log in requests
+app.post('/login', async function(req, res)
+{
+
+});
+
+
+// Entry point for the program
 main();
 async function main()
 {
 	// Initialize the database, if it hasn't been already.
-	dbUtils.initialize_database();
+	await dbUtils.initializeDatabase();
 
 	// Start handling requests
 	app.listen(3000, function()
