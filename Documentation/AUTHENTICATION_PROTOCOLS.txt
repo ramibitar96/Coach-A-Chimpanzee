@@ -1,3 +1,15 @@
+# Strategy
+The server does not keep a record of who is currently logged in; instead, it sends
+the client a session token when they log in, which the client must send back to
+the server every time they make a request.  The session token is cryptographically
+signed by the server, so an attacker can't fake a token.  Again, all communications
+are to be done over HTTPS, so an attacker can't steal the session token while
+it's in transit.
+
+The token is set to expire after a certain amount of time, so all is not lost if
+a session token is compromised.
+
+
 # Registering a new user
 
 To register a new user, the client should send a POST request over HTTPS.
@@ -34,3 +46,7 @@ operation.  See the following table to learn what each error code means.
 | 2				| email address invalid		|
 | 3				| json object did not contain the required fields	|
 | anything else	| currently unused			|
+
+
+# Logging in
+TODO
