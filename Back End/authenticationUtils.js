@@ -1,11 +1,11 @@
+// See AUTHENTICATION_PROTOCOLS.txt for complete documentation
 // Imports
 const dbUtils = require('./dbUtils.js');
 const ErrorCodeEnum = require('./errorCodes.js');
 
 // Attempts to create a new user with the given credentials.
 // Returns 0 if successful, or an error code if not.
-// See "REGISTER_USER_PROTOCOL.txt" for more info.
-async function register_user(username, password, email, summoner_id)
+async function registerUser(username, password, email, summoner_id)
 {
 	// TODO: Error if email is invalid
 
@@ -49,5 +49,5 @@ async function register_user(username, password, email, summoner_id)
 // Exports
 module.exports =
 {
-	register_user
+	registerUser
 }

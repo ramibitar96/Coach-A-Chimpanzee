@@ -42,7 +42,7 @@ app.post('/register', async function(req, res)
 	}
 
 	// Try to register the user
-	let errorCode = await auth.register_user(req.body.username, req.body.password, req.body.email, req.body.summoner_id);
+	let errorCode = await auth.registerUser(req.body.username, req.body.password, req.body.email, req.body.summoner_id);
 	res.send({error_code: errorCode});
 });
 
