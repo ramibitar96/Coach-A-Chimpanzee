@@ -1,5 +1,6 @@
 // See AUTHENTICATION_PROTOCOLS.txt for complete documentation
 // Imports
+const bcrypt = require('bcryptjs');
 const dbUtils = require('./dbUtils.js');
 const ErrorCodeEnum = require('./errorCodes.js');
 
@@ -17,9 +18,12 @@ async function registerUser(username, password, email, summoner_id)
 		return ErrorCodeEnum.USERNAME_EXISTS;
 	}
 
-	// TODO: Use a proper hashing algorithm
-	let salt = "salt";
-	let hashedPassword = password + salt;
+	// TODO: Use the async version
+	let salt = bcrypt.genSaltSync(10);     // 10 is the number of "rounds" used for generating the salt.
+	let hashedPassword = bcrypt.hashSync(password, salt);
+
+    console.log("salt: " + salt);
+    console.log("hashedPassword: " + hashedPassword);
 
 	// Create the user
 	await dbUtils.db.run
