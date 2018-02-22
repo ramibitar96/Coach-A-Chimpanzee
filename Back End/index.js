@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const dbUtils = require('./dbUtils.js');
 const auth = require('./authenticationUtils.js');
+const ErrorCodeEnum = require('./errorCodes.js');
 
 var app = express();
 

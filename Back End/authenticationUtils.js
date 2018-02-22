@@ -1,20 +1,12 @@
 // Imports
 const dbUtils = require('./dbUtils.js');
+const ErrorCodeEnum = require('./errorCodes.js');
 
 // Attempts to create a new user with the given credentials.
 // Returns 0 if successful, or an error code if not.
 // See "REGISTER_USER_PROTOCOL.txt" for more info.
 async function register_user(username, password, email, summoner_id)
 {
-	// See REGISTER_USER_PROTOCOL.txt for a list of error codes.
-	const ErrorCodeEnum =
-	{
-		SUCCESS: 0,
-		USERNAME_EXISTS: 1,
-		EMAIL_INVALID: 2,
-		BAD_JSON_OBJECT: 3
-	};
-
 	// TODO: Error if email is invalid
 
 	// Error if username already exists
