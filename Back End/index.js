@@ -94,7 +94,8 @@ app.get('/get_prefs', async function(req, res)
     }
 
     // Retrieve the user prefs and send them.
-    r
+    let results = await dbUtils.getUserPrefs(authResults.username);
+    res.send(results);
 });
 
 // Returns a webpage displaying the username of the currently-logged-in user.
