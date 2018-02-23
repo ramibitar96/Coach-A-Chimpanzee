@@ -81,6 +81,20 @@ async function getUserPrefs(username)
 	return output;
 }
 
+// Updates the database with the new preferences
+async function setUserPrefs(username, prefsData)
+{
+	// Get the user id
+	let uidQuery = "SELECT user_id FROM user WHERE username = ?;";
+	let uid = (await db.get(uidQuery, username)).user_id;
+
+	console.log("Setting preferences for user " + uid);
+
+	// TODO: Update rank settings
+
+	return {error_code: ErrorCodeEnum.SUCCESS};
+}
+
 // Executes the SQL script specified by filePath.
 // Returns a Promise<sqlite.Statement> when it's done.
 // filePath's type is string.  db's type is sqlite.Database
@@ -98,5 +112,6 @@ module.exports =
 {
 	initializeDatabase,
 	getUserPrefs,
+	setUserPrefs,
     db
 }
