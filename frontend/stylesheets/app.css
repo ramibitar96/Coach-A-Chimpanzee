@@ -2,40 +2,97 @@
   z-index: 1;
   position: fixed;
   width: 100%;
-  height: 50px; }
-  .top-bar .log-in-form {
-    border: 1px solid grey;
-    padding: 10px;
-    border-radius: 10px; }
+  height: 50px;
+  background-color: #222;
+  opacity: .9; }
+  .top-bar .title-area a {
+    line-height: 50px !important; }
+  .top-bar .login-text {
+    line-height: 50px !important;
+    padding-left: 20px;
+    padding-right: 20px;
+    color: #f2f2f2;
+    background-color: #222 !important; }
+    .top-bar .login-text:hover {
+      opacity: 1; }
+    .top-bar .login-text:after {
+      top: 25px !important; }
+  .top-bar .SignIn {
+    width: 200px !important;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    background-color: #222;
+    opacity: 0.9;
+    border-radius: 0 0 10px 10px; }
+    .top-bar .SignIn li {
+      background-color: transparent; }
+    .top-bar .SignIn .login-form > div {
+      padding-bottom: 10px; }
+    .top-bar .SignIn .login-form h3 {
+      font-size: 20px !important;
+      text-align: center;
+      margin: 10px 0px;
+      color: #f2f2f2; }
+    .top-bar .SignIn .login-form input {
+      top: 0 !important;
+      margin: 0 auto;
+      display: block; }
+    .top-bar .SignIn .login-form .button {
+      margin-top: 10px; }
 
 .main .intro {
   margin-top: 200px; }
+.main .background {
+  background-image: url("../img/home-bg.jpg");
+  background-size: cover;
+  height: 100vh; }
 .main .faq-link {
-  margin-top: 500px; }
+  margin-top: 450px; }
   .main .faq-link > div {
     position: relative;
     width: fit-content;
     margin: 0 auto; }
   .main .faq-link.tab-title > a {
-    width: 150px;
-    margin: 0 auto; }
+    width: fit-content;
+    padding: 10px 20px;
+    margin: 0 auto;
+    background-color: #222;
+    opacity: 0.8;
+    border-radius: 15px;
+    color: #f2f2f2 !important; }
+    .main .faq-link.tab-title > a:hover {
+      opacity: 0.9; }
 .main .center-text {
   position: fixed;
   display: block;
   width: 100%;
   z-index: 1; }
   .main .center-text h2, .main .center-text a {
-    text-align: center; }
+    text-align: center;
+    color: #f2f2f2; }
 .main .section {
-  height: 100vh; }
-  .main .section.left {
-    background-color: red; }
-  .main .section.right {
-    background-color: blue; }
+  height: 100vh;
+  /*
+  		&.left {
+  			background-image: url("../img/home-student.jpeg");
+  			background-size: cover;
+  		}
+  
+  		&.right {
+  			background-image: url("../img/home-teacher.jpeg");
+  			background-size: cover;
+  		}
+  */ }
   .main .section .button-div {
     margin-top: 300px; }
     .main .section .button-div .button {
-      width: 100%; }
+      width: 100%;
+      border-radius: 15px;
+      background-color: #222;
+      opacity: .8; }
+      .main .section .button-div .button:hover {
+        opacity: .9; }
 
 .faq-container {
   margin-top: 100px; }
@@ -44,24 +101,32 @@
     .faq-container .faq-title h2 {
       font-size: 24px;
       line-height: 50px;
-      margin: 0; }
+      margin: 0;
+      color: #f2f2f2; }
     .faq-container .faq-title .tabs a {
       padding: 0px 10px;
       line-height: 50px;
       vertical-align: middle;
-      background-color: transparent; }
+      background-color: transparent;
+      color: #f2f2f2;
+      text-decoration: underline; }
+  .faq-container .faq-content .question {
+    border-bottom: 1px solid #222; }
   .faq-container .faq-content .faq-question {
     color: white;
-    background-color: grey;
+    background-color: #222;
+    opacity: 0.9;
     padding-left: 10px; }
     .faq-container .faq-content .faq-question p {
       font-size: 18px;
       line-height: 30px;
       margin-bottom: 0; }
   .faq-container .faq-content .faq-answer {
-    border-left: grey 1px solid;
-    border-right: grey 1px solid;
-    border-bottom: grey 1px solid;
+    border-left: #222 1px solid;
+    border-right: #222 1px solid;
+    border-bottom: #222 1px solid;
+    background: #f2f2f2;
+    opacity: 0.9;
     padding-left: 10px;
     padding-top: 5px;
     padding-bottom: 5px; }
@@ -78,5 +143,8 @@
   .signup-container .email-field,
   .signup-container .rank-field {
     padding-left: 5px; }
+
+body {
+  overflow: hidden; }
 
 /*# sourceMappingURL=app.css.map */

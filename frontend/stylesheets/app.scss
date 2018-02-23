@@ -1,4 +1,9 @@
+@import 'color';
 @import 'topbar';
 @import 'home';
 @import 'register';
+
+body {
+	overflow: hidden;
+}
 

@@ -1,12 +1,17 @@
-$grey : grey;
 
 .main {
 	.intro {
 		margin-top: 200px;
 	}
 
+	.background {
+		background-image: url("../img/home-bg.jpg");
+		background-size: cover;
+		height: 100vh;
+	}
+
 	.faq-link {
-		margin-top: 500px;
+		margin-top: 450px;
 
 		> div {
 			position: relative;
@@ -15,8 +20,17 @@ $grey : grey;
 		}
 
 		&.tab-title > a {
-			width: 150px;
+			width: fit-content;
+			padding: 10px 20px;
 			margin: 0 auto;
+			background-color: $grey;
+			opacity: 0.8;
+			border-radius: 15px;
+			color: $white !important;
+
+			&:hover {
+				opacity: 0.9;
+			}
 		}
 	}
 
@@ -28,25 +42,35 @@ $grey : grey;
 
 		h2, a {
 			text-align: center;
+			color: $white;
 		}
 	}
 
 	.section {
 		height: 100vh;
-
+/*
 		&.left {
-			background-color: red;
+			background-image: url("../img/home-student.jpeg");
+			background-size: cover;
 		}
 
 		&.right {
-			background-color: blue;
+			background-image: url("../img/home-teacher.jpeg");
+			background-size: cover;
 		}
-
+*/
 		.button-div {
 			margin-top: 300px;
 
 			.button {
 				width: 100%;
+				border-radius: 15px;
+				background-color: $grey;
+				opacity: .8;	
+
+				&:hover {
+					opacity: .9;
+				}
 			}
 		}
 	}
@@ -62,6 +86,7 @@ $grey : grey;
 			font-size: 24px;
 			line-height: 50px;
 			margin: 0;
+			color: $white;
 		}
 
 		.tabs a {
@@ -69,13 +94,20 @@ $grey : grey;
 			line-height: 50px;
 			vertical-align: middle;
 			background-color: transparent;
+			color: $white;
+			text-decoration: underline;
 		}
 	}
 
 	.faq-content {
+		.question {
+			border-bottom: 1px solid $grey;
+		}
+
 		.faq-question {
 			color: white;
 			background-color: $grey;
+			opacity: 0.9;
 			padding-left: 10px;
 
 			p {
@@ -89,6 +121,8 @@ $grey : grey;
 			border-left: $grey 1px solid;
 			border-right: $grey 1px solid;
 			border-bottom: $grey 1px solid;
+			background: $white;
+			opacity: 0.9;
 			padding-left: 10px;
 			padding-top: 5px;
 			padding-bottom: 5px;

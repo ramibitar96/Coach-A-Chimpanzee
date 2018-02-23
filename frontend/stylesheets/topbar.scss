@@ -3,10 +3,64 @@
 	position:fixed;
 	width:100%;
 	height: 50px;
+	background-color: $grey;
+	opacity: .9;
 
-	.log-in-form {
-		border: 1px solid grey;
-		padding: 10px;
-		border-radius: 10px;
+	.title-area a {
+		line-height: 50px !important;
 	}
+
+	.login-text {
+		line-height: 50px !important;
+		padding-left: 20px;
+		padding-right: 20px;
+		color: $white;
+		background-color: $grey !important;
+
+		&:hover {
+			opacity: 1;
+		}
+
+		&:after {
+			top: 25px!important;
+		}
+	}
+
+	.SignIn {
+		width: 200px !important;
+		padding-left: 10px;
+		padding-right: 10px;
+		padding-bottom: 10px;
+		background-color: $grey;
+		opacity: 0.9;
+		border-radius: 0 0 10px 10px;
+
+		li {
+			background-color: transparent;
+		}
+	
+		.login-form {
+			& > div {
+				padding-bottom: 10px;
+			}
+
+			h3 {
+				font-size: 20px !important;
+				text-align: center;
+				margin: 10px 0px;
+				color: $white;
+			}
+
+			input {
+				top: 0 !important;
+				margin: 0 auto;
+				display: block;
+			}
+
+			.button {
+				margin-top: 10px;
+			}
+		}
+	}
+
 }
