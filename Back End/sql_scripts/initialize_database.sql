@@ -56,3 +56,12 @@ CREATE TABLE IF NOT EXISTS coach_skills
 	FOREIGN KEY(coach_user_id) REFERENCES user(user_id),
 	FOREIGN KEY(skill_id) REFERENCES skill(skill_id)
 );
+
+CREATE TABLE IF NOT EXISTS user_rank_preferences
+(
+    user_id int,
+    min_coach_rank int,     --- The minimum rank this user wants their coach to be.
+    max_coachee_rank int,   --- The maximum rank this user wants their student to be.
+
+    FOREIGN KEY(user_id) REFERENCES user(user_id)
+);
