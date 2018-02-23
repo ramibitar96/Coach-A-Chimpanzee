@@ -1,6 +1,6 @@
 # Retrieving Preferences
 
-To retrieve a user's preferences, the preferences page should send a GET request
+To retrieve the user's preferences, the preferences page should send a GET request
 to "localhost:3000/get_prefs".  The request should include the session token cookie,
 although I'm pretty sure the browser automatically does that.
 
@@ -38,3 +38,32 @@ The server will respond with a JSON object of the following format:
             "max_student_rank": <max rank of student, an integer from 0 to 6>
         }
     }
+
+## Relevant error codes:
+| Error code    | Meaning                   |
+|---            |---                        |
+| 0             | successful (no error)     |
+| 5             | session token expired     |
+| 6             | session token invalid (IE: fake) |
+
+
+# Changing preferences
+
+To update the user's preferences, the client should send a POST request to
+"localhost:3000/set_prefs".  As always, the session token cookie should be included.
+
+The body of the request should be a JSON object just like the one described in the
+above section(minus the "error_code" field).
+
+The server will respond with a JSON object of the following format:
+    {
+        "error_code": <take a guess at what this contains.>
+    }
+
+## Relevant error codes:
+| Error code    | Meaning                   |
+|---            |---                        |
+| 0             | successful (no error)     |
+| 3             | json object did not contain the required fields    |
+| 5             | session token expired     |
+| 6             | session token invalid (IE: fake) |
