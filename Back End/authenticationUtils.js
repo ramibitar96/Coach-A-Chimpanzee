@@ -76,8 +76,10 @@ async function login(username, password)
         return null;
 
     // Generate and return the token.
-    // TODO: Make the token expire
-    return jsonWebToken.sign(username, TOKEN_SIGNING_KEY);  // TODO: Use the async version
+    // TODO: Make the token include a timestamp and a signature
+    let token = username;
+
+    return token;
 }
 
 // Checks if the given token is valid, and returns the username belonging to the token if it is.
@@ -85,11 +87,18 @@ async function login(username, password)
 // Returns an object in the format {error_code: <error code>, username: <username>}
 async function checkToken(token)
 {
-    // TODO: Use the async version and deal with errors
-    let username = jsonWebToken.verify(token, TOKEN_SIGNING_KEY);
+    // TODO: Fail the token if the signature isn't valid.
+    // TODO: Fail the token if it's expired.
+    // TODO: Get the username from the token.
 
-    console.log("decoded token " + token + " to " + username);
-    return username;
+    // Temporary: the token IS the username right now.
+    let result =
+    {
+        error_code: ErrorCodeEnum.SUCCESS,
+        username: token
+    };
+
+    return result;
 }
 
 // Exports
