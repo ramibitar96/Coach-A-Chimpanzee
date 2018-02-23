@@ -1,0 +1,40 @@
+# Retrieving Preferences
+
+To retrieve a user's preferences, the preferences page should send a GET request
+to "localhost:3000/get_prefs".  The request should include the session token cookie,
+although I'm pretty sure the browser automatically does that.
+
+The server will respond with a JSON object of the following format:
+    {
+        "error_code": <error code>,
+
+        "user":
+        {
+            "summoner_name": <summoner name>,
+            "current_rank": <their rank, an integer from 0 to 6>    // NOTE: we should probably get this from Riot.
+        },
+
+        "student":
+        {
+            "last_hitting": <bool>,
+            "macro": <bool>,
+            "map_awareness": <bool>,
+            "skillshots": <bool>,
+            "freezing_waves": <bool>,
+            "matchups": <bool>,
+            "setup": <bool>,
+            "min_coach_rank": <minimum rank of coach, an integer from 0 to 6>
+        },
+
+        "coach":
+        {
+            "last_hitting": <bool>,
+            "macro": <bool>,
+            "map_awareness": <bool>,
+            "skillshots": <bool>,
+            "freezing_waves": <bool>,
+            "matchups": <bool>,
+            "setup": <bool>,
+            "max_student_rank": <max rank of student, an integer from 0 to 6>
+        }
+    }

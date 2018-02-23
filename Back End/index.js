@@ -79,6 +79,12 @@ app.post('/login', async function(req, res)
     res.send({error_code: ErrorCodeEnum.SUCCESS});
 });
 
+// Retrieves the user preferences of the currently logged-in user.
+app.get('/get_prefs')
+{
+
+}
+
 // Returns a webpage displaying the username of the currently-logged-in user.
 app.get('/whats_my_username', async function(req, res)
 {
