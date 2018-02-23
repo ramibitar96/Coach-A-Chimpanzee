@@ -34,7 +34,9 @@ async function getUserPrefs(username)
 	`
 		SELECT
 			user.user_name,
-			user.user_id
+			user.user_id,
+			user_rank_preferences.min_coach_rank,
+			user_rank_preferences.max_coachee_rank
 		FROM
 			user,
 			user_rank_preferences
@@ -60,8 +62,23 @@ async function getUserPrefs(username)
 		user:
 		{
 			// TODO: Summoner name
-		}
-	}
+			// TODO: Current rank
+		},
+
+		student:
+		{
+			// TODO: All the skills
+			min_coach_rank: rankResults.max_coach_rank
+		},
+
+		coach:
+		{
+			// TODO: All the skills
+			max_coachee_rank: rankResults.max_coach_rank
+		},
+	};
+
+	return output;
 }
 
 // Executes the SQL script specified by filePath.
