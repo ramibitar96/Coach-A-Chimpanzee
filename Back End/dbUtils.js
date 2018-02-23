@@ -34,7 +34,7 @@ async function getUserPrefs(username)
 	`
 		SELECT
 			user.user_name,
-			user.user_id,
+			user.rowid,
 			user_rank_preferences.min_coach_rank,
 			user_rank_preferences.max_coachee_rank
 		FROM
@@ -42,7 +42,7 @@ async function getUserPrefs(username)
 			user_rank_preferences
 		WHERE
 			user.user_name = ? AND
-			user.user_id = user_rank_preferences.user_id;
+			user.rowid = user_rank_preferences.user_id;
 	`;
 
 	let rankPromise = db.all(rankQuery, username);
@@ -85,10 +85,12 @@ async function getUserPrefs(username)
 async function setUserPrefs(username, prefsData)
 {
 	// Get the user id
-	let uidQuery = "SELECT user_id FROM user WHERE username = ?;";
-	let uid = (await db.get(uidQuery, username)).user_id;
+	let uidQuery = "SELECT rowid FROM user WHERE user_name = ?;";
+	let uidResults = await db.get(uidQuery, username);
+	let uid = uidResults.rowid;
 
-	console.log("Setting preferences for user " + uid);
+	console.log(uidResults);
+	console.log("" + username + "'s id is " + uid);
 
 	// TODO: Update rank settings
 
