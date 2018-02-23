@@ -47,7 +47,12 @@ app.post('/register', async function(req, res)
 // Handles log in requests
 app.post('/login', async function(req, res)
 {
-    // TODO: Error if bad JSON.
+    // Error if bad JSON.
+    if (!req.body.hasOwnProperty("username") || !req.body.hasOwnProperty("password"))
+    {
+        res.send({error_code: ErrorCodeEnum.BAD_JSON_OBJECT});
+        return;
+    }
 
     // Generate a session token
     let token = await auth.login(req.body.username, req.body.password);
