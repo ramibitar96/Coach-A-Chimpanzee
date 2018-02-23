@@ -8,6 +8,13 @@ const ErrorCodeEnum = require('./errorCodes.js');
 
 var app = express();
 
+// Tell expressjs that we want to allow cookies from mutliple origins
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
+
 app.use(bodyParser.json());					// Tell expressjs that we want it to parse the request bodies as json.
 app.use(cookieParser());                    // Tell expressjs that we want it to parse cookies it receives.
 app.use(express.static("../frontend"));		// Tell expressjs that we want to serve all static files(.html, images, etc) from this folder.
@@ -64,7 +71,7 @@ app.post('/login', async function(req, res)
     // Set the cookie to the token and send success.
     let cookieOptions =
     {
-        secure: true,
+        secure: false,      // TODO: Set this to true once we get HTTPS working
         maxAge: auth.TOKEN_EXPIRATION_MS
     };
 
@@ -72,17 +79,33 @@ app.post('/login', async function(req, res)
     res.send({error_code: ErrorCodeEnum.SUCCESS});
 });
 
-// Returns the username of the person currently logged in, for testing purposes.
+// Returns a webpage displaying the username of the currently-logged-in user.
 app.get('/whats_my_username', async function(req, res)
 {
+    // TODO: Error if bad json object for cookie.
+
+    console.log("received cookies: " + JSON.stringify(req.cookies));
+
     // Decode the username
     let token = req.cookies.session_token;
-    let username = await auth.checkToken(token);
+    let authResults = await auth.checkToken(token);
 
-    // TODO: Error checking
+    // Display error messages
+    let error_code = authResults.error_code;
+    if (error_code == ErrorCodeEnum.TOKEN_EXPIRED)
+    {
+        res.send("ERROR: Token Expired.  Please log in again.");
+        return;
+    }
+
+    if (error_code == ErrorCodeEnum.TOKEN_INVALID)
+    {
+        res.send("ERROR: Invalid token.  Are you a hacker?");
+        return;
+    }
 
     // Send the username
-    res.send(username);
+    res.send("Hello, " + authResults.username);
 });
 
 // Entry point for the program
