@@ -1,0 +1,92 @@
+# Strategy
+The server does not keep a record of who is currently logged in; instead, it sends
+the client a session token when they log in, which the client must send back to
+the server every time they make a request.  The session token is cryptographically
+signed by the server, so an attacker can't fake a token.  Again, all communications
+are to be done over HTTPS, so an attacker can't steal the session token while
+it's in transit.
+
+The token is set to expire after a certain amount of time, so all is not lost if
+a session token is compromised.
+
+
+# Registering a new user
+
+To register a new user, the client should send a POST request over HTTPS to the
+following URL: https://www.our-domain-name.com/register
+
+The request's packet MUST have its Content-Type set to "application/json",
+or else expressjs will reject it.
+
+The request's body should be a JSON object with the following format:
+
+{
+    "username": "mike_wizowski",
+    "password": "ceilia",
+    "email": "mwizowski@monstersinc.com",
+    "summoner_id": 2319
+}
+
+Do not bother encrypting the password yourself; HTTPS will encrypt all
+packets for us.
+
+
+The server will then reply with a JSON object of the following format:
+
+{
+    "error_code": <result code>
+}
+
+"error_code" is a number(NOT a string) specifying the result of the
+operation.  See ERROR_CODES.txt for a full list of error codes and their meanings.
+Here are the ones that are relevant to signing up:
+
+| Error code    | Meaning                   |
+|---            |---                        |
+| 0             | successful (no error)     |
+| 1             | username already exists   |
+| 2             | email address invalid     |
+| 3             | json object did not contain the required fields    |
+
+
+# Logging in
+
+The act of logging in is simply requesting a session token from the server.  To
+do this, the client sends a POST request over HTTPS to the following URL:
+https://www.our-domain-name.com/login
+
+The request's packet MUST have its Content-Type set to "application/json",
+or else expressjs will reject it.
+
+The request's body should be a JSON object with the following format:
+
+{
+    "username": "mike_wizowski",
+    "password": "ceilia"
+}
+
+The server will respond with a JSON object with the following format:
+{
+    "error_code": <result code>
+}
+
+"error_code" is a number(NOT a string) specifying the result of the
+operation.  See ERROR_CODES.txt for a full list of error codes and their meanings.
+Here are the ones that are relevant to logging in:
+
+| Error code    | Meaning                   |
+|---            |---                        |
+| 0             | successful (no error)     |
+| 3             | json object did not contain the required fields    |
+| 4             | incorrect password        |
+
+If the client provided the correct password in their request, then a cookie will
+be attached to the response containing the session token.  The client does not
+need to do anything special with the session token; it just needs to send it back
+to the server every time it makes a request.
+
+
+# Logging out
+
+To log out, the client simply deletes the session token from their browser.
+No action on the server side is required.
