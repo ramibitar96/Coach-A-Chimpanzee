@@ -1,13 +1,18 @@
 // Imports
 const express = require('express');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const dbUtils = require('./dbUtils.js');
 const auth = require('./authenticationUtils.js');
 const ErrorCodeEnum = require('./errorCodes.js');
 
+// Constants
+const TOKEN_EXPIRATION_MS = 1000 * 60 * 60 * 24;    // One day
+
 var app = express();
 
 app.use(bodyParser.json());					// Tell expressjs that we want it to parse the request bodies as json.
+app.use(cookieParser());                    // Tell expressjs that we want it to parse cookies it receives.
 app.use(express.static("../frontend"));		// Tell expressjs that we want to serve all static files(.html, images, etc) from this folder.
 
 // Handles registration requests
@@ -43,6 +48,26 @@ app.post('/register', async function(req, res)
 app.post('/login', async function(req, res)
 {
     // TODO: Error if bad JSON.
+
+    // Generate a session token
+    let token = await auth.login(req.body.username, req.body.password);
+
+    // Error if the username and password were invalid
+    if (token === null)
+    {
+        res.send({error_code: ErrorCodeEnum.WRONG_PASSWORD});
+        return;
+    }
+
+    // Set the cookie to the token and send success.
+    let cookieOptions =
+    {
+        secure: true,
+        maxAge: TOKEN_EXPIRATION_MS
+    };
+
+    res.cookie("session_token", token, cookieOptions);
+    res.send({error_code: ErrorCodeEnum.SUCCESS});
 });
 
 
