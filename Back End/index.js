@@ -7,7 +7,7 @@ const auth = require('./authenticationUtils.js');
 const ErrorCodeEnum = require('./errorCodes.js');
 
 var app = express();
-
+//yash was here
 // Tell expressjs that we want to allow cookies from mutliple origins
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -78,6 +78,12 @@ app.post('/login', async function(req, res)
     res.cookie("session_token", token, cookieOptions);
     res.send({error_code: ErrorCodeEnum.SUCCESS});
 });
+
+// Retrieves the user preferences of the currently logged-in user.
+app.get('/get_prefs')
+{
+
+}
 
 // Returns a webpage displaying the username of the currently-logged-in user.
 app.get('/whats_my_username', async function(req, res)
