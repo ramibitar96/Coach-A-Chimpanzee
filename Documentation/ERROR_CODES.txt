@@ -7,3 +7,5 @@ Here is a list of error codes sent by the server.
 | 2             | email address invalid     |
 | 3             | json object did not contain the required fields    |
 | 4             | incorrect password        |
+| 5             | session token expired     |
+| 6             | session token invalid (IE: fake) |
