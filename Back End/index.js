@@ -72,6 +72,18 @@ app.post('/login', async function(req, res)
     res.send({error_code: ErrorCodeEnum.SUCCESS});
 });
 
+// Returns the username of the person currently logged in, for testing purposes.
+app.get('/whats_my_username', async function(req, res)
+{
+    // Decode the username
+    let token = req.cookies.session_token;
+    let username = await auth.checkToken(token);
+
+    // TODO: Error checking
+
+    // Send the username
+    res.send(username);
+});
 
 // Entry point for the program
 main();

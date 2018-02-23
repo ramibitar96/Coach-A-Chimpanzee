@@ -76,12 +76,8 @@ async function login(username, password)
         return null;
 
     // Generate and return the token.
-    let tokenOptions =
-    {
-        expiresIn: TOKEN_EXPIRATION_MS
-    };
-
-    return jsonWebToken.sign(username, TOKEN_SIGNING_KEY, tokenOptions);  // TODO: Use the async version
+    // TODO: Make the token expire
+    return jsonWebToken.sign(username, TOKEN_SIGNING_KEY);  // TODO: Use the async version
 }
 
 // Checks if the given token is valid, and returns the username belonging to the token if it is.
@@ -101,5 +97,6 @@ module.exports =
 {
 	registerUser,
     login,
+    checkToken,
     TOKEN_EXPIRATION_MS
 }
