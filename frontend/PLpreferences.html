@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="stylesheets/sidebar.css">
     <style>
         body {
-         background-image: url("bgimage.png");
+				background-image: url("bgimage.png");
+				overflow: auto !important;
         }
     </style>
   </head>
@@ -58,7 +59,7 @@
                 <input id="SummonerName" type="text" placeholder="Summoner Name" name="SummName">
 
                 <p>Your Current Elo:<p>
-                <select name="rank">
+                <select name="rank" id="rank">
                     <option value="1"> Bronze</option>
                     <option value="2"> Silver</option>
                     <option value="3"> Gold</option>
@@ -108,7 +109,7 @@
                 </fieldset>
 
                 <p>Select the minimum rank you would like your coach to be (Example: Selecting Platinum would allow anyone who is Platinum 5 or higher to coach you).</p>
-                <select name="minRank">
+                <select name="minRank" id="min_rank">
                     <option value="0" selected = "selected"> No Preference</option>
                     <option value="1"> Bronze</option>
                     <option value="2"> Silver</option>
@@ -157,7 +158,7 @@
                 </fieldset>
 
                 <p>Select the minimum rank you would like to coach (Example: Selecting Silver would allow anyone who is Silver 5 or higher to be your student).</p>
-                <select name="minRankC">
+                <select name="minRankC" id="maxStudentRank">
                     <option value="0" selected = "selected"> No Preference</option>
                     <option value="1"> Bronze</option>
                     <option value="2"> Silver</option>
@@ -188,10 +189,13 @@
         }
         document.getElementById("defaultOpen").click();
     </script>
-    <script src="js/vendor/jquery.js"></script>
-    <script src="js/vendor/what-input.js"></script>
-    <script src="js/vendor/foundation.js"></script>
-    <script src="js/app.js"></script>
+	<script src="js/vendor/jquery.js"></script>
+	<script src="js/foundation.min.js"></script>
+	<script src="js/foundation/foundation.dropdown.js"></script>
+	<script src="js/custom/preferencesPage.js"></script>
+	<script>
+		$(document).foundation();
+	</script> 
     <script>
         function ocNav() {
             var width = document.getElementById('mySidenav').offsetWidth;
