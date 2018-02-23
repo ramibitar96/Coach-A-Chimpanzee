@@ -56,5 +56,3 @@ CREATE TABLE IF NOT EXISTS coach_skills
 	FOREIGN KEY(coach_user_id) REFERENCES user(user_id),
 	FOREIGN KEY(skill_id) REFERENCES skill(skill_id)
 );
-
--- TODO: coach and coachee preferences
