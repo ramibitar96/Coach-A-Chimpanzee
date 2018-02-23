@@ -2,6 +2,7 @@
 const sqlite = require('sqlite');
 const fs = require('fs');
 const strip = require('sql-strip-comments');
+const ErrorCodeEnum = require('./errorCodes.js');
 
 var db;     // The connection to the SQLite database.
 
@@ -24,6 +25,45 @@ async function initializeDatabase()
 		await executeSQLScript("./sql_scripts/populate_skills.sql", db);
 }
 
+// Queries the database for the given user's preferences.
+// See PREFERENCES_API for the structure of the object it returns.
+async function getUserPrefs(username)
+{
+	// Query for the rank preferences
+	let rankQuery =
+	`
+		SELECT
+			user.user_name,
+			user.user_id
+		FROM
+			user,
+			user_rank_preferences
+		WHERE
+			user.user_name = ? AND
+			user.user_id = user_rank_preferences.user_id;
+	`;
+
+	let rankPromise = db.all(rankQuery, username);
+
+	// TODO: Query Riot's servers for summoner name and rank
+	// TODO: Query for coach skills
+	// TODO: Query for coachee skills
+
+	// Await all the results
+	let rankResults = await rankPromise;
+
+	// Construct the object
+	let output =
+	{
+		error_code: ErrorCodeEnum.SUCCESS,
+
+		user:
+		{
+			// TODO: Summoner name
+		}
+	}
+}
+
 // Executes the SQL script specified by filePath.
 // Returns a Promise<sqlite.Statement> when it's done.
 // filePath's type is string.  db's type is sqlite.Database
@@ -40,5 +80,6 @@ function executeSQLScript(filePath, db)
 module.exports =
 {
 	initializeDatabase,
+	getUserPrefs,
     db
 }
