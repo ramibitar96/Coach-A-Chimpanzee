@@ -6,9 +6,6 @@ const dbUtils = require('./dbUtils.js');
 const auth = require('./authenticationUtils.js');
 const ErrorCodeEnum = require('./errorCodes.js');
 
-// Constants
-const TOKEN_EXPIRATION_MS = 1000 * 60 * 60 * 24;    // One day
-
 var app = express();
 
 app.use(bodyParser.json());					// Tell expressjs that we want it to parse the request bodies as json.
@@ -68,7 +65,7 @@ app.post('/login', async function(req, res)
     let cookieOptions =
     {
         secure: true,
-        maxAge: TOKEN_EXPIRATION_MS
+        maxAge: auth.TOKEN_EXPIRATION_MS
     };
 
     res.cookie("session_token", token, cookieOptions);
