@@ -1,0 +1,74 @@
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8"/>
+		<meta http-equiv="x-ua-compatible" content="ie=edge"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<title>Enter queue</title>
+		<link rel="stylesheet" href="stylesheets/foundation.css"/>
+		<link rel="stylesheet" href="stylesheets/app.css"/>
+		<link rel="stylesheet" href="stylesheets/sidebar.css">
+		<script src="js/vendor/modernizr.js"></script>
+	</head>
+	<body>
+		<div id="mySidenav" class="sidenav">
+        	<a href="index.html">F.A.Q.</a>
+        	<a href="queue.html">Queue me up</a>
+        	<a href="PLpreferences.html">Settings</a>
+        	<a href="#">Logout</a>
+    	</div>
+
+   	   <nav class="top-bar" data-topbar role="navigation">
+       	<ul class="title-area">
+     	<!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+     		<li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+        </ul>
+
+  	    <section class="top-bar-section">
+    		<!-- Right Nav Section -->
+    	 	<ul class="right">
+      		</ul>
+
+      		<ul class="left">
+       			<button onclick="ocNav()";>☰</button>
+     		</ul>
+    	</section>
+	</nav>
+	
+	</nav>
+	<div class="main large-12 medium-12">
+		<div class="tabs-content">
+			<div class="content active" id="panel1">
+				<div class="intro center-text">
+					<h2>Enter queue as...</h2>
+				</div>
+				<div class="section large-6 medium-6 columns left">
+					<div class="button-div large-6 medium-6 columns medium-centered large-centered push-2">
+						<a class="button">Student</a>
+					</div>
+				</div>
+				<div class="section large-6 medium-6 columns right">
+					<div class="button-div large-6 medium-6 columns medium-centered large-centered pull-2">
+						<a class="button">Coach</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+		<script src="js/vendor/jquery.js"></script>
+		<script src="js/foundation.min.js"></script>
+		<script src="js/custom/faq.js"></script>
+		<script>
+			$(document).foundation();
+		</script>
+		<script>
+        	function ocNav() {
+            	var width = document.getElementById('mySidenav').offsetWidth;
+            	if (width == 0)
+            	    document.getElementById("mySidenav").style.width = "250px";
+            	if (width == 250)
+            	    document.getElementById("mySidenav").style.width = "0px";
+        	}
+    </script> 
+	</body>
+</html>
