@@ -10,7 +10,7 @@ $('.signup-form').on('submit', function() {
 		'"username":' + '"' + data['username'] + '",' +
 		'"password":' + '"' + data['password'] + '",' +
 		'"email":' + '"' + data['email'] + '",' +
-		'"summoner_id":' + data['summoner_id'] +
+		'"summoner_id": 1' +
 		'}';
 
 	$.ajax({
