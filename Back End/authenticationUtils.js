@@ -11,7 +11,6 @@ async function registerUser(username, password, email, summoner_id)
 	// TODO: Error if email is invalid
 
 	// Error if username already exists
-    console.log("dbUtils.db = " + dbUtils.db);
 	let user = await dbUtils.db.get("SELECT user_name FROM user WHERE user_name = ?;", username);
 	if (user !== undefined)
 	{
