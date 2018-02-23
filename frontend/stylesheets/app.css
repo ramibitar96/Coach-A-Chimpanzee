@@ -156,6 +156,10 @@
     .signup-container button:hover {
       background-color: #5e5e5e; }
 
+.qmain {
+  background-image: url("../img/queue-bg.jpg");
+  background-size: cover; }
+
 body {
   overflow: hidden; }
 
