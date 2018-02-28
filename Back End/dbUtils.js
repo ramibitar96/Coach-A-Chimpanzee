@@ -45,19 +45,13 @@ async function getUserPrefs(username)
 			user.user_name = ? AND
 			user.rowid = user_rank_preferences.user_id;
 	`;
-
-	let rankPromise = db.get(rankQuery, username);
+	let rankResults = await db.get(rankQuery, username);
 
 	// TODO: Query Riot's servers for summoner name and rank
 	
-	// Query for skills
-	let coachSkillsPromise = getSkillPrefs(uid, false);
-	let coacheeSkillsPromise = getSkillPrefs(uid, true);
-
-	// Await all the results
-	let rankResults = await rankPromise;
-	let coachSkillsResults = await coachSkillsPromise;
-	let coacheeSkillsResults = await coacheeSkillsPromise;
+	// Query for the skills
+	let coachSkills = await getSkillPrefs(uid, false);
+	let coacheeSkills = await getSkillPrefs(uid, true);
 
 	// Construct the object
 	let output =
@@ -73,14 +67,14 @@ async function getUserPrefs(username)
 		student:
 		{
 			// TODO: All the skills
-			skills: coacheeSkillsResults,
+			skills: coacheeSkills,
 			min_coach_rank: rankResults.min_coach_rank
 		},
 
 		coach:
 		{
 			// TODO: All the skills
-			skills: coachSkillsResults,
+			skills: coachSkills,
 			max_coachee_rank: rankResults.max_coachee_rank
 		},
 	};
