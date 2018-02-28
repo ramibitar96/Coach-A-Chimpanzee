@@ -87,7 +87,29 @@ async function setUserPrefs(username, prefsData)
 	console.log(uidResults);
 	console.log("" + username + "'s id is " + uid);
 
-	// TODO: Update rank settings
+	// TODO: Set the skill settings
+	
+	// Set the coach/coachee ranks
+	let rankQuery = 
+	`
+		INSERT INTO user_rank_preferences
+		(
+			user_id,
+			min_coach_rank,
+			max_coachee_rank
+		)
+		VALUES (?, ?, ?);
+	`;
+	let rankPromise = db.run
+	(
+		rankQuery,
+		uid,
+		prefsData.student.min_coach_rank,
+		prefsData.coach.max_coachee_rank
+	);
+
+	// Await all the results
+	await rankPromise;
 
 	return {error_code: ErrorCodeEnum.SUCCESS};
 }
