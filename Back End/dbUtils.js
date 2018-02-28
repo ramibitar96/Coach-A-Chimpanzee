@@ -89,7 +89,11 @@ async function setUserPrefs(username, prefsData)
 	console.log(uidResults);
 	console.log("" + username + "'s id is " + uid);
 
-	// TODO: Set the skill settings
+	// TODO: Set preferences from the "user" part of prefsData.
+
+	// Set the skill settings
+	let coachSkillsPromise = setSkillPrefs(uid, prefsData.coach.skills, false);
+	let coacheeSkillsPromise = setSkillPrefs(uid, prefsData.student.skills, true);
 	
 	// Set the coach/coachee ranks
 	let rankQuery = 
@@ -110,8 +114,10 @@ async function setUserPrefs(username, prefsData)
 		prefsData.coach.max_coachee_rank
 	);
 
-	// Await all the results
+	// Wait for all the promises to finish.
 	await rankPromise;
+	await coachSkillsPromise;
+	await coacheeSkillsPromise;
 
 	return {error_code: ErrorCodeEnum.SUCCESS};
 }
@@ -147,6 +153,50 @@ async function getSkillPrefs(userid, coachee)
 	}
 
 	return output;
+}
+
+// Sets a given user's coach skill preferences.
+// skills is a boolean array specifying if each skill present.
+// If coachee is true, it will search for coachee skills instead of coach skills.
+async function setSkillPrefs(userid, skills, coachee)
+{
+	// Decide which table to query
+	let tableName = "coach_skills";
+	if (coachee)
+		tableName = "coachee_skills";
+
+	// We're going to be building a big query, so buckle up!
+	let parameters = [];
+	let query = ""
+
+	query += "BEGIN TRANSACTION;\n"	// We want our entire query to be atomic; if one
+									// statement fails, then all the previous statements
+									// will be cancelled.  That way the database doesn't
+									// get corrupted.
+
+	// Clear any existing skills in the database
+	query += "DELETE FROM ? WHERE user_id = ?\n";
+	parameters.push(tableName, userid);
+
+	// Add back the skills that were set to true
+	for (let i = 0; i < skills.length; i++)
+	{
+		if (!skills[i])
+			continue;
+
+		query += "INSERT INTO ?(user_id, skill_id) VALUES(?, ?);\n"
+		parameters.push(tableName, userid, i);
+	}
+
+	query += "END TRANSACTION;";
+
+	// Now that the query has been constructed, we can add it to the parameters
+	// exec() expects the query to be the first parameter, so we need ot insert it
+	// at the beginning.
+	parameters.unshift(query);
+
+	// This is equivalent to db.exec(parameters[0], parameters[1], ..., parameters[n])
+	await db.exec.apply(db, parameters);
 }
 
 // Executes the SQL script specified by filePath.
