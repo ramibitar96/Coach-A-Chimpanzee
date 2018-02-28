@@ -24,6 +24,12 @@ async function initializeDatabase()
 // See PREFERENCES_API for the structure of the object it returns.
 async function getUserPrefs(username)
 {
+	// Get the user id
+	// TODO: Refactor this so user id is passed as a parameter isntead.
+	let uidQuery = "SELECT rowid FROM user WHERE user_name = ?;";
+	let uidResults = await db.get(uidQuery, username);
+	let uid = uidResults.rowid;
+
 	// Query for the rank preferences
 	let rankQuery =
 	`
@@ -43,11 +49,15 @@ async function getUserPrefs(username)
 	let rankPromise = db.get(rankQuery, username);
 
 	// TODO: Query Riot's servers for summoner name and rank
-	// TODO: Query for coach skills
-	// TODO: Query for coachee skills
+	
+	// Query for skills
+	let coachSkillsPromise = getSkillPrefs(uid, false);
+	let coacheeSkillsPromise = getSkillPrefs(uid, true);
 
 	// Await all the results
 	let rankResults = await rankPromise;
+	let coachSkillsResults = await coachSkillsPromise;
+	let coacheeSkillsResults = await coacheeSkillsPromise;
 
 	// Construct the object
 	let output =
@@ -63,12 +73,14 @@ async function getUserPrefs(username)
 		student:
 		{
 			// TODO: All the skills
+			skills: coacheeSkillsResults,
 			min_coach_rank: rankResults.min_coach_rank
 		},
 
 		coach:
 		{
 			// TODO: All the skills
+			skills: coachSkillsResults,
 			max_coachee_rank: rankResults.max_coachee_rank
 		},
 	};
