@@ -18,11 +18,6 @@ async function initializeDatabase()
 
 	// Create the tables
 	await executeSQLScript("./sql_scripts/initialize_database.sql", db);
-
-	// Add all the skills if they aren't added already.
-	let skills = await db.get("SELECT * FROM skill;");
-	if (skills === undefined)
-		await executeSQLScript("./sql_scripts/populate_skills.sql", db);
 }
 
 // Queries the database for the given user's preferences.

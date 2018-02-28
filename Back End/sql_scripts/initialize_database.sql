@@ -35,12 +35,6 @@ CREATE TABLE IF NOT EXISTS coaching_session
 	FOREIGN KEY(coach_user_id) REFERENCES user(rowid)
 );
 
--- Primary key is rowid
-CREATE TABLE IF NOT EXISTS skill
-(
-	skill_name varchar
-);
-
 CREATE TABLE IF NOT EXISTS coachee_skills
 (
 	coachee_user_id int,
@@ -53,8 +47,7 @@ CREATE TABLE IF NOT EXISTS coach_skills
 (
 	coach_user_id int,
 	skill_id int,
-	FOREIGN KEY(coach_user_id) REFERENCES user(rowid),
-	FOREIGN KEY(skill_id) REFERENCES skill(rowid)
+	FOREIGN KEY(coach_user_id) REFERENCES user(rowid)
 );
 
 CREATE TABLE IF NOT EXISTS user_rank_preferences
