@@ -147,8 +147,7 @@ async function getSkillPrefs(userid, coachee)
 	// Query for the skills
 	let skillRows = await db.all
 	(
-		"SELECT skill_id FROM ? WHERE user_id = ?;",
-		tableName,
+		"SELECT skill_id FROM " + tableName + " WHERE user_id = ?;",
 		userid
 	);
 
