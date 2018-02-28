@@ -113,8 +113,10 @@ app.post('/set_prefs', async function(req, res)
         return;
     }
 
+    // TODO: Error if the body does not have the required data
+
     // Set the preferences
-    let results = await dbUtils.setUserPrefs(authResults.username);
+    let results = await dbUtils.setUserPrefs(authResults.username, req.body);
     res.send(results);
 });
 
