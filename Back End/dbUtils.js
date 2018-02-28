@@ -40,7 +40,7 @@ async function getUserPrefs(username)
 			user.rowid = user_rank_preferences.user_id;
 	`;
 
-	let rankPromise = db.all(rankQuery, username);
+	let rankPromise = db.get(rankQuery, username);
 
 	// TODO: Query Riot's servers for summoner name and rank
 	// TODO: Query for coach skills
@@ -63,15 +63,17 @@ async function getUserPrefs(username)
 		student:
 		{
 			// TODO: All the skills
-			min_coach_rank: rankResults.max_coach_rank
+			min_coach_rank: rankResults.min_coach_rank
 		},
 
 		coach:
 		{
 			// TODO: All the skills
-			max_coachee_rank: rankResults.max_coach_rank
+			max_coachee_rank: rankResults.max_coachee_rank
 		},
 	};
+
+	console.log(output);
 
 	return output;
 }
