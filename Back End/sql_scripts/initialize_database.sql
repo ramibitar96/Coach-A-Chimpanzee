@@ -37,17 +37,16 @@ CREATE TABLE IF NOT EXISTS coaching_session
 
 CREATE TABLE IF NOT EXISTS coachee_skills
 (
-	coachee_user_id int,
+	user_id int,
 	skill_id int,
-	FOREIGN KEY(coachee_user_id) REFERENCES user(rowid),
-	FOREIGN KEY(skill_id) REFERENCES skill(rowid)
+	FOREIGN KEY(user_id) REFERENCES user(rowid)
 );
 
 CREATE TABLE IF NOT EXISTS coach_skills
 (
-	coach_user_id int,
+	user_id int,
 	skill_id int,
-	FOREIGN KEY(coach_user_id) REFERENCES user(rowid)
+	FOREIGN KEY(user_id) REFERENCES user(rowid)
 );
 
 CREATE TABLE IF NOT EXISTS user_rank_preferences
