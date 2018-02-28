@@ -175,8 +175,8 @@ async function setSkillPrefs(userid, skills, coachee)
 									// get corrupted.
 
 	// Clear any existing skills in the database
-	query += "DELETE FROM ? WHERE user_id = ?\n";
-	parameters.push(tableName, userid);
+	query += "DELETE FROM " + tableName + " WHERE user_id = ?;\n";
+	parameters.push(userid);
 
 	// Add back the skills that were set to true
 	for (let i = 0; i < skills.length; i++)
@@ -184,8 +184,8 @@ async function setSkillPrefs(userid, skills, coachee)
 		if (!skills[i])
 			continue;
 
-		query += "INSERT INTO ?(user_id, skill_id) VALUES(?, ?);\n"
-		parameters.push(tableName, userid, i);
+		query += "INSERT INTO " + tableName + "(user_id, skill_id) VALUES(?, ?);\n"
+		parameters.push(userid, i);
 	}
 
 	query += "END TRANSACTION;";
@@ -195,7 +195,7 @@ async function setSkillPrefs(userid, skills, coachee)
 	// at the beginning.
 	parameters.unshift(query);
 
-	// This is equivalent to db.exec(parameters[0], parameters[1], ..., parameters[n])
+	// This is equivalent to db.prepare(parameters[0], parameters[1], ..., parameters[n])
 	await db.exec.apply(db, parameters);
 }
 
