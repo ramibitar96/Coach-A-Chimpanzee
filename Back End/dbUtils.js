@@ -92,6 +92,39 @@ async function setUserPrefs(username, prefsData)
 	return {error_code: ErrorCodeEnum.SUCCESS};
 }
 
+// Queries the database for a given user's coach skill preferences.
+// Returns a boolean array specifying if each skill present.
+// If coachee is true, it will search for coachee skills instead of coach skills.
+async function getSkillPrefs(userid, coachee)
+{
+	// Decide which table to query
+	let tableName = "coach_skills";
+	if (coachee)
+		tableName = "coachee_skills";
+
+	// Query for the skills
+	let skillRows = await db.all
+	(
+		"SELECT skill_id FROM ? WHERE user_id = ?;",
+		tableName,
+		userid
+	);
+
+	// Start each skill as false
+	let output = [];
+	for (let i = 0; i < 8; i++)
+		output.push(false);
+
+	// Mark each skill true if it was returned in the query
+	for (let i = 0; i < skillRows.length; i++)
+	{
+		let skill_id = skillRows[i].skill_id;
+		output[skill_id] = true;
+	}
+
+	return output;
+}
+
 // Executes the SQL script specified by filePath.
 // Returns a Promise<sqlite.Statement> when it's done.
 // filePath's type is string.  db's type is sqlite.Database
