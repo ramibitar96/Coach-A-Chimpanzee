@@ -1,9 +1,11 @@
+@import 'foundation';
 @import 'color';
 @import 'topbar';
 @import 'home';
 @import 'register';
 @import 'queue';
 @import 'profile';
+@import 'history';
 
 body {
 	overflow: hidden;

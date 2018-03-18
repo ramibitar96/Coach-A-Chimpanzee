@@ -20,7 +20,10 @@ $('.login-form').on('submit', function() {
 			data: body,
 			success: function (data){
 				var response = data;
-				alert(response["error_code"]);
+				if (response["error_code"] == 0) {
+					alert("success");
+					window.location.assign("test.html");
+				}
 			}
 	});
 });
