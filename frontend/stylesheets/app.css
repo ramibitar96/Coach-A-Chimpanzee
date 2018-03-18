@@ -6782,6 +6782,8 @@ th.hide-for-touch {
     border: #c2c2c2 1px solid; }
     .history-main .log-chat p.dark {
       background-color: #c2c2c2; }
+  .history-main .log-main {
+    margin-bottom: 50px; }
 
 body {
   overflow: hidden; }

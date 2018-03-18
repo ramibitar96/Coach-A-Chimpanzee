@@ -1,6 +1,6 @@
 $(".open-log").click(function() {
 	var id = $(this).attr('id');
-	var file = "file://../Back End/logs/TestUser/" + id + ".txt";
+	var file = "http://127.0.0.1:3000/logs/TestUser/" + id + ".txt";
 	var rawFile = new XMLHttpRequest();
 	rawFile.open("GET", file, false);
 	rawFile.onreadystatechange = function ()
@@ -9,8 +9,18 @@ $(".open-log").click(function() {
 		{
 			if(rawFile.status === 200 || rawFile.status == 0)
 			{
+				$(".log-chat").children().remove();
+
 				var allText = rawFile.responseText;
-				alert(allText);
+				var lines = allText.split("\n");
+				for (var i = 0; i < lines.length; i++) {
+					if (lines[i] != "") {
+						if (i % 2)	var text = "<p>" + lines[i] + "</p>";
+						else			var text = "<p class='dark'>" + lines[i] + "</p>";
+						$(".log-chat").append(text);
+					}
+				}
+				$(".log-main").removeClass("hide");
 			}
 		}
 	}
