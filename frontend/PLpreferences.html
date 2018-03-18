@@ -18,6 +18,7 @@
   </head>
   <body>
     <div id="mySidenav" class="sidenav">
+		  <a href="profile.html">Profile</a>
         <a href="queue.html">Queue me up</a>
         <a href="PLpreferences.html">Settings</a>
          <a href="#">Logout</a>
@@ -58,7 +59,7 @@
                 <label><b>Summoner Name:</b></label>
                 <input id="SummonerName" type="text" placeholder="Summoner Name" name="SummName">
 
-                <p>Your Current Elo:<p>
+					 <label><b>Your Current Elo:</b></label>
                 <select name="rank" id="rank">
                     <option value="1"> Bronze</option>
                     <option value="2"> Silver</option>
@@ -68,6 +69,9 @@
                     <option value="6"> Master</option>
                     <option value="7"> Challenger</option>
                 </select>
+
+					 <label><b>Twitch TV Stream</b></label>
+					 <input id="twitch" type="text" placeholder="http://www.twitch.tv/USERNAME" name="twitchLink">
                 
                 <button type="submit">Save Changes</button>
             </div>
@@ -128,7 +132,11 @@
     <div id="Coach" class="tabcontent large-12 medium-12 large-centered medium-centered columns">
       <h3>Edit your preferences as a Coach</h3>
           <form id="coachPref">
-
+					<div>
+					<label for="yes_no_radio">Coach a replay file</label>
+					<input type="radio" name="yes_no" id="yes_no_yes">Yes</input>
+					<input type="radio" name="yes_no" id="yes_no_no">No</input>
+				</div>
                 <fieldset>
                     <legend>Choose your Expertise (Note: If you choose the Everything option don't pick others)</legend>
 

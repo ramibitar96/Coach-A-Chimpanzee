@@ -3,8 +3,13 @@
 @import 'home';
 @import 'register';
 @import 'queue';
+@import 'profile';
 
 body {
 	overflow: hidden;
+
+	&.scroll {
+		overflow: auto !important;
+	}
 }
 

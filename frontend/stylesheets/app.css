@@ -160,7 +160,14 @@
   background-image: url("../img/queue-bg.jpg");
   background-size: cover; }
 
+.profile-main {
+  padding-top: 100px; }
+  .profile-main .basic-info {
+    padding-bottom: 25px; }
+
 body {
   overflow: hidden; }
+  body.scroll {
+    overflow: auto !important; }
 
 /*# sourceMappingURL=app.css.map */

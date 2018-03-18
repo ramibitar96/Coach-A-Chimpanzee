@@ -1,76 +1,89 @@
 <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
-	<head>
-		<meta charset="utf-8"/>
-		<meta http-equiv="x-ua-compatible" content="ie=edge"/>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-		<title>Enter queue</title>
-		<link rel="stylesheet" href="stylesheets/foundation.css"/>
-		<link rel="stylesheet" href="stylesheets/app.css"/>
-		<link rel="stylesheet" href="stylesheets/sidebar.css">
-		<script src="js/vendor/modernizr.js"></script>
-	</head>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preference Page</title>
+    <link rel="stylesheet" href="stylesheets/foundation.css">
+    <link rel="stylesheet" href="stylesheets/app.css">
+    <link rel="stylesheet" href="stylesheets/tabs.css">
+    <link rel="stylesheet" href="stylesheets/sidebar.css">
+    <style>
+    </style>
+  </head>
+  <body class="scroll" >
+    <div id="mySidenav" class="sidenav">
+		  <a href="profile.html">Profile</a>
+        <a href="queue.html">Queue me up</a>
+        <a href="PLpreferences.html">Settings</a>
+         <a href="#">Logout</a>
+    </div>
 
+      <nav class="top-bar" data-topbar role="navigation">
+        <ul class="title-area">
+     <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+          <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+       </ul>
 
-	<body>
-		<div id="mySidenav" class="sidenav">
-        	<a href="index.html">F.A.Q.</a>
-        	<a href="queue.html">Queue me up</a>
-        	<a href="PLpreferences.html">Settings</a>
-        	<a href="#">Logout</a>
-    	</div>
+  <section class="top-bar-section">
+    <!-- Right Nav Section -->
+      <ul class="right">
+      </ul>
 
-   	   <nav class="top-bar" data-topbar role="navigation">
-       	<ul class="title-area">
-     	<!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
-     		<li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
-        </ul>
+      <ul class="left">
+       <button onclick="ocNav()";>☰</button>
+      </ul>
+    </section>
+</nav>
 
-  	    <section class="top-bar-section">
-    		<!-- Right Nav Section -->
-    	 	<ul class="right">
-      		</ul>
-
-      		<ul class="left">
-       			<button onclick="ocNav()";>☰</button>
-     		</ul>
-    	</section>
-	</nav>
-	
-	</nav>
-	<div class="main qmain large-12 medium-12">
-		<div class="tabs-content">
-			<div class="content active" id="panel1">
-				<div class="intro center-text">
-					<h2>Enter queue as...</h2>
-				</div>
-				<div class="section large-6 medium-6 columns left">
-					<div class="button-div large-6 medium-6 columns medium-centered large-centered push-2">
-						<a class="button">Student</a>
-					</div>
-				</div>
-				<div class="section large-6 medium-6 columns right">
-					<div class="button-div large-6 medium-6 columns medium-centered large-centered pull-2">
-						<a class="button">Coach</a>
-					</div>
-				</div>
+<div class="profile-main push-2 large-8 medium-8">
+		<div class="basic-info row">
+			<div class="profile-image large-3 medium-3 columns">
+				<img src="./img/profile_temp.png" class="p-img">
+			</div>
+			<div class="name large-9 medium-9 columns">
+				<h2>Name</h2>
+				<h2>Bronze 2</h2>
+				<h2>In Game</h2>
 			</div>
 		</div>
+		<div id="twitch-embed" class="twitch-embed columns row"></div>
+
 	</div>
-		<script src="js/vendor/jquery.js"></script>
-		<script src="js/foundation.min.js"></script>
-		<script src="js/custom/faq.js"></script>
-		<script>
-			$(document).foundation();
-		</script>
-		<script>
-        	function ocNav() {
-            	var width = document.getElementById('mySidenav').offsetWidth;
-            	if (width == 0)
-            	    document.getElementById("mySidenav").style.width = "250px";
-            	if (width == 250)
-            	    document.getElementById("mySidenav").style.width = "0px";
-        	}
-    </script> 
-	</body>
+	<script src="js/vendor/jquery.js"></script>
+	<script src="js/foundation.min.js"></script>
+	<script src="js/foundation/foundation.dropdown.js"></script>
+	<script src="js/custom/preferencesPage.js"></script>
+	<script src="https://embed.twitch.tv/embed/v1.js"></script>
+    <!-- Create a Twitch.Embed object that will render within the "twitch-embed" root element. -->
+    <script type="text/javascript">
+      var embed = new Twitch.Embed("twitch-embed", {
+        width: "100%",
+        height: 480,
+        channel: "riotgames",
+		  layout: "video",
+		  autoplay: false
+      });
+
+      embed.addEventListener(Twitch.Embed.VIDEO_READY, () => {
+        var player = embed.getPlayer();
+        player.play();
+      });
+    </script>	
+	
+	<script>
+		$(document).foundation();
+	</script> 
+    <script>
+        function ocNav() {
+            var width = document.getElementById('mySidenav').offsetWidth;
+            if (width == 0)
+                document.getElementById("mySidenav").style.width = "250px";
+            if (width == 250)
+                document.getElementById("mySidenav").style.width = "0px";
+        }
+    </script>
+
+  </body>
 </html>
