@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,MAAO;EACN,gBAAgB,EAAE,0BAA0B;EAC5C,eAAe,EAAE,KAAK",
+"sources": ["queue.scss"],
+"names": [],
+"file": "queue.css"
+}

@@ -11,14 +11,16 @@
     <link rel="stylesheet" href="stylesheets/sidebar.css">
     <style>
         body {
-         background-image: url("bgimage.png");
+				background-image: url("bgimage.png");
+				overflow: auto !important;
         }
     </style>
   </head>
   <body>
     <div id="mySidenav" class="sidenav">
-         <a href="index.html">F.A.Q.</a>
+		  <a href="profile.html">Profile</a>
         <a href="queue.html">Queue me up</a>
+		  <a href="history.html">Chat Logs</a>
         <a href="PLpreferences.html">Settings</a>
          <a href="#">Logout</a>
     </div>
@@ -44,133 +46,142 @@
 
 </div>
 
-<div class="tab large-4 medium-4 large-centered medium-centered columns">
-  <button class="tablinks" onclick="OpenPrefForm(event, 'General')" id="defaultOpen">General</button>
-  <button class="tablinks" onclick="OpenPrefForm(event, 'Student')" >Student</button>
-  <button class="tablinks" onclick="OpenPrefForm(event, 'Coach')">Coach</button>
+<div class = "large-4 medium-4 large-centered medium-centered columns">
+    <div class="tab large-12 medium-12 large-centered medium-centered">
+      <button class="tablinks large-4 medium-4 columns" onclick="OpenPrefForm(event, 'General')" id="defaultOpen">General</button>
+      <button class="tablinks large-4 medium-4 columns" onclick="OpenPrefForm(event, 'Student')" >Student</button>
+      <button class="tablinks large-4 medium-4 columns" onclick="OpenPrefForm(event, 'Coach')">Coach</button>
+    </div>
+
+    <div id="General" class="tabcontent large-12 medium-12 large-centered medium-centered columns">
+          <h3>Edit your general information</h3>
+          <form id="generalInfo">
+            <div class="container">
+                <label><b>Summoner Name:</b></label>
+                <input id="SummonerName" type="text" placeholder="Summoner Name" name="SummName">
+
+					 <label><b>Your Current Elo:</b></label>
+                <select name="rank" id="rank">
+                    <option value="1"> Bronze</option>
+                    <option value="2"> Silver</option>
+                    <option value="3"> Gold</option>
+                    <option value="4"> Platinum</option>
+                    <option value="5"> Diamond</option>
+                    <option value="6"> Master</option>
+                    <option value="7"> Challenger</option>
+                </select>
+
+					 <label><b>Twitch TV Stream</b></label>
+					 <input id="twitch" type="text" placeholder="http://www.twitch.tv/USERNAME" name="twitchLink">
+                
+                <button type="submit">Save Changes</button>
+            </div>
+        </form>
+
+    </div>
+
+    <div id="Student" class="tabcontent large-12 medium-12 large-centered medium-centered columns">
+
+      <h3>Edit your preferences as a Student</h3>
+      <form id="studentPref">
+            <div class="container">
+                <fieldset>
+                    <legend>Choose what you would like to improve on (Note: If you choose the Everything option don't pick others)</legend>
+
+                    <input type="checkbox" id="Everything" name="focus" value="Everything">
+                    <label for = "Everything">Everything!</label><br>
+
+                    <input type="checkbox" id="LastHitting" name="focus" value="LastHitting">
+                    <label for = "LastHitting">Last Hitting</label><br>
+
+                    <input type ="checkbox" id="Macro" name="focus" value="Macro">
+                    <label for = "Macro">Macro</label><br>
+
+                    <input type="checkbox" id="MapAwareness" name="focus" value="Map">
+                    <label for = "MapAwareness">Map Awareness</label><br>
+
+                    <input type="checkbox" id="Skillshots" name="focus" value="Skillshots">
+                    <label for = "Skillshots">Skillshots (Offense/Defence)</label><br>
+
+                    <input type="checkbox" id="Freezing" name="focus" value="Freezing">
+                    <label for = "Freezing">Freezing Waves</label><br>
+
+                    <input type="checkbox" id="Matchups" name="focus" value="Matchups">
+                    <label for = "Matchups">Matchups</label><br>
+
+                    <input type="checkbox" id="SetUp" name="focus" value="SetUp">
+                    <label for = "SetUp">Set-up</label><br>
+                </fieldset>
+
+                <p>Select the minimum rank you would like your coach to be (Example: Selecting Platinum would allow anyone who is Platinum 5 or higher to coach you).</p>
+                <select name="minRank" id="min_rank">
+                    <option value="0" selected = "selected"> No Preference</option>
+                    <option value="1"> Bronze</option>
+                    <option value="2"> Silver</option>
+                    <option value="3"> Gold</option>
+                    <option value="4"> Platinum</option>
+                    <option value="5"> Diamond</option>
+                    <option value="6"> Master</option>
+                    <option value="7"> Challenger</option>
+                </select>
+                <button type="submit">Save Changes</button>
+            </div>
+        </form>
+    </div>
+
+
+    <div id="Coach" class="tabcontent large-12 medium-12 large-centered medium-centered columns">
+      <h3>Edit your preferences as a Coach</h3>
+          <form id="coachPref">
+					<div>
+					<label for="yes_no_radio">Coach a replay file</label>
+					<input type="radio" name="yes_no" id="yes_no_yes">Yes</input>
+					<input type="radio" name="yes_no" id="yes_no_no">No</input>
+				</div>
+                <fieldset>
+                    <legend>Choose your Expertise (Note: If you choose the Everything option don't pick others)</legend>
+
+                    <input type="checkbox" id="EverythingC" name="expertise" value="EverythingC">
+                    <label for = "EverythingC">Everything!</label><br>
+
+                    <input type="checkbox" id="LastHittingC" name="expertise" value="LastHittingC">
+                    <label for = "LastHittingC">Last Hitting</label><br>
+
+                    <input type="checkbox" id="MacroC" name="expertise" value="MacroC">
+                    <label for = "MacroC">Macro</label><br>
+
+                    <input type="checkbox" id="MapAwarenessC" name="expertise" value="MapC">
+                    <label for = "MapAwarenessC">Map Awareness</label><br>
+
+                    <input type="checkbox" id="SkillshotsC" name="expertise" value="SkillshotsC">
+                    <label for = "SkillshotsC">Skillshots (Offense/Defence)</label><br>
+
+                    <input type="checkbox" id="FreezingC" name="expertise" value="FreezingC">
+                    <label for = "FreezingC">Freezing Waves</label><br>
+
+                    <input type="checkbox" id="MatchupsC" name="expertise" value="MatchupsC">
+                    <label for = "MatchupsC">Matchups</label><br>
+
+                    <input type="checkbox" id="SetUpC" name="expertise" value="SetUpC">
+                    <label for = "SetUpC">Set-up</label><br>
+                </fieldset>
+
+                <p>Select the minimum rank you would like to coach (Example: Selecting Silver would allow anyone who is Silver 5 or higher to be your student).</p>
+                <select name="minRankC" id="maxStudentRank">
+                    <option value="0" selected = "selected"> No Preference</option>
+                    <option value="1"> Bronze</option>
+                    <option value="2"> Silver</option>
+                    <option value="3"> Gold</option>
+                    <option value="4"> Platinum</option>
+                    <option value="5"> Diamond</option>
+                    <option value="6"> Master</option>
+                    <option value="7"> Challenger</option>
+                </select>
+                <button type="submit">Save Changes</button>
+            </div>
+        </form>
+    </div>
 </div>
-
-<div id="General" class="tabcontent large-4 medium-4 large-centered medium-centered columns">
-      <h3>Edit your general information</h3>
-      <form id="generalInfo">
-        <div class="container">
-            <label><b>Summoner Name:</b></label>
-            <input id="SummonerName" type="text" placeholder="Summoner Name" name="SummName">
-
-            <p>Your Current Elo:<p>
-            <select name="rank">
-                <option value="1"> Bronze</option>
-                <option value="2"> Silver</option>
-                <option value="3"> Gold</option>
-                <option value="4"> Platinum</option>
-                <option value="5"> Diamond</option>
-                <option value="6"> Master</option>
-                <option value="7"> Challenger</option>
-            </select>
-            
-            <button type="submit">Save Changes</button>
-        </div>
-    </form>
-
-</div>
-
-<div id="Student" class="tabcontent large-4 medium-4 large-centered medium-centered columns">
-
-  <h3>Edit your preferences as a Student</h3>
-  <form id="studentPref">
-        <div class="container">
-            <fieldset>
-                <legend>Choose what you would like to improve on (Note: If you choose the Everything option don't pick others)</legend>
-
-                <input type="checkbox" id="Everything" name="focus" value="Everything">
-                <label for = "Everything">Everything!</label><br>
-
-                <input type="checkbox" id="LastHitting" name="focus" value="LastHitting">
-                <label for = "LastHitting">Last Hitting</label><br>
-
-                <input type ="checkbox" id="Macro" name="focus" value="Macro">
-                <label for = "Macro">Macro</label><br>
-
-                <input type="checkbox" id="MapAwareness" name="focus" value="Map">
-                <label for = "MapAwareness">Map Awareness</label><br>
-
-                <input type="checkbox" id="Skillshots" name="focus" value="Skillshots">
-                <label for = "Skillshots">Skillshots (Offense/Defence)</label><br>
-
-                <input type="checkbox" id="Freezing" name="focus" value="Freezing">
-                <label for = "Freezing">Freezing Waves</label><br>
-
-                <input type="checkbox" id="Matchups" name="focus" value="Matchups">
-                <label for = "Matchups">Matchups</label><br>
-
-                <input type="checkbox" id="SetUp" name="focus" value="SetUp">
-                <label for = "SetUp">Set-up</label><br>
-            </fieldset>
-
-            <p>Select the minimum rank you would like your coach to be (Example: Selecting Platinum would allow anyone who is Platinum 5 or higher to coach you).</p>
-            <select name="minRank">
-                <option value="0" selected = "selected"> No Preference</option>
-                <option value="1"> Bronze</option>
-                <option value="2"> Silver</option>
-                <option value="3"> Gold</option>
-                <option value="4"> Platinum</option>
-                <option value="5"> Diamond</option>
-                <option value="6"> Master</option>
-                <option value="7"> Challenger</option>
-            </select>
-            <button type="submit">Save Changes</button>
-        </div>
-    </form>
-</div>
-
-<div id="Coach" class="tabcontent large-4 medium-4 large-centered medium-centered columns">
-  <h3>Edit your preferences as a Coach</h3>
-      <form id="coachPref">
-
-            <fieldset>
-                <legend>Choose your Expertise (Note: If you choose the Everything option don't pick others)</legend>
-
-                <input type="checkbox" id="EverythingC" name="expertise" value="EverythingC">
-                <label for = "EverythingC">Everything!</label><br>
-
-                <input type="checkbox" id="LastHittingC" name="expertise" value="LastHittingC">
-                <label for = "LastHittingC">Last Hitting</label><br>
-
-                <input type="checkbox" id="MacroC" name="expertise" value="MacroC">
-                <label for = "MacroC">Macro</label><br>
-
-                <input type="checkbox" id="MapAwarenessC" name="expertise" value="MapC">
-                <label for = "MapAwarenessC">Map Awareness</label><br>
-
-                <input type="checkbox" id="SkillshotsC" name="expertise" value="SkillshotsC">
-                <label for = "SkillshotsC">Skillshots (Offense/Defence)</label><br>
-
-                <input type="checkbox" id="FreezingC" name="expertise" value="FreezingC">
-                <label for = "FreezingC">Freezing Waves</label><br>
-
-                <input type="checkbox" id="MatchupsC" name="expertise" value="MatchupsC">
-                <label for = "MatchupsC">Matchups</label><br>
-
-                <input type="checkbox" id="SetUpC" name="expertise" value="SetUpC">
-                <label for = "SetUpC">Set-up</label><br>
-            </fieldset>
-
-            <p>Select the minimum rank you would like to coach (Example: Selecting Silver would allow anyone who is Silver 5 or higher to be your student).</p>
-            <select name="minRankC">
-                <option value="0" selected = "selected"> No Preference</option>
-                <option value="1"> Bronze</option>
-                <option value="2"> Silver</option>
-                <option value="3"> Gold</option>
-                <option value="4"> Platinum</option>
-                <option value="5"> Diamond</option>
-                <option value="6"> Master</option>
-                <option value="7"> Challenger</option>
-            </select>
-            <button type="submit">Save Changes</button>
-        </div>
-    </form>
-</div>
-
     <script>
         function OpenPrefForm(evt, PrefPage) {
             var i, tabcontent, tablinks;
@@ -187,10 +198,13 @@
         }
         document.getElementById("defaultOpen").click();
     </script>
-    <script src="js/vendor/jquery.js"></script>
-    <script src="js/vendor/what-input.js"></script>
-    <script src="js/vendor/foundation.js"></script>
-    <script src="js/app.js"></script>
+	<script src="js/vendor/jquery.js"></script>
+	<script src="js/foundation.min.js"></script>
+	<script src="js/foundation/foundation.dropdown.js"></script>
+	<script src="js/custom/preferencesPage.js"></script>
+	<script>
+		$(document).foundation();
+	</script> 
     <script>
         function ocNav() {
             var width = document.getElementById('mySidenav').offsetWidth;
