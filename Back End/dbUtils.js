@@ -47,7 +47,22 @@ async function getUserPrefs(username)
 	`;
 	let rankResults = await db.get(rankQuery, username);
 
-	// TODO: Query Riot's servers for summoner name and rank
+	// Query for the summoner name and rank
+	// TODO: Replace this with a query to Riot's servers
+	let miscPrefsQuery = 
+	`
+		SELECT
+			user_id,
+			summoner_name,
+			current_rank
+		FROM 
+			user_misc_preferences
+		WHERE
+			user_id = ?;
+	`;
+
+	let miscPrefs = await db.get(miscPrefsQuery, uid);
+	// TODO: return error if not found
 	
 	// Query for the skills
 	let coachSkills = await getSkillPrefs(uid, false);
@@ -60,8 +75,8 @@ async function getUserPrefs(username)
 
 		user:
 		{
-			// TODO: Summoner name
-			// TODO: Current rank
+			summoner_name: miscPrefs[0].summoner_name,
+			current_rank: miscPrefs[0].current_rank
 		},
 
 		student:
