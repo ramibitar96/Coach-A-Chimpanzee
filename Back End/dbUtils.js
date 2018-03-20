@@ -66,14 +66,12 @@ async function getUserPrefs(username)
 
 		student:
 		{
-			// TODO: All the skills
 			skills: coacheeSkills,
 			min_coach_rank: rankResults.min_coach_rank
 		},
 
 		coach:
 		{
-			// TODO: All the skills
 			skills: coachSkills,
 			max_coachee_rank: rankResults.max_coachee_rank
 		},
@@ -92,10 +90,25 @@ async function setUserPrefs(username, prefsData)
 	let uidResults = await db.get(uidQuery, username);
 	let uid = uidResults.rowid;
 
-	console.log(uidResults);
-	console.log("" + username + "'s id is " + uid);
+	// Set preferences from the "user" part of prefsData.
+	let miscPrefsQuery = 
+	`
+		INSERT INTO user_misc_preferences
+		(
+			user_id,
+			summoner_name,
+			current_rank
+		)
+		VALUES (?, ?, ?);
+	`;
 
-	// TODO: Set preferences from the "user" part of prefsData.
+	let miscPrefsPromise = db.run
+	(
+		miscPrefsQuery,
+		uid,
+		prefsData.user.summoner_name,
+		prefsData.user.current_rank
+	);
 
 	// Set the skill settings
 	let coachSkillsPromise = setSkillPrefs(uid, prefsData.coach.skills, false);
@@ -121,6 +134,7 @@ async function setUserPrefs(username, prefsData)
 	);
 
 	// Wait for all the promises to finish.
+	await miscPrefsPromise;
 	await rankPromise;
 	await coachSkillsPromise;
 	await coacheeSkillsPromise;

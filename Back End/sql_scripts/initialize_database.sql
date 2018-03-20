@@ -49,6 +49,18 @@ CREATE TABLE IF NOT EXISTS coach_skills
 	FOREIGN KEY(user_id) REFERENCES user(rowid)
 );
 
+-- This data is not part of the "user" table because not all users will have this filled
+-- out right away.
+CREATE TABLE IF NOT EXISTS user_misc_preferences
+(
+	user_id int,
+	
+	summoner_name varchar,
+	current_rank int,
+
+	FOREIGN KEY(user_id) REFERENCES user(rowid)
+);
+
 CREATE TABLE IF NOT EXISTS user_rank_preferences
 (
     user_id int,
