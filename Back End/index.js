@@ -7,7 +7,7 @@ const auth = require('./authenticationUtils.js');
 const ErrorCodeEnum = require('./errorCodes.js');
 
 var app = express();
-//yash was here
+
 // Tell expressjs that we want to allow cookies from mutliple origins
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -80,10 +80,45 @@ app.post('/login', async function(req, res)
 });
 
 // Retrieves the user preferences of the currently logged-in user.
-app.get('/get_prefs')
+app.get('/get_prefs', async function(req, res)
 {
+    // TODO: Error if bad json object for cookie
+    let token = req.cookies.session_token;
+    let authResults = await auth.checkToken(token);
 
-}
+    // Send the error code if the token is bad
+    if (authResults.error_code != 0)
+    {
+        res.send({error_code: authResults.error_code});
+        return;
+    }
+
+    // Retrieve the user prefs and send them.
+    let results = await dbUtils.getUserPrefs(authResults.username);
+    res.send(results);
+});
+
+// Sets the user preferences of the currently logged-in user.
+app.post('/set_prefs', async function(req, res)
+{
+    // TODO: Error if bad json object for cookie
+    let token = req.cookies.session_token;
+    let authResults = await auth.checkToken(token);
+
+    // Send the error code if the token is bad
+    // TODO: Refactor this copypasta code
+    if (authResults.error_code != 0)
+    {
+        res.send({error_code: authResults.error_code});
+        return;
+    }
+
+    // TODO: Error if the body does not have the required data
+
+    // Set the preferences
+    let results = await dbUtils.setUserPrefs(authResults.username, req.body);
+    res.send(results);
+});
 
 // Returns a webpage displaying the username of the currently-logged-in user.
 app.get('/whats_my_username', async function(req, res)

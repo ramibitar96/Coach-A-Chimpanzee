@@ -1,5 +1,6 @@
 const ErrorCodeEnum =
 {
+    UNKNOWN_SERVER_ERROR: -1,
     SUCCESS: 0,
     USERNAME_EXISTS: 1,
     EMAIL_INVALID: 2,
