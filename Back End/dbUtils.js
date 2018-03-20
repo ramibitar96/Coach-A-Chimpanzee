@@ -14,8 +14,6 @@ async function initializeDatabase()
 	db = await sqlite.open('./database_contents/database.sqlite', {Promise});
     module.exports.db = db;     // Ensures other files will be able to reference db
 
-    console.log("db = " + db);
-
 	// Create the tables
 	await executeSQLScript("./sql_scripts/initialize_database.sql", db);
 }
@@ -61,9 +59,18 @@ async function getUserPrefs(username)
 			user_id = ?;
 	`;
 
+
 	let miscPrefs = await db.get(miscPrefsQuery, uid);
-	// TODO: return error if not found
-	
+
+	let summoner_name = null;
+	let current_rank = -1;
+
+	if (miscPrefs != undefined)
+	{
+		summoner_name = miscPrefs.summoner_name;
+		current_rank = miscPrefs.current_rank;
+	}
+
 	// Query for the skills
 	let coachSkills = await getSkillPrefs(uid, false);
 	let coacheeSkills = await getSkillPrefs(uid, true);
@@ -75,8 +82,8 @@ async function getUserPrefs(username)
 
 		user:
 		{
-			summoner_name: miscPrefs[0].summoner_name,
-			current_rank: miscPrefs[0].current_rank
+			summoner_name: summoner_name,
+			current_rank: current_rank
 		},
 
 		student:
