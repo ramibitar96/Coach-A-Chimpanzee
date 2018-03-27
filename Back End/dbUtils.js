@@ -109,6 +109,10 @@ async function setUserPrefs(username, prefsData)
 	let uidResults = await db.get(uidQuery, username);
 	let uid = uidResults.rowid;
 
+	// Delete the preferences row if it already exists
+	let deleteQuery = `DELETE FROM user_misc_preferences WHERE user_id = ?;`;
+	await db.run(deleteQuery, uid);
+
 	// Set misc user preferences
 	let miscPrefsQuery = 
 	`
