@@ -1,12 +1,15 @@
 // Imports
-const express = require('express');
+const express = require('express');             // Express.js, the framework we use for responding to requests and serving pages
+const socketIO = require('socket.io');          // Socket.io, the framework we use for the chat functionality
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const dbUtils = require('./dbUtils.js');
 const auth = require('./authenticationUtils.js');
 const ErrorCodeEnum = require('./errorCodes.js');
 
-var app = express();
+var app = express();                            // Create the expressjs app
+var server = require('http').Server(app);       // Wrap it up inside a server object so we can use it alongside socket.io
+var io = socketIO(server);                      // Tell socket.io that we want it to run on our express.js server
 
 // Tell expressjs that we want to allow cookies from mutliple origins
 app.use(function(req, res, next) {
@@ -157,7 +160,7 @@ async function main()
 	await dbUtils.initializeDatabase();
 
 	// Start handling requests
-	app.listen(3000, function()
+	server.listen(3000, function()
 	{
 		console.log('Listening on port 3000!');
 	});
