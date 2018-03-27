@@ -71,7 +71,7 @@ async function getUserPrefs(username)
 
 	if (miscPrefs != undefined)
 	{
-		view_replay = miscPrefs.view_replay;
+		view_replay = Boolean(miscPrefs.view_replay);	// SQLite returns integers 0 and 1, so we need to cast to a bool
 		twitch_name = miscPrefs.twitch_name;
 		summoner_name = miscPrefs.summoner_name;
 		current_rank = miscPrefs.current_rank;
