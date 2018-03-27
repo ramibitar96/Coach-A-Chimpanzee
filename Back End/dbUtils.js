@@ -129,9 +129,11 @@ async function setUserPrefs(username, prefsData)
 			view_replay,
 			twitch_name,
 			summoner_name,
-			current_rank
+			current_rank,
+			min_coach_rank,
+			max_coachee_rank
 		)
-		VALUES (?, ?, ?, ?, ?);
+		VALUES (?, ?, ?, ?, ?, ?, ?);
 	`;
 
 	let miscPrefsPromise = db.run
@@ -140,35 +142,17 @@ async function setUserPrefs(username, prefsData)
 		uid,
 		prefsData.coach.view_replay,
 		prefsData.user.summoner_name,
-		prefsData.user.current_rank
+		prefsData.user.current_rank,
+		prefsData.student.min_coach_rank,
+		prefsData.coach.max_coachee_rank
 	);
 
 	// Set the skill settings
 	let coachSkillsPromise = setSkillPrefs(uid, prefsData.coach.skills, false);
 	let coacheeSkillsPromise = setSkillPrefs(uid, prefsData.student.skills, true);
-	
-	// Set the coach/coachee ranks
-	let rankQuery = 
-	`
-		INSERT INTO user_rank_preferences
-		(
-			user_id,
-			min_coach_rank,
-			max_coachee_rank
-		)
-		VALUES (?, ?, ?);
-	`;
-	let rankPromise = db.run
-	(
-		rankQuery,
-		uid,
-		prefsData.student.min_coach_rank,
-		prefsData.coach.max_coachee_rank
-	);
 
 	// Wait for all the promises to finish.
 	await miscPrefsPromise;
-	await rankPromise;
 	await coachSkillsPromise;
 	await coacheeSkillsPromise;
 
