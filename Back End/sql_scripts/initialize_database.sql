@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS coach_skills
 CREATE TABLE IF NOT EXISTS user_misc_preferences
 (
 	user_id int,
-	
+	view_replay boolean,	-- If this is true, the user wants to view a replay instead of a live game when coaching
 	twitch_name varchar,
 	summoner_name varchar,
 	current_rank int,
@@ -62,6 +62,7 @@ CREATE TABLE IF NOT EXISTS user_misc_preferences
 	FOREIGN KEY(user_id) REFERENCES user(rowid)
 );
 
+-- TODO: Combine this with user_misc_preferences
 CREATE TABLE IF NOT EXISTS user_rank_preferences
 (
     user_id int,

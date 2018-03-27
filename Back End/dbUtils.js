@@ -46,11 +46,12 @@ async function getUserPrefs(username)
 	let rankResults = await db.get(rankQuery, username);
 
 	// Query for the summoner name and rank
-	// TODO: Replace this with a query to Riot's servers
+	// TODO: Replace summoner_name and current_rank with a query to Riot's servers
 	let miscPrefsQuery = 
 	`
 		SELECT
 			user_id,
+			view_replay,
 			twitch_name,
 			summoner_name,
 			current_rank
@@ -63,12 +64,15 @@ async function getUserPrefs(username)
 
 	let miscPrefs = await db.get(miscPrefsQuery, uid);
 
+	let view_replay = null;
 	let twitch_name = null;
 	let summoner_name = null;
 	let current_rank = -1;
 
 	if (miscPrefs != undefined)
 	{
+		view_replay = miscPrefs.view_replay;
+		twitch_name = miscPrefs.twitch_name;
 		summoner_name = miscPrefs.summoner_name;
 		current_rank = miscPrefs.current_rank;
 	}
@@ -84,6 +88,7 @@ async function getUserPrefs(username)
 
 		user:
 		{
+			replay: view_replay,
 			twitch_name: twitch_name,
 			summoner_name: summoner_name,
 			current_rank: current_rank
