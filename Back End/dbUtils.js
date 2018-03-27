@@ -51,6 +51,7 @@ async function getUserPrefs(username)
 	`
 		SELECT
 			user_id,
+			twitch_name,
 			summoner_name,
 			current_rank
 		FROM 
@@ -62,6 +63,7 @@ async function getUserPrefs(username)
 
 	let miscPrefs = await db.get(miscPrefsQuery, uid);
 
+	let twitch_name = null;
 	let summoner_name = null;
 	let current_rank = -1;
 
@@ -82,6 +84,7 @@ async function getUserPrefs(username)
 
 		user:
 		{
+			twitch_name: twitch_name,
 			summoner_name: summoner_name,
 			current_rank: current_rank
 		},
@@ -118,10 +121,11 @@ async function setUserPrefs(username, prefsData)
 		INSERT INTO user_misc_preferences
 		(
 			user_id,
+			twitch_name,
 			summoner_name,
 			current_rank
 		)
-		VALUES (?, ?, ?);
+		VALUES (?, ?, ?, ?);
 	`;
 
 	let miscPrefsPromise = db.run

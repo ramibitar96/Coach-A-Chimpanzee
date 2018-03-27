@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS user_misc_preferences
 (
 	user_id int,
 	
+	twitch_name varchar,
 	summoner_name varchar,
 	current_rank int,
 
