@@ -88,7 +88,6 @@ async function getUserPrefs(username)
 
 		user:
 		{
-			replay: view_replay,
 			twitch_name: twitch_name,
 			summoner_name: summoner_name,
 			current_rank: current_rank
@@ -102,6 +101,7 @@ async function getUserPrefs(username)
 
 		coach:
 		{
+			view_replay: view_replay,
 			skills: coachSkills,
 			max_coachee_rank: rankResults.max_coachee_rank
 		},
@@ -120,23 +120,25 @@ async function setUserPrefs(username, prefsData)
 	let uidResults = await db.get(uidQuery, username);
 	let uid = uidResults.rowid;
 
-	// Set preferences from the "user" part of prefsData.
+	// Set misc user preferences
 	let miscPrefsQuery = 
 	`
 		INSERT INTO user_misc_preferences
 		(
 			user_id,
+			view_replay,
 			twitch_name,
 			summoner_name,
 			current_rank
 		)
-		VALUES (?, ?, ?, ?);
+		VALUES (?, ?, ?, ?, ?);
 	`;
 
 	let miscPrefsPromise = db.run
 	(
 		miscPrefsQuery,
 		uid,
+		prefsData.coach.view_replay,
 		prefsData.user.summoner_name,
 		prefsData.user.current_rank
 	);

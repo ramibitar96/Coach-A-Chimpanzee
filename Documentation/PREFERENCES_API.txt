@@ -23,7 +23,7 @@ The server will respond with a JSON object of the following format:
 
         "coach":
         {
-            "replay": <a boolean indicating whether or not the coach wants to watch a replay instead of live game>
+            "view_replay": <a boolean indicating whether or not the coach wants to watch a replay instead of live game>
             "skills": <an array of booleans>
             "max_coachee_rank": <max rank of student, an integer from 0 to 6>
         }
