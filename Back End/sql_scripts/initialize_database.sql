@@ -58,16 +58,8 @@ CREATE TABLE IF NOT EXISTS user_misc_preferences
 	twitch_name varchar,
 	summoner_name varchar,
 	current_rank int,
+	min_coach_rank int,
+	max_coachee_rank int,
 
 	FOREIGN KEY(user_id) REFERENCES user(rowid)
-);
-
--- TODO: Combine this with user_misc_preferences
-CREATE TABLE IF NOT EXISTS user_rank_preferences
-(
-    user_id int,
-    min_coach_rank int,     --- The minimum rank this user wants their coach to be.
-    max_coachee_rank int,   --- The maximum rank this user wants their student to be.
-
-    FOREIGN KEY(user_id) REFERENCES user(rowid)
 );
