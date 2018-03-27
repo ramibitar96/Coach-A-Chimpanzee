@@ -28,23 +28,6 @@ async function getUserPrefs(username)
 	let uidResults = await db.get(uidQuery, username);
 	let uid = uidResults.rowid;
 
-	// Query for the rank preferences
-	let rankQuery =
-	`
-		SELECT
-			user.user_name,
-			user.rowid,
-			user_rank_preferences.min_coach_rank,
-			user_rank_preferences.max_coachee_rank
-		FROM
-			user,
-			user_rank_preferences
-		WHERE
-			user.user_name = ? AND
-			user.rowid = user_rank_preferences.user_id;
-	`;
-	let rankResults = await db.get(rankQuery, username);
-
 	// Query for the summoner name and rank
 	// TODO: Replace summoner_name and current_rank with a query to Riot's servers
 	let miscPrefsQuery = 
@@ -54,20 +37,24 @@ async function getUserPrefs(username)
 			view_replay,
 			twitch_name,
 			summoner_name,
-			current_rank
+			current_rank,
+			min_coach_rank,
+			max_coachee_rank
 		FROM 
 			user_misc_preferences
 		WHERE
 			user_id = ?;
 	`;
 
-
 	let miscPrefs = await db.get(miscPrefsQuery, uid);
 
+	// TODO: What was I thinking?  Refactor this bullshit.
 	let view_replay = null;
 	let twitch_name = null;
 	let summoner_name = null;
 	let current_rank = -1;
+	let min_coach_rank = -1;
+	let max_coachee_rank = -1;
 
 	if (miscPrefs != undefined)
 	{
@@ -75,6 +62,8 @@ async function getUserPrefs(username)
 		twitch_name = miscPrefs.twitch_name;
 		summoner_name = miscPrefs.summoner_name;
 		current_rank = miscPrefs.current_rank;
+		min_coach_rank = miscPrefs.min_coach_rank;
+		max_coachee_rank = miscPrefs.max_coachee_rank;
 	}
 
 	// Query for the skills
@@ -96,14 +85,14 @@ async function getUserPrefs(username)
 		student:
 		{
 			skills: coacheeSkills,
-			min_coach_rank: rankResults.min_coach_rank
+			min_coach_rank: min_coach_rank
 		},
 
 		coach:
 		{
 			view_replay: view_replay,
 			skills: coachSkills,
-			max_coachee_rank: rankResults.max_coachee_rank
+			max_coachee_rank: max_coachee_rank
 		},
 	};
 
