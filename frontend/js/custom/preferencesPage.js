@@ -21,7 +21,7 @@ function parseData(json) {
 	$("#rank").val(json_user["current_rank"]);
 
 	//twitch link 
-	//$("#twitch").val(json_user["twitch.tv"]);
+	$("#twitch").val(json_user["twitch_name"]);
 
 	//set student preferences
 	if (json_student["skills"][0]) {
@@ -37,14 +37,12 @@ function parseData(json) {
 	}	
 	$("#min_rank").val(json_student["min_coach_rank"]);
 	//set coach preferences
-	/*
-	 if (json_coach["replay"]) {
-	 $("#yes_no_yes").prop("checked", true);
-}
-else { 
-$("#yes_no_no").prop("checked", true);
-}
-*/
+	if (json_coach["view_replay"]) {
+		$("#yes_no_yes").prop("checked", true);
+	}
+	else { 
+		$("#yes_no_no").prop("checked", true);
+	}
 
 	if (json_coach["skills"][0]) {
 		$("#EverythingC").prop("checked", true);
@@ -64,9 +62,11 @@ $('#savePreferences').on('submit', function() {
 
 	var name = document.getElementById("SummonerName").value;
 	var rank = document.getElementById("rank").value;
+	var twitch = document.getElementById("twitch").value;
 
 	var user =
 		'"user": {' +
+		'"twitch_name":"' + twitch + '",' +
 		'"summoner_name":"' + name + '",' +
 		'"current_rank":' + rank +
 		'},';
@@ -88,6 +88,11 @@ $('#savePreferences').on('submit', function() {
 		'"min_coach_rank":' + rank_S +
 		'},';
 
+	if (document.getElementById("yes_no_yes").checked) {
+		var replay = true;
+	} else {
+		var replay = false;
+	}
 	var c0 = document.getElementById("EverythingC").checked;
 	var c1 = document.getElementById("LastHittingC").checked;
 	var c2 = document.getElementById("MacroC").checked;
@@ -101,6 +106,7 @@ $('#savePreferences').on('submit', function() {
 
 	var coach = 
 		'"coach": {' +
+		'"view_replay":' + replay + ',' +
 		'"skills":[' + c0 + ',' + c1 + ',' + c2 + ',' + c3 + ',' + c4 + ',' + c5 + ',' + c6 + ',' + c7 + '],' +
 		'"max_coachee_rank":' + rank_C +
 		'}';
