@@ -4,14 +4,17 @@
 
     function sendMessage()
     {
-        let msg = document.getElementByName("inputText").value;
+        let box = document.getElementById("inputText");
+        let msg = box.value;
+        
         socket.send(msg);
 
-        document.getElementByName("inputText").value = "";
+        alert("sending " + msg);
+        box.value = "";
     }
 </script>
 
-<form>
-    <input type = "Text" name = "inputText"/>
+<body>
+    <input type = "Text" id = "inputText"/>
     <button onclick="sendMessage()">Send</button>
-</form>
+</body>
