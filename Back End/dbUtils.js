@@ -134,6 +134,7 @@ async function setUserPrefs(username, prefsData)
 		miscPrefsQuery,
 		uid,
 		prefsData.coach.view_replay,
+		prefsData.user.twitch_name,
 		prefsData.user.summoner_name,
 		prefsData.user.current_rank,
 		prefsData.student.min_coach_rank,
