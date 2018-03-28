@@ -1,12 +1,12 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
     var socket = io.connect('http://localhost:3000');
-    
-    socket.on('message', function(msg)
+
+    socket.on('message_received', function(msg)
     {
         // Put it in the chatbox
         let chatArea = document.getElementById("chatArea");
-        chatArea.textContent += "Them: " + msg + "\n";
+        chatArea.textContent += msg.sender + ": " + msg.contents + "\n";
     });
 
     function keypressHandle(e)

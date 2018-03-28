@@ -1,0 +1,15 @@
+# Connecting to the chat server
+TODO
+
+# Sending messages
+To send a message from the client, simply call the "send" method on your socket object, with the message you want
+to send as the parameter.
+
+# Receiving messages on the client.
+
+When your partner sends you a message, your socket will receive the 'message_received' event.
+The event takes as a parameter an object that looks like this:
+{
+    "sender": <username of sender>,
+    "contents": contents of the message
+}

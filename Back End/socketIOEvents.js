@@ -27,8 +27,10 @@ module.exports = function(io)
             return;
         }
 
+        let username = authResult.username;
+
         // Associate the socket with the username
-        userSockets[authResult.username] = socket;
+        userSockets[username] = socket;
         socketUsers[socket.id] = authResult.username;
         console.log("associated socket " + socket.id + " with username " + authResult.username);
 
@@ -47,10 +49,16 @@ module.exports = function(io)
         {
             console.log(authResult.username + ": " + msg);
 
-            let partnerName = getPartner(authResult.username);
+            let partnerName = getPartner(username);
             let partnerSocket = userSockets[partnerName];
 
-            partnerSocket.send(msg);
+            let msgObj =
+            {
+                sender: username,
+                contents: msg
+            };
+
+            partnerSocket.emit('message_received', msgObj);
         });
     });
 }
