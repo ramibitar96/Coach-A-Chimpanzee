@@ -67,6 +67,6 @@ module.exports = function(io)
 // Returns the given user's partner.
 function getPartner(username)
 {
-    // TODO
+    // TODO: test
     return matchmaking.findPartner(username);
 }

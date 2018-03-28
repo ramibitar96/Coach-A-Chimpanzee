@@ -68,6 +68,8 @@ class User {
 }
 
 var matchedUsers = [];
+var students = [];
+var coaches = [];
 
 // Calculates "matchmaking quotient" between a student and coach, based on 
 // how many skills they have in common (strengths and weaknesses)
@@ -89,16 +91,16 @@ function calculateQuotient(student, coach) {
 
 // Iterates though lists of students and coaches and finds the best matches
 // prioritizing position in the list
-function matchUsers(studentList, coachList) {
+function matchUsers(students, coaches) {
 	var studentIndex = 0;
-	while (studentIndex < studentList.length) {
+	while (studentIndex < students.length) {
 		var i = 0;
 		var highestIndex = 0;
 		var highestQuotient = 0;
 
 		// Iterate through list of coaches
-		while (i < coachList.length) {
-			quotient = calculateQuotient(studentList[studentIndex], coachList[i]);
+		while (i < coaches.length) {
+			quotient = calculateQuotient(students[studentIndex], coaches[i]);
 			if (quotient > highestQuotient) {
 				highestQuotient = quotient;
 				highestIndex = i;
@@ -107,10 +109,10 @@ function matchUsers(studentList, coachList) {
 		}
 
 		if (highestQuotient > 0) {
-			var mp = new MatchedPair(studentList.splice(studentIndex, 1)[0], coachList.splice(highestIndex, 1)[0]);
+			var mp = new MatchedPair(students.splice(studentIndex, 1)[0], coaches.splice(highestIndex, 1)[0]);
 			matchedUsers.push(mp);
-			//console.log("Student: " + studentList.splice(studentIndex, 1)[0].name);
-			//console.log("Coach: " + coachList.splice(highestIndex, 1)[0].name);
+			//console.log("Student: " + students.splice(studentIndex, 1)[0].name);
+			//console.log("Coach: " + coaches.splice(highestIndex, 1)[0].name);
 			//console.log("Quotient: " + highestQuotient);
 			//console.log('\n');
 		} else {
@@ -118,6 +120,16 @@ function matchUsers(studentList, coachList) {
 			studentIndex += 1;
 		}
 	}
+}
+
+// Adds student to student array
+function addStudent(student) {
+	students.push(student);
+}
+
+// Adds coach to coach array
+function addCoach(coach) {
+	coaches.push(coach);
 }
 
 // Finds the specified user's pair by username
@@ -133,6 +145,12 @@ function findPartner(username) {
 	}
 
 	return null;
+}
+
+module.exports = {
+	addStudent,
+	addCoach,
+	findPartner
 }
 
 test1();
@@ -156,22 +174,20 @@ function test1() {
 	let c4 = new User("Braum", Rank.Master, [], [Rank.Gold], 0.9, [Skills.A, Skills.F], []);
 	let c5 = new User("Janna", Rank.Diamond, [], [Rank.Bronze, Rank.Gold], 0.9, [Skills.A, Skills.F], []);
 
-	var studentList = [];
-	studentList.push(s1);
-	studentList.push(s2);
-	studentList.push(s3);
-	studentList.push(s4);
-	studentList.push(s5);
+	students.push(s1);
+	students.push(s2);
+	students.push(s3);
+	students.push(s4);
+	students.push(s5);
 
-	var coachList = [];
-	coachList.push(c1);
-	coachList.push(c2);
-	coachList.push(c3);
-	coachList.push(c4);
-	coachList.push(c5);
+	coaches.push(c1);
+	coaches.push(c2);
+	coaches.push(c3);
+	coaches.push(c4);
+	coaches.push(c5);
 
 	console.log("Test Case 1:");
-	matchUsers(studentList, coachList);
+	matchUsers(students, coaches);
 
 	console.log(findPartner("Draven"));
 	console.log(findPartner("Leona"));
