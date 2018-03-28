@@ -18,6 +18,15 @@ async function initializeDatabase()
 	await executeSQLScript("./sql_scripts/initialize_database.sql", db);
 }
 
+// Returns the given user's uid.
+async function getUID(username)
+{
+	let query = "SELECT rowid FROM user WHERE user_name = ?;"
+	let queryResult = await db.get(query, username);
+
+	return queryResult.rowid;
+}
+
 // Queries the database for the given user's preferences.
 // See PREFERENCES_API for the structure of the object it returns.
 async function getUserPrefs(username)
