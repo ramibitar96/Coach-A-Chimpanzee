@@ -2,6 +2,7 @@
 const authUtils = require('./authenticationUtils.js');
 const ErrorCodeEnum = require('./errorCodes.js');
 const cookieParser = require('cookie');
+const matchmaking = require('./matchmaking.js');
 
 let userSockets = {};   // A dictionary mapping usernames to their sockets
 let socketUsers = {};   // A dictionary mapping sockets to their usernames
@@ -66,9 +67,6 @@ module.exports = function(io)
 // Returns the given user's partner.
 function getPartner(username)
 {
-    // TODO
-    if (username === "mike_wizowski")
-        return "ceilia";
-    else
-        return "mike_wizowski";
+    // TODO: test
+    return matchmaking.findPartner(username);
 }
