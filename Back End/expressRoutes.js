@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const dbUtils = require('./dbUtils.js');
 const auth = require('./authenticationUtils.js');
+const matchmaking = require('./matchmaking.js');
 const ErrorCodeEnum = require('./errorCodes.js');
 
 module.exports = function(app)
@@ -116,6 +117,34 @@ module.exports = function(app)
         // Set the preferences
         let results = await dbUtils.setUserPrefs(authResults.username, req.body);
         res.send(results);
+    });
+
+    app.post('/add_review', await function(req, res)
+    {
+        // TODO: Error if bad json object for cookie
+        let token = req.cookies.session_token;
+        let authResults = await auth.checkToken(token);
+
+        // Send the error code if the token is bad
+        // TODO: Refactor this copypasta code
+        if (authResults.error_code != 0)
+        {
+            res.send({error_code: authResults.error_code});
+            return;
+        }
+
+        // TODO: Error if bad json object for body
+
+        // Get the user ids
+        let coach_username = matchmaking.findPartner(authResults.username);
+        let coach_uid = await dbUtils.getUID(coach_username);
+        let student_uid = await dbUtils.getUID(authResults.username);
+
+        // Get the stuff from the body
+        let upvoteDownvote = req.body.upvoteOrDownvote;
+        let text = req.body.text;
+
+        dbUtils.add_review(student_uid, coach_uid, upvoteDownvote, text);
     });
 
     // Returns a webpage displaying the username of the currently-logged-in user.
