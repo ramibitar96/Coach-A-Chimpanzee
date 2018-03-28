@@ -27,8 +27,10 @@ module.exports = function(io)
             return;
         }
 
+        let username = authResult.username;
+
         // Associate the socket with the username
-        userSockets[authResult.username] = socket;
+        userSockets[username] = socket;
         socketUsers[socket.id] = authResult.username;
         console.log("associated socket " + socket.id + " with username " + authResult.username);
 
@@ -41,14 +43,32 @@ module.exports = function(io)
 
             console.log("User " + username + " disconnected.");
         });
+
+        // When a user sends a message, forward it to their partner.
+        socket.on('message', function(msg)
+        {
+            console.log(authResult.username + ": " + msg);
+
+            let partnerName = getPartner(username);
+            let partnerSocket = userSockets[partnerName];
+
+            let msgObj =
+            {
+                sender: username,
+                contents: msg
+            };
+
+            partnerSocket.emit('message_received', msgObj);
+        });
     });
-
-
 }
 
 // Returns the given user's partner.
 function getPartner(username)
 {
     // TODO
-    return "ceilia";
+    if (username === "mike_wizowski")
+        return "ceilia";
+    else
+        return "mike_wizowski";
 }
