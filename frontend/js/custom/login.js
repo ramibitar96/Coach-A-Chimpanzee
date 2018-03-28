@@ -1,5 +1,6 @@
 //signup pass to ajax
-$('.login-form').on('submit', function() {
+$('.login-form').on('submit', function(e) {
+	e.preventDefault();
 	var data = $('.login-form').serializeArray().reduce(function(obj, item) {
 		obj[item.name] = item.value;
 		return obj;
@@ -21,16 +22,10 @@ $('.login-form').on('submit', function() {
 			success: function (data){
 				var response = data;
 				if (response["error_code"] == 0) {
-					alert("success");
-					window.location.assign("test.html");
+					window.location.assign("queue.html");
+				} else if (response["error_code"] == 4 ) {
+					alert("User and/or Password incorrect");
 				}
 			}
 	});
 });
-
-/*
-var name = "temp";
-var date = new Date();
-date.setTime(date.getTime() + 24*60*60*1000); //expire in 1 day
-document.cookie = "username=" + name + "; expires=" + date.toUTCString() + ";path=/";
-*/

@@ -61,4 +61,5 @@ typings/
 .next
 
 # Contents of the SQLite database, and other file that the server generates at Runtime
-Back\ End/database_contents/
+Back\ End/database_contents/*
+!Back\ End/database_contents/.gitkeep

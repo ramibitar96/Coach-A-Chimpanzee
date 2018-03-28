@@ -11,33 +11,55 @@ The server will respond with a JSON object of the following format:
         "user":
         {
             "summoner_name": <summoner name>,
+            "twitch_name": <user's twitch username>
             "current_rank": <their rank, an integer from 0 to 6>    // NOTE: we should probably get this from Riot.
         },
 
         "student":
         {
-            "last_hitting": <bool>,
-            "macro": <bool>,
-            "map_awareness": <bool>,
-            "skillshots": <bool>,
-            "freezing_waves": <bool>,
-            "matchups": <bool>,
-            "setup": <bool>,
+            "skills": <an array of booleans>
             "min_coach_rank": <minimum rank of coach, an integer from 0 to 6>
         },
 
         "coach":
         {
-            "last_hitting": <bool>,
-            "macro": <bool>,
-            "map_awareness": <bool>,
-            "skillshots": <bool>,
-            "freezing_waves": <bool>,
-            "matchups": <bool>,
-            "setup": <bool>,
-            "max_student_rank": <max rank of student, an integer from 0 to 6>
+            "view_replay": <a boolean indicating whether or not the coach wants to watch a replay instead of live game>
+            "skills": <an array of booleans>
+            "max_coachee_rank": <max rank of student, an integer from 0 to 6>
         }
     }
+
+## What is the "skills" array?
+
+Each element in the array coresponds to a skill, such as freezing, macro play, etc.
+If the entry is true, that means the user has selected that skill.  Here is the list of skills
+and their indices:
+
+    const SkillIDEnum =
+    {
+        EVERYTHING: 0,
+        LAST_HITTING: 1,
+        MACRO: 2,
+        MAP_AWARENESS: 3,
+        SKILL_SHOTS: 4,
+        FREEZING: 5,
+        MATCHUPS: 6,
+        SET_UP: 7
+    };
+(that was just copy/pasted from skillEnum.js)
+
+So, if you receive the array
+    [
+        false,
+        true,
+        true,
+        false, 
+        false, 
+        false, 
+        false, 
+        false
+    ]
+that means the user selected LAST_HITTING and MACRO, and no others.
 
 ## Relevant error codes:
 | Error code    | Meaning                   |
