@@ -1,13 +1,12 @@
 $.ajax({
 		type: "GET",
-		url: "http://127.0.0.1:3000/get_prefs",
+		url: "http://localhost:3000/get_prefs",
 		success: function(data) {
 			parseData(data);
 		}
 });
 
 function parseData(json) {
-	//var json = JSON.parse(data);
 	var json_user = json["user"];
 	var json_student = json["student"];
 	var json_coach = json["coach"];
@@ -111,21 +110,18 @@ $('#savePreferences').on('submit', function() {
 		'"max_coachee_rank":' + rank_C +
 		'}';
 
-
 	var body = '{' + user + student + coach + '}';
+	//alert(body);
 
 	$.ajax({
 			type: "POST",
-			url: "http://localhost:3000/set_pref",
+			url: "http://localhost:3000/set_prefs",
 			contentType: 'application/json',
 			processData: false,
 			async: false,
 			data: body,
 			success: function (data){
-				var response = data;
-				if (response["error_code"] == 0) {
-					alert("success");
-				}
+				alert(data["error_code"]);
 			}
 	});
 });

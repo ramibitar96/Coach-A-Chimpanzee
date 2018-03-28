@@ -27,10 +27,3 @@ $('.login-form').on('submit', function() {
 			}
 	});
 });
-
-/*
-var name = "temp";
-var date = new Date();
-date.setTime(date.getTime() + 24*60*60*1000); //expire in 1 day
-document.cookie = "username=" + name + "; expires=" + date.toUTCString() + ";path=/";
-*/
