@@ -11,15 +11,24 @@
 
     function sendMessage()
     {
+        // Send the message
         let box = document.getElementById("inputText");
         let msg = box.value;
         
         socket.send(msg);
         box.value = "";
+
+        // Make it appear in the chat area
+        let chatArea = document.getElementById("chatArea");
+        chatArea.textContent += "Me: " + msg + "\n";
     }
 </script>
 
 <body>
+    <textarea id = "chatArea" readonly=true></textarea>
+    
+    <br/>
+
     <input type = "Text" id = "inputText" onkeypress="keypressHandle(event)"/>
     <button onclick="sendMessage()">Send</button>
 </body>
