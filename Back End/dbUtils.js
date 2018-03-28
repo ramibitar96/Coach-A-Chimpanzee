@@ -219,6 +219,38 @@ async function setSkillPrefs(userid, skills, coachee)
 	await db.exec(query);
 }
 
+// Adds a review from the given student for the given coach
+// upvoteOrDownvote is a bool.  If true, it's an upvote, else downvote
+// text is the text of the review
+async function add_review(student_uid, coach_uid, upvoteOrDownvote, text)
+{
+	// TODO: Error checking
+
+	let query = 
+	`
+		INSERT INTO coach_reviews
+		(
+			student_user_id,
+			coach_user_id,
+			review_date,
+			upvote_or_downvote,
+			review_text,
+		)
+		VALUES
+		(?, ?, ?, ?, ?);
+	`;
+
+	let date = new Date();
+	db.run
+	(
+		query,
+		student_uid,
+		coach_uid,
+		date,
+		text
+	);
+}
+
 // Executes the SQL script specified by filePath.
 // Returns a Promise<sqlite.Statement> when it's done.
 // filePath's type is string.  db's type is sqlite.Database
@@ -237,5 +269,6 @@ module.exports =
 	initializeDatabase,
 	getUserPrefs,
 	setUserPrefs,
+	add_review,
     db
 }
