@@ -51,6 +51,10 @@ async function registerUser(username, password, email, summoner_id)
 		);
 	`, username, hashedPassword, salt, email, summoner_id);
 
+	// DEBUG: Show all his records
+	let wholeRow = await dbUtils.db.get("SELECT * FROM user WHERE user_name = ?", username);
+	console.log(wholeRow);
+
 	// Return success
 	return 0;
 }

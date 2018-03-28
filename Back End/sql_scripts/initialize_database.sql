@@ -1,6 +1,6 @@
+--primary key is rowid
 CREATE TABLE IF NOT EXISTS user
 (
-	user_id int PRIMARY KEY,
 	summoner_id int,
 	user_name varchar,
 	email varchar,
@@ -31,37 +31,35 @@ CREATE TABLE IF NOT EXISTS coaching_session
 	student_user_id int,
 	coach_user_id int,
 	time_stamp int,
-	FOREIGN KEY(student_user_id) REFERENCES user(user_id),
-	FOREIGN KEY(coach_user_id) REFERENCES user(user_id)
-);
-
-CREATE TABLE IF NOT EXISTS skill
-(
-	skill_id int PRIMARY KEY,
-	skill_name varchar
+	FOREIGN KEY(student_user_id) REFERENCES user(rowid),
+	FOREIGN KEY(coach_user_id) REFERENCES user(rowid)
 );
 
 CREATE TABLE IF NOT EXISTS coachee_skills
 (
-	coachee_user_id int,
+	user_id int,
 	skill_id int,
-	FOREIGN KEY(coachee_user_id) REFERENCES user(user_id),
-	FOREIGN KEY(skill_id) REFERENCES skill(skill_id)
+	FOREIGN KEY(user_id) REFERENCES user(rowid)
 );
 
 CREATE TABLE IF NOT EXISTS coach_skills
 (
-	coach_user_id int,
+	user_id int,
 	skill_id int,
-	FOREIGN KEY(coach_user_id) REFERENCES user(user_id),
-	FOREIGN KEY(skill_id) REFERENCES skill(skill_id)
+	FOREIGN KEY(user_id) REFERENCES user(rowid)
 );
 
-CREATE TABLE IF NOT EXISTS user_rank_preferences
+-- This data is not part of the "user" table because not all users will have this filled
+-- out right away.
+CREATE TABLE IF NOT EXISTS user_misc_preferences
 (
-    user_id int,
-    min_coach_rank int,     --- The minimum rank this user wants their coach to be.
-    max_coachee_rank int,   --- The maximum rank this user wants their student to be.
+	user_id int,
+	view_replay boolean,	-- If this is true, the user wants to view a replay instead of a live game when coaching
+	twitch_name varchar,
+	summoner_name varchar,
+	current_rank int,
+	min_coach_rank int,
+	max_coachee_rank int,
 
-    FOREIGN KEY(user_id) REFERENCES user(user_id)
+	FOREIGN KEY(user_id) REFERENCES user(rowid)
 );
