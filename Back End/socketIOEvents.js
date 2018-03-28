@@ -45,16 +45,22 @@ module.exports = function(io)
         // When a user sends a message, forward it to their partner.
         socket.on('message', function(msg)
         {
-            console.log("received message " + msg);
+            console.log(authResult.username + ": " + msg);
+
+            let partnerName = getPartner(authResult.username);
+            let partnerSocket = userSockets[partnerName];
+
+            partnerSocket.send(msg);
         });
     });
-
-
 }
 
 // Returns the given user's partner.
 function getPartner(username)
 {
     // TODO
-    return "ceilia";
+    if (username === "mike_wizowski")
+        return "ceilia";
+    else
+        return "mike_wizowski";
 }
