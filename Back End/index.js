@@ -152,6 +152,12 @@ app.get('/whats_my_username', async function(req, res)
     res.send("Hello, " + authResults.username);
 });
 
+// Called whenever a client connects to socket.io
+io.on('connection', function(socket)
+{
+    console.log("A user connected");
+});
+
 // Entry point for the program
 main();
 async function main()
