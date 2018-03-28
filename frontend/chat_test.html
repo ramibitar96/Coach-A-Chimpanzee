@@ -1,4 +1,17 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
-  var socket = io.connect('http://localhost:3000');
+    var socket = io.connect('http://localhost:3000');
+
+    function sendMessage()
+    {
+        let msg = document.getElementByName("inputText").value;
+        socket.send(msg);
+
+        document.getElementByName("inputText").value = "";
+    }
 </script>
+
+<form>
+    <input type = "Text" name = "inputText"/>
+    <button onclick="sendMessage()">Send</button>
+</form>

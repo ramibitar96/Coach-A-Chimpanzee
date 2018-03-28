@@ -41,6 +41,12 @@ module.exports = function(io)
 
             console.log("User " + username + " disconnected.");
         });
+
+        // When a user sends a message, forward it to their partner.
+        socket.on('message', function(msg)
+        {
+            console.log("received message " + msg);
+        });
     });
 
 
