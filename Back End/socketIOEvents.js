@@ -13,8 +13,6 @@ module.exports = function(io)
     // Associates the socket with the user
     io.on('connection', async function(socket)
     {
-        console.log("A user connected, bearing the cookie " + socket.handshake.headers.cookie);
-
         // Check the session token to find out what user this is
         let cookie = cookieParser.parse(socket.handshake.headers.cookie);
         let session_token = cookie.session_token;
@@ -32,11 +30,20 @@ module.exports = function(io)
         // Associate the socket with the username
         userSockets[authResult.username] = socket;
         socketUsers[socket.id] = authResult.username;
-
-        // TODO: Remove the user from both dicitonaries when they disconnect
-
         console.log("associated socket " + socket.id + " with username " + authResult.username);
+
+        // When a user disconnects, remove them from both dictionaries
+        socket.on('disconnect', function()
+        {
+            let username = socketUsers[socket.id];
+            delete userSockets[username];
+            delete socketUsers[socket.id];
+
+            console.log("User " + username + " disconnected.");
+        });
     });
+
+
 }
 
 // Returns the given user's partner.
