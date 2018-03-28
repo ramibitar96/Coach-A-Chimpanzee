@@ -2,19 +2,24 @@
 <script>
     var socket = io.connect('http://localhost:3000');
 
+    function keypressHandle(e)
+    {
+        // keycode 13 is 'enter'
+        if (e.keyCode == 13)
+            sendMessage();
+    }
+
     function sendMessage()
     {
         let box = document.getElementById("inputText");
         let msg = box.value;
         
         socket.send(msg);
-
-        alert("sending " + msg);
         box.value = "";
     }
 </script>
 
 <body>
-    <input type = "Text" id = "inputText"/>
+    <input type = "Text" id = "inputText" onkeypress="keypressHandle(event)"/>
     <button onclick="sendMessage()">Send</button>
 </body>
