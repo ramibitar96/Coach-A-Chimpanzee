@@ -96,8 +96,6 @@ async function getUserPrefs(username)
 		},
 	};
 
-	console.log(output);
-
 	return output;
 }
 
@@ -196,7 +194,6 @@ async function setSkillPrefs(userid, skills, coachee)
 		tableName = "coachee_skills";
 
 	// We're going to be building a big query, so buckle up!
-	let parameters = [];
 	let query = ""
 
 	query += "BEGIN TRANSACTION;\n"	// We want our entire query to be atomic; if one
@@ -205,8 +202,7 @@ async function setSkillPrefs(userid, skills, coachee)
 									// get corrupted.
 
 	// Clear any existing skills in the database
-	query += "DELETE FROM " + tableName + " WHERE user_id = ?;\n";
-	parameters.push(userid);
+	query += "DELETE FROM " + tableName + " WHERE user_id = " + userid + ";\n";
 
 	// Add back the skills that were set to true
 	for (let i = 0; i < skills.length; i++)
@@ -214,19 +210,13 @@ async function setSkillPrefs(userid, skills, coachee)
 		if (!skills[i])
 			continue;
 
-		query += "INSERT INTO " + tableName + "(user_id, skill_id) VALUES(?, ?);\n"
-		parameters.push(userid, i);
+		query += "INSERT INTO " + tableName + "(user_id, skill_id) VALUES(" + userid + ", " + i + ");\n";
 	}
 
 	query += "END TRANSACTION;";
 
-	// Now that the query has been constructed, we can add it to the parameters
-	// exec() expects the query to be the first parameter, so we need ot insert it
-	// at the beginning.
-	parameters.unshift(query);
-
-	// This is equivalent to db.prepare(parameters[0], parameters[1], ..., parameters[n])
-	await db.exec.apply(db, parameters);
+	// Execute the query and return success
+	await db.exec(query);
 }
 
 // Executes the SQL script specified by filePath.
