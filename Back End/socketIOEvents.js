@@ -14,6 +14,7 @@ module.exports = function(io)
     // Associates the socket with the user
     io.on('connection', async function(socket)
     {
+        console.log('asdf');
         // Check the session token to find out what user this is
         let cookie = cookieParser.parse(socket.handshake.headers.cookie);
         let session_token = cookie.session_token;
@@ -60,6 +61,31 @@ module.exports = function(io)
             };
 
             partnerSocket.emit('message_received', msgObj);
+        });
+
+        socket.on('queueType', function(msg)
+        {
+            console.log(authResult.username + ": " + msg);
+
+            // 0 = student, 1 = coach
+            console.log("QUEUE TYPE: " + msg);
+
+            /*let partnerName = findPartner(username);
+            let userSocket = userSockets[username];
+            let partnerSocket = userSockets[partnerName];
+
+            let userObj =
+            {
+                partner: partnerName,
+            };
+
+            let partnerObj =
+            {
+                partner: username
+            };
+
+            userSocket.emit('partner_found', partnerObj);
+            partnerSocket.emit('partner_found', userObj);*/
         });
     });
 }

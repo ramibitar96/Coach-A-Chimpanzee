@@ -13,12 +13,13 @@
 
 
 	<body>
-		<div id="mySidenav" class="sidenav">
-        	<a href="index.html">F.A.Q.</a>
-        	<a href="queue.html">Queue me up</a>
-        	<a href="PLpreferences.html">Settings</a>
-        	<a href="#">Logout</a>
-    	</div>
+			<div id="mySidenav" class="sidenav">
+				<a href="profile.html">Profile</a>
+				<a href="queue.html">Queue me up</a>
+				<a href="history.html">Chat Logs</a>
+				<a href="PLpreferences.html">Settings</a>
+				<a href="#" onclick="logout()">Logout</a>
+			</div>
 
    	   <nav class="top-bar" data-topbar role="navigation">
        	<ul class="title-area">
@@ -46,12 +47,12 @@
 				</div>
 				<div class="section large-6 medium-6 columns left">
 					<div class="button-div large-6 medium-6 columns medium-centered large-centered push-2">
-						<a class="button">Student</a>
+						<a class="button" onclick="queueStudent()">Student</a>
 					</div>
 				</div>
 				<div class="section large-6 medium-6 columns right">
 					<div class="button-div large-6 medium-6 columns medium-centered large-centered pull-2">
-						<a class="button">Coach</a>
+						<a class="button" onclick="queueCoach()">Coach</a>
 					</div>
 				</div>
 			</div>
@@ -71,6 +72,8 @@
             	if (width == 250)
             	    document.getElementById("mySidenav").style.width = "0px";
         	}
-    </script> 
+		</script> 
+		<script src="js/custom/queue.js"></script>
+		<script src="js/custom/check.js"></script>
 	</body>
 </html>

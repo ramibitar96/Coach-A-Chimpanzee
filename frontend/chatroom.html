@@ -1,0 +1,30 @@
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8"/>
+		<meta http-equiv="x-ua-compatible" content="ie=edge"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<title>Coach a Chimp</title>
+		<link rel="stylesheet" href="stylesheets/foundation.css"/>
+		<link rel="stylesheet" href="stylesheets/app.css"/>
+		<link rel="stylesheet" href="stylesheets/chat.css"/>
+		<script src="js/vendor/modernizr.js"></script>
+	</head>
+
+	<body>
+		<div class="section large-6 medium-6 columns left">		
+			<textarea id = "chatArea" style=" resize: none; height: 70vh" readonly></textarea>
+			<input type = "text" id = "inputText" onkeypress="keypressHandle(event)" style="width:80vh"/>
+			<button onclick="sendMessage()">Send</button>
+		</div>		
+
+
+	</body>
+	<script src="js/vendor/jquery.js"></script>
+	<script src="js/foundation.min.js"></script>
+	<script src="js/foundation/foundation.dropdown.js"></script>
+	<script src="js/custom/check.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="js/custom/chat.js"></script>
+</html>
+

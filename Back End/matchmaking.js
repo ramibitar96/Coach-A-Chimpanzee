@@ -168,6 +168,7 @@ module.exports = function(io)
     // Associates the socket with the user
     io.on('connection', async function(socket)
     {
+    	console.log('TEST');
         // Check the session token to find out what user this is
         let cookie = cookieParser.parse(socket.handshake.headers.cookie);
         let session_token = cookie.session_token;
