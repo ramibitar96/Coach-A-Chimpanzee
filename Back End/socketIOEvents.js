@@ -110,7 +110,9 @@ module.exports = function(io)
             let partnerName = getPartner(username);
             let userSocket = userSockets[username];
             let partnerSocket = userSockets[partnerName];
-            partnerSocket.emit('end_chat', 1);
+            if (partnerSocket != undefined) {
+                partnerSocket.emit('end_chat', 1);
+            }
 
             delete userSockets[username];
             delete userSockets[partnerName];
