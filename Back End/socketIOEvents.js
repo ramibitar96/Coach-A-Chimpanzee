@@ -66,6 +66,10 @@ module.exports = function(io)
             console.log(authResult.username + ": " + msg);
 
             let partnerName = getPartner(username);
+            if (partnerName == undefined) {
+                console.log("ERROR: no match for this user");
+                return;
+            }
             let partnerSocket = userSockets[partnerName];
             console.log("Partner: " + partnerName);
 
@@ -104,13 +108,17 @@ module.exports = function(io)
         socket.on('end_chat', function(msg)
         {
             let partnerName = getPartner(username);
-            let userSocketID = userSockets[username];
-            let partnerSocketID = userSockets[partnerName];
+            let userSocket = userSockets[username];
+            let partnerSocket = userSockets[partnerName];
+            if (partnerSocket != undefined) {
+                partnerSocket.emit('end_chat', 1);
+            }
+
             delete userSockets[username];
             delete userSockets[partnerName];
-            delete socketUsers[userSocketID];
-            delete socketUsers[partnerSocketID];
-            removeMatchedPair(username);
+            delete socketUsers[userSocket];
+            delete socketUsers[partnerSocket];
+            matchmaking.removeMatchedPair(username);
         });
     });
 }
