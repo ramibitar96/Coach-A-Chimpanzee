@@ -1,11 +1,20 @@
 --primary key is rowid
 CREATE TABLE IF NOT EXISTS user
 (
-	summoner_id int,
+	summoner_id int PRIMARY KEY,
 	user_name varchar,
+	profile_img varchar,
 	email varchar,
 	hashed_salted_password varbinary,
 	password_salt varbinary
+);
+
+CREATE TABLE IF NOT EXISTS replays 
+(
+ replay_id int PRIMARY KEY,
+ replay_owner_id int,
+ replay_url varchar,
+ FOREIGN KEY(replay_owner_id) REFERENCES user(summoner_id)
 );
 
 CREATE TABLE IF NOT EXISTS coach_ratings
@@ -63,3 +72,4 @@ CREATE TABLE IF NOT EXISTS user_misc_preferences
 
 	FOREIGN KEY(user_id) REFERENCES user(rowid)
 );
+
