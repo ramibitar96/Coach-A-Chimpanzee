@@ -1,5 +1,10 @@
+//user type
+var type = localStorage.getItem("queueType");
 
 var socket = io.connect('http://localhost:3000');
+
+//send queue type
+socket.emit("queueType", type);
 
 socket.on('message_received', function(msg)
 {
