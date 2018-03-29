@@ -7,7 +7,7 @@
 		<title>Coach a Chimp</title>
 		<link rel="stylesheet" href="stylesheets/foundation.css"/>
 		<link rel="stylesheet" href="stylesheets/app.css"/>
-		<link rel="stylesheet" href="stylesheets/chat.css"/>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
 		<script src="js/vendor/modernizr.js"></script>
 	</head>
 
@@ -17,6 +17,50 @@
 			<input type = "text" id = "inputText" onkeypress="keypressHandle(event)" style="width:80vh"/>
 			<button onclick="sendMessage()">Send</button>
 		</div>		
+		<a class="button" href="#" data-reveal-id="endChat">End Chat</a>
+
+		<!-- modal -->
+		<div id="endChat" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" data-options="close_on_background_click:false; close_on_esc: false;">
+			<h2 id="modalTitle">How did it go?</h2>
+			<form>
+				<div class="row">
+					<div class="large-12 columns">
+						<div class="star-rating">
+							<input id="star-5" type="radio" name="rating" value="5">
+							<label for="star-5" title="5 stars">
+								<i class="active fa fa-star" aria-hidden="true"></i>
+							</label>
+							<input id="star-4" type="radio" name="rating" value="4">
+							<label for="star-4" title="4 stars">
+								<i class="active fa fa-star" aria-hidden="true"></i>
+							</label>
+							<input id="star-3" type="radio" name="rating" value="3">
+							<label for="star-3" title="3 stars">
+								<i class="active fa fa-star" aria-hidden="true"></i>
+							</label>
+							<input id="star-2" type="radio" name="rating" value="2">
+							<label for="star-2" title="2 stars">
+								<i class="active fa fa-star" aria-hidden="true"></i>
+							</label>
+							<input id="star-1" type="radio" name="rating" value="1">
+							<label for="star-1" title="1 star">
+								<i class="active fa fa-star" aria-hidden="true"></i>
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="large-12 columns">
+						<label>Write a Review! (500 character limit)
+							<textarea id="review_txt" placeholder="Review" maxlength="500"></textarea>
+						</label>
+					</div>
+				</div>
+				<div class="row">
+					<a href="#" onclick="submitReview()" class="button">Submit Review</a>
+				</div>
+			</form>
+		</div>
 
 
 	</body>
@@ -26,5 +70,8 @@
 	<script src="js/custom/check.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="js/custom/chat.js"></script>
+	<script>
+		$(document).foundation();
+	</script> 
 </html>
 

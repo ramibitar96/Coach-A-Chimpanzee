@@ -35,3 +35,17 @@ function sendMessage()
 	chatArea.textContent += "Me: " + msg + "\n";
 }
 
+function submitReview() {
+	//clear localstorage
+	localStorage.removeItem("queueType");
+	
+	//submit review
+	var rating = $('input[name="rating"]:checked').val();	
+	var review = $("#review_txt").val();
+
+	//clean input if all spaces
+	var c = review.replace(" ","");
+	if (review.trim() == '') {
+		review = "";
+	}
+}
