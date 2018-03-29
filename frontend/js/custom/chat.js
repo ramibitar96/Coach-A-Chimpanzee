@@ -24,6 +24,8 @@ socket.on('end_chat', function(msg)
 {
     let chatArea = document.getElementById("chatArea");
 	chatArea.textContent += "CHAT ENDED\n";
+	//simulate end chat click
+	$('#endChat').foundation('reveal', 'open');
 });
 
 function keypressHandle(e)
