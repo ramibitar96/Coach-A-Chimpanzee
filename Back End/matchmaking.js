@@ -148,10 +148,27 @@ function removeMatchedPair(username) {
 	}
 }
 
+function isInQueue(username) {
+	for (var i = 0; i < students.length; i++) {
+		if (students[i].name == username) {
+			return true;
+		}
+	}
+
+	for (var i = 0; i < coaches.length; i++) {
+		if (coaches[i].name == username) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 module.exports = {
 	addStudent,
 	addCoach,
 	findPartner,
 	removeMatchedPair,
+	isInQueue,
 	User
 }
