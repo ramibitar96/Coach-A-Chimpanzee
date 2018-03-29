@@ -20,164 +20,166 @@ module.exports = function(app)
 	// Handles registration requests
 	// TODO: Have the user give their summoner name and then look up the summoner id over Riot's api
 	app.post('/register', async function(req, res)
-			{
-			console.log(req.body);
+	{
+        console.log(req.body);
 
-			// Error if the body's json object is missing a property.
-			let requiredProperties =
-			[
-			"username",
-			"password",
-			"email",
-			"summoner_id"
-			];
-			for (let i = 0; i < requiredProperties.length; i++)
-			{
-			if (!req.body.hasOwnProperty(requiredProperties[i]))
-			{
-			res.send({error_code: ErrorCodeEnum.BAD_JSON_OBJECT});
-			return;
-			}
-			}
+        // Error if the body's json object is missing a property.
+        let requiredProperties =
+        [
+            "username",
+            "password",
+            "email",
+            "summoner_id"
+        ];
+        for (let i = 0; i < requiredProperties.length; i++)
+        {
+            if (!req.body.hasOwnProperty(requiredProperties[i]))
+            {
+                res.send({error_code: ErrorCodeEnum.BAD_JSON_OBJECT});
+                return;
+            }
+        }
 
-			// Try to register the user
-			let errorCode = await auth.registerUser(req.body.username, req.body.password, req.body.email, req.body.summoner_id);
-			res.send({error_code: errorCode});
-			});
+        // Try to register the user
+        let errorCode = await auth.registerUser(req.body.username, req.body.password, req.body.email, req.body.summoner_id);
+        res.send({error_code: errorCode});
+	});
 
 
 	// Handles log in requests
 	app.post('/login', async function(req, res)
-			{
-			// Error if bad JSON.
-			if (!req.body.hasOwnProperty("username") || !req.body.hasOwnProperty("password"))
-			{
-			res.send({error_code: ErrorCodeEnum.BAD_JSON_OBJECT});
-			return;
-			}
+    {
+        // Error if bad JSON.
+        if (!req.body.hasOwnProperty("username") || !req.body.hasOwnProperty("password"))
+        {
+            res.send({error_code: ErrorCodeEnum.BAD_JSON_OBJECT});
+            return;
+        }
 
-			// Generate a session token
-			let token = await auth.login(req.body.username, req.body.password);
+        // Generate a session token
+        let token = await auth.login(req.body.username, req.body.password);
 
-			// Error if the username and password were invalid
-			if (token === null)
-			{
-			res.send({error_code: ErrorCodeEnum.WRONG_PASSWORD});
-			return;
-			}
+        // Error if the username and password were invalid
+        if (token === null)
+        {
+            res.send({error_code: ErrorCodeEnum.WRONG_PASSWORD});
+            return;
+        }
 
-			// Set the cookie to the token and send success.
-			let cookieOptions =
-			{
-secure: false,      // TODO: Set this to true once we get HTTPS working
-				maxAge: auth.TOKEN_EXPIRATION_MS
-			};
+        // Set the cookie to the token and send success.
+        let cookieOptions =
+        {
+            secure: false,      // TODO: Set this to true once we get HTTPS working
+            maxAge: auth.TOKEN_EXPIRATION_MS
+        };
 
-			res.cookie("session_token", token, cookieOptions);
-			res.send({error_code: ErrorCodeEnum.SUCCESS});
-			});
+        res.cookie("session_token", token, cookieOptions);
+        res.send({error_code: ErrorCodeEnum.SUCCESS});
+    });
 
 	// Retrieves the user preferences of the currently logged-in user.
 	app.get('/get_prefs', async function(req, res)
-			{
-			// TODO: Error if bad json object for cookie
-			let token = req.cookies.session_token;
-			let authResults = await auth.checkToken(token);
+    {
+        // TODO: Error if bad json object for cookie
+        let token = req.cookies.session_token;
+        let authResults = await auth.checkToken(token);
 
-			// Send the error code if the token is bad
-			if (authResults.error_code != 0)
-			{
-			res.send({error_code: authResults.error_code});
-			return;
-			}
+        // Send the error code if the token is bad
+        if (authResults.error_code != 0)
+        {
+            res.send({error_code: authResults.error_code});
+            return;
+        }
 
-			// Retrieve the user prefs and send them.
-			let results = await dbUtils.getUserPrefs(authResults.username);
-			res.send(results);
-			});
+        // Retrieve the user prefs and send them.
+        let results = await dbUtils.getUserPrefs(authResults.username);
+        res.send(results);
+    });
+    
 	app.post('/set_pfp', async function(req, res)
-			{
-			let token = req.cookies.session_token;
-			let authResults = await auth.checkToken(token);
+    {
+        let token = req.cookies.session_token;
+        let authResults = await auth.checkToken(token);
 
-      
-			//send error code
-			if (authResults.error_code != 0)
-			{
-			res.send({error_code: authResults.error_code});
-			return;
-			}
+    
+        //send error code
+        if (authResults.error_code != 0)
+        {
+            res.send({error_code: authResults.error_code});
+            return;
+        }
 
-			//uploadImagetoServer
+        //uploadImagetoServer
 
 
-			let results = await dbUtils.setProfileImg(authResults.username,req.body);
-			res.send(results);
-			});
+        let results = await dbUtils.setProfileImg(authResults.username,req.body);
+        res.send(results);
+    });
+
 	app.post('/add_replay', async function(req, res)
-			{
-			let token = req.cookies.session_token;
-			let authResults = await auth.checkToken(token);
+    {
+        let token = req.cookies.session_token;
+        let authResults = await auth.checkToken(token);
 
-			//send error code for authError
-			if(authResults.error_code != 0)
-			{
-			res.send({error_code: authResults.error_code});
-			return;
-			}
+        //send error code for authError
+        if(authResults.error_code != 0)
+        {
+            res.send({error_code: authResults.error_code});
+            return;
+        }
 
-			let results = await dbUtils.uploadReplayFile(authResults.username,req.body);
-			res.send(results);
-			});
+        let results = await dbUtils.uploadReplayFile(authResults.username,req.body);
+        res.send(results);
+    });
 
 	// Sets the user preferences of the currently logged-in user.
 	app.post('/set_prefs', async function(req, res)
-			{
-			// TODO: Error if bad json object for cookie
-			let token = req.cookies.session_token;
-			let authResults = await auth.checkToken(token);
+    {
+        // TODO: Error if bad json object for cookie
+        let token = req.cookies.session_token;
+        let authResults = await auth.checkToken(token);
 
-			// Send the error code if the token is bad
-			// TODO: Refactor this copypasta code
-			if (authResults.error_code != 0)
-			{
-			res.send({error_code: authResults.error_code});
-			return;
-			}
+        // Send the error code if the token is bad
+        // TODO: Refactor this copypasta code
+        if (authResults.error_code != 0)
+        {
+            res.send({error_code: authResults.error_code});
+            return;
+        }
 
-			// TODO: Error if the body does not have the required data
+        // TODO: Error if the body does not have the required data
 
-			// Set the preferences
-			let results = await dbUtils.setUserPrefs(authResults.username, req.body);
-			res.send(results);
-			});
+        // Set the preferences
+        let results = await dbUtils.setUserPrefs(authResults.username, req.body);
+        res.send(results);
+    });
 
 	// Returns a webpage displaying the username of the currently-logged-in user.
 	app.get('/whats_my_username', async function(req, res)
-			{
-			// TODO: Error if bad json object for cookie.
+    {
+        // TODO: Error if bad json object for cookie.
 
-			console.log("received cookies: " + JSON.stringify(req.cookies));
+        console.log("received cookies: " + JSON.stringify(req.cookies));
 
-			// Decode the username
-			let token = req.cookies.session_token;
-			let authResults = await auth.checkToken(token);
+        // Decode the username
+        let token = req.cookies.session_token;
+        let authResults = await auth.checkToken(token);
 
-			// Display error messages
-			let error_code = authResults.error_code;
-			if (error_code == ErrorCodeEnum.TOKEN_EXPIRED)
-			{
-			res.send("ERROR: Token Expired.  Please log in again.");
-			return;
-			}
+        // Display error messages
+        let error_code = authResults.error_code;
+        if (error_code == ErrorCodeEnum.TOKEN_EXPIRED)
+        {
+            res.send("ERROR: Token Expired.  Please log in again.");
+            return;
+        }
 
-			if (error_code == ErrorCodeEnum.TOKEN_INVALID)
-			{
-			res.send("ERROR: Invalid token.  Are you a hacker?");
-			return;
-			}
+        if (error_code == ErrorCodeEnum.TOKEN_INVALID)
+        {
+            res.send("ERROR: Invalid token.  Are you a hacker?");
+            return;
+        }
 
-			// Send the username
-			res.send("Hello, " + authResults.username);
-			});
+        // Send the username
+        res.send("Hello, " + authResults.username);
+    });
 }
