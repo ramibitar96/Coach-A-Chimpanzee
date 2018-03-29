@@ -155,7 +155,7 @@ module.exports = function(app)
         res.send(results);
     });
 
-    app.post('/add_review', await function(req, res)
+    app.post('/add_review', async function(req, res)
     {
         // TODO: Error if bad json object for cookie
         let token = req.cookies.session_token;
