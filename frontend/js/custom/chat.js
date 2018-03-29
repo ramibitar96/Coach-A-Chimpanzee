@@ -10,6 +10,7 @@ socket.emit("queueType", type);
 
 socket.on('message_received', function(msg)
 {
+	document.getElementById('alert').play();
 	// Put it in the chatbox
 	let chatArea = document.getElementById("chatArea");
 	chatArea.textContent += msg.sender + ": " + msg.contents + "\n";
@@ -46,7 +47,9 @@ function sendMessage()
 	// Send the message
 	let msg = inputText.value;
 
-	socket.send(msg);
+	if (writeReview) {
+		socket.send(msg);
+	}
 	inputText.value = "";
 
 	// Make it appear in the chat area
