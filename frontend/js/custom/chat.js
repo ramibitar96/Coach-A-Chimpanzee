@@ -13,6 +13,13 @@ socket.on('message_received', function(msg)
 	chatArea.textContent += msg.sender + ": " + msg.contents + "\n";
 });
 
+socket.on('match_found', function(msg)
+{
+	// Put it in the chatbox
+	let chatArea = document.getElementById("chatArea");
+	chatArea.textContent = "MATCH FOUND\n";
+});
+
 function keypressHandle(e)
 {
 	// keycode 13 is 'enter'

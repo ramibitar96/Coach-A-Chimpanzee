@@ -3,10 +3,11 @@ const authUtils = require('./authenticationUtils.js');
 const ErrorCodeEnum = require('./errorCodes.js');
 const cookieParser = require('cookie');
 const matchmaking = require('./matchmaking.js');
+const dbUtils = require('./dbUtils.js');
+const {User} = require('./matchmaking.js');
 
 let userSockets = {};   // A dictionary mapping usernames to their sockets
 let socketUsers = {};   // A dictionary mapping sockets to their usernames
-
 
 module.exports = function(io)
 {
@@ -14,6 +15,20 @@ module.exports = function(io)
     // Associates the socket with the user
     io.on('connection', async function(socket)
     {
+        socket.on('matchFound', function(msg)
+        {
+            console.log("MATCH FOUND: " + msg + "\n\n");
+            let partnerName = getPartner(msg);
+            let userSocket = userSockets[msg];
+            let partnerSocket = userSockets[partnerName];
+
+            console.log("Username: " + msg);
+            console.log("Partner name: " + partnerName);
+
+            userSocket.emit('match_found', msg);
+            partnerSocket.emit('match_found', partnerName);
+        });
+
         // Check the session token to find out what user this is
         let cookie = cookieParser.parse(socket.handshake.headers.cookie);
         let session_token = cookie.session_token;
@@ -52,6 +67,7 @@ module.exports = function(io)
 
             let partnerName = getPartner(username);
             let partnerSocket = userSockets[partnerName];
+            console.log("Partner: " + partnerName);
 
             let msgObj =
             {
@@ -60,6 +76,41 @@ module.exports = function(io)
             };
 
             partnerSocket.emit('message_received', msgObj);
+        });
+
+        // When a user enters the queue
+        socket.on('queueType', async function(msg)
+        {
+            // 0 = student, 1 = coach
+            console.log(authResult.username + ": " + " QUEUE TYPE: " + msg);
+
+            if (getPartner(username) != null) {
+                console.log("Returning user to existing chatroom");
+                return;
+            }
+
+            let userPrefs = await dbUtils.getUserPrefs(username);
+            user = new User(username, userPrefs.user.current_rank, userPrefs.student.min_coach_rank, userPrefs.coach.max_coachee_rank, authResult.rating,
+                userPrefs.coach.skills, userPrefs.student.skills)
+
+            if (msg == 0) {
+                matchmaking.addStudent(user);
+            } else if (msg == 1) {
+                matchmaking.addCoach(user);
+            }
+        });
+
+        // When a chat is being ended
+        socket.on('end_chat', function(msg)
+        {
+            let partnerName = getPartner(username);
+            let userSocketID = userSockets[username];
+            let partnerSocketID = userSockets[partnerName];
+            delete userSockets[username];
+            delete userSockets[partnerName];
+            delete socketUsers[userSocketID];
+            delete socketUsers[partnerSocketID];
+            removeMatchedPair(username);
         });
     });
 }
