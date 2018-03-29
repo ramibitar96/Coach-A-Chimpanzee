@@ -9,6 +9,14 @@ CREATE TABLE IF NOT EXISTS user
 	password_salt varbinary
 );
 
+CREATE TABLE IF NOT EXISTS replays 
+(
+ replay_id int PRIMARY KEY,
+ replay_owner_id int,
+ replay_url varchar,
+ FOREIGN KEY(replay_owner_id) REFERENCES user(rowid)
+);
+
 CREATE TABLE IF NOT EXISTS coach_ratings
 (
 	student_user_id int,
