@@ -20,6 +20,12 @@ socket.on('match_found', function(msg)
 	chatArea.textContent = "MATCH FOUND\n";
 });
 
+socket.on('end_chat', function(msg)
+{
+    let chatArea = document.getElementById("chatArea");
+	chatArea.textContent += "CHAT ENDED\n";
+});
+
 function keypressHandle(e)
 {
 	// keycode 13 is 'enter'
