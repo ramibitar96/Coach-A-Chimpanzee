@@ -5,23 +5,23 @@ const dbUtils = require('./dbUtils.js');
 const auth = require('./authenticationUtils.js');
 const matchmaking = require('./matchmaking.js');
 const ErrorCodeEnum = require('./errorCodes.js');
-
+const fs = require('fs');
 module.exports = function(app)
 {
-    // Tell expressjs that we want to allow cookies from mutliple origins
-    app.use(function(req, res, next) {
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-        next();
-    });
+	// Tell expressjs that we want to allow cookies from mutliple origins
+	app.use(function(req, res, next) {
+			res.header("Access-Control-Allow-Origin", "*");
+			res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+			next();
+			});
 
-    app.use(bodyParser.json());					// Tell expressjs that we want it to parse the request bodies as json.
-    app.use(cookieParser());                    // Tell expressjs that we want it to parse cookies it receives.
+	app.use(bodyParser.json());					// Tell expressjs that we want it to parse the request bodies as json.
+	app.use(cookieParser());                    // Tell expressjs that we want it to parse cookies it receives.
 
-    // Handles registration requests
-    // TODO: Have the user give their summoner name and then look up the summoner id over Riot's api
-    app.post('/register', async function(req, res)
-    {
+	// Handles registration requests
+	// TODO: Have the user give their summoner name and then look up the summoner id over Riot's api
+	app.post('/register', async function(req, res)
+	{
         console.log(req.body);
 
         // Error if the body's json object is missing a property.
@@ -44,11 +44,11 @@ module.exports = function(app)
         // Try to register the user
         let errorCode = await auth.registerUser(req.body.username, req.body.password, req.body.email, req.body.summoner_id);
         res.send({error_code: errorCode});
-    });
+	});
 
 
-    // Handles log in requests
-    app.post('/login', async function(req, res)
+	// Handles log in requests
+	app.post('/login', async function(req, res)
     {
         // Error if bad JSON.
         if (!req.body.hasOwnProperty("username") || !req.body.hasOwnProperty("password"))
@@ -78,8 +78,8 @@ module.exports = function(app)
         res.send({error_code: ErrorCodeEnum.SUCCESS});
     });
 
-    // Retrieves the user preferences of the currently logged-in user.
-    app.get('/get_prefs', async function(req, res)
+	// Retrieves the user preferences of the currently logged-in user.
+	app.get('/get_prefs', async function(req, res)
     {
         // TODO: Error if bad json object for cookie
         let token = req.cookies.session_token;
@@ -96,9 +96,45 @@ module.exports = function(app)
         let results = await dbUtils.getUserPrefs(authResults.username);
         res.send(results);
     });
+    
+	app.post('/set_pfp', async function(req, res)
+    {
+        let token = req.cookies.session_token;
+        let authResults = await auth.checkToken(token);
 
-    // Sets the user preferences of the currently logged-in user.
-    app.post('/set_prefs', async function(req, res)
+    
+        //send error code
+        if (authResults.error_code != 0)
+        {
+            res.send({error_code: authResults.error_code});
+            return;
+        }
+
+        //uploadImagetoServer
+
+
+        let results = await dbUtils.setProfileImg(authResults.username,req.body);
+        res.send(results);
+    });
+
+	app.post('/add_replay', async function(req, res)
+    {
+        let token = req.cookies.session_token;
+        let authResults = await auth.checkToken(token);
+
+        //send error code for authError
+        if(authResults.error_code != 0)
+        {
+            res.send({error_code: authResults.error_code});
+            return;
+        }
+
+        let results = await dbUtils.uploadReplayFile(authResults.username,req.body);
+        res.send(results);
+    });
+
+	// Sets the user preferences of the currently logged-in user.
+	app.post('/set_prefs', async function(req, res)
     {
         // TODO: Error if bad json object for cookie
         let token = req.cookies.session_token;

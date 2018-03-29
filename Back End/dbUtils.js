@@ -107,7 +107,50 @@ async function getUserPrefs(username)
 
 	return output;
 }
+//allows user to set profile image
+async function setProfileImg(username,data)
+{
+	//get user id
+	let uidQuery = `Select rowid FROM user WHERE user_name=?;`;
+	let uidResults = await db.run(uidQuery,username);
+	let uid = uidResults.rowid;
+	
+	//update the user's profile picture
+	let imgLink = data.imgURL;
+	var n = imgLink.lastIndexOf(".");
+	let imgLocalUrl = uid + imgLink.substring(n);
+	let updateQuery = "UPDATE user SET profile_img = ? WHERE user_id = ?";
+	let updatePromise = db.run
+		(
+		 updateQuery,
+		 imgLocalUrl,
+		 username,
+		);
+  await updatePromise;
+	return {error_code: ErrorCodeEnum.SUCCESS};
+}
 
+async function uploadReplayFile(username, data)
+{
+	//get id
+	let uidQuery = `Select rowid FROM user WHERE user_name=?;`;
+	let uidResults = await db.run(uidQuery,username);
+	let uid = uidResults.rowid;
+
+	//add replay file
+	let replayLink = data.replayLink;
+	var n = replayLink.lastIndexOf(".");
+	let replayLocalUrl = uid + replayLink.substring(n);
+	let addQuery = "INSERT INTO replays (" +
+		"replay_owner_id, replay_url)" +
+		"VALUES (?, ?);";
+	let addQueryPromise = db.run(addQuery, uid, replayLocalUrl);
+
+	await addQueryPromise;
+
+	return {error_code: ErrorCodeEnum.SUCCESS};
+}
+	
 // Updates the database with the new preferences
 async function setUserPrefs(username, prefsData)
 {
