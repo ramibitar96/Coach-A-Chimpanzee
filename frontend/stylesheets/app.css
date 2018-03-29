@@ -6621,6 +6621,11 @@ th.hide-for-touch {
       opacity: 1; }
     .top-bar .login-text:after {
       top: 25px !important; }
+  .top-bar .profile-search {
+    padding-right: 70px; }
+    .top-bar .profile-search .columns {
+      padding-left: 0 !important;
+      padding-right: 0 !important; }
   .top-bar .SignIn {
     width: 200px !important;
     padding-left: 10px;
