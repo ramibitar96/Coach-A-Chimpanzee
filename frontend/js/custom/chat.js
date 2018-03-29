@@ -45,6 +45,7 @@ function sendMessage()
 function submitReview() {
 	//clear localstorage
 	localStorage.removeItem("queueType");
+	socket.emit("end_chat", "end_chat");
 	
 	//submit review
 	var rating = $('input[name="rating"]:checked').val();	
@@ -83,4 +84,5 @@ function submitReview() {
 			}
 	});
 	*/
+	window.location.assign("queue.html");
 }

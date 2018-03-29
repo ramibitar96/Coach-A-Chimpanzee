@@ -5,7 +5,7 @@ if (window.location.pathname == "/index.html" ||
 		window.location.assign("queue.html");
 	}
 } else {
-	if (!loggedIn()) {
+	if (!loggedIn() && window.location.pathname != "/signup.html") {
 		//redirect to login page
 		window.location.assign("index.html");	
 	}

@@ -80,6 +80,7 @@ $('#savePreferences').on('submit', function() {
 	var s6 = document.getElementById("Matchups").checked;
 	var s7 = document.getElementById("SetUp").checked;
 	var rank_S = document.getElementById("min_rank").value;
+	if (rank_S == "") rank_S = 3;
 
 	var student = 
 		'"student": {' +
@@ -101,6 +102,7 @@ $('#savePreferences').on('submit', function() {
 	var c6 = document.getElementById("MatchupsC").checked;
 	var c7 = document.getElementById("SetUpC").checked;
 	var rank_C = document.getElementById("maxStudentRank").value;
+	if (rank_C == "") rank_C = 3;
 
 
 	var coach = 
@@ -111,7 +113,7 @@ $('#savePreferences').on('submit', function() {
 		'}';
 
 	var body = '{' + user + student + coach + '}';
-	//alert(body);
+	alert(body);
 
 	$.ajax({
 			type: "POST",
@@ -121,7 +123,7 @@ $('#savePreferences').on('submit', function() {
 			async: false,
 			data: body,
 			success: function (data){
-				alert(data["error_code"]);
+				//alert(data["error_code"]);
 			}
 	});
 });
