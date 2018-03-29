@@ -41,11 +41,39 @@ function submitReview() {
 	
 	//submit review
 	var rating = $('input[name="rating"]:checked').val();	
+	if (rating == null) {
+		rating = 3;
+	}
+
 	var review = $("#review_txt").val();
 
 	//clean input if all spaces
-	var c = review.replace(" ","");
 	if (review.trim() == '') {
 		review = "";
 	}
+	review = review.replace(/"/g, "'");
+
+	var body =
+		"{" +
+		'"rating":' + rating + ',' +
+		'"text":"' + review + '"' +
+		"}";
+
+	alert(body);
+	/*
+	$.ajax({
+			type: "POST",
+			url: "http://localhost:3000/add_review",
+			contentType: 'application/json',
+			processData: false,
+			async: false,
+			data: body,
+			success: function (data){
+				var response = data;
+				if (response["error_code"] == 0) {
+					window.location.assign("queue.html");
+				}
+			}
+	});
+	*/
 }
