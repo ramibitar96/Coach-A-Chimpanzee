@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS user
 (
 	summoner_id int,
 	user_name varchar,
+	profile_img varchar,
 	email varchar,
 	hashed_salted_password varbinary,
 	password_salt varbinary
@@ -63,3 +64,4 @@ CREATE TABLE IF NOT EXISTS user_misc_preferences
 
 	FOREIGN KEY(user_id) REFERENCES user(rowid)
 );
+
