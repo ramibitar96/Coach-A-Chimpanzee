@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser');
 const dbUtils = require('./dbUtils.js');
 const auth = require('./authenticationUtils.js');
 const ErrorCodeEnum = require('./errorCodes.js');
-
+const fs = require('fs');
 module.exports = function(app)
 {
 	// Tell expressjs that we want to allow cookies from mutliple origins
@@ -100,12 +100,16 @@ secure: false,      // TODO: Set this to true once we get HTTPS working
 			let token = req.cookies.session_token;
 			let authResults = await auth.checkToken(token);
 
+      
 			//send error code
 			if (authResults.error_code != 0)
 			{
 			res.send({error_code: authResults.error_code});
 			return;
 			}
+
+			//uploadImagetoServer
+
 
 			let results = await dbUtils.setProfileImg(authResults.username,req.body);
 			res.send(results);
