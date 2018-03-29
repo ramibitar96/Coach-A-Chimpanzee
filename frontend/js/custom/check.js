@@ -1,11 +1,11 @@
 if (window.location.pathname == "/index.html" || 
 	window.location.pathname == "/" || 
-	window.location.pathname == "signup.html") {
+	window.location.pathname == "/signup.html") {
 	if (loggedIn()) {
 		window.location.assign("queue.html");
 	}
 } else {
-	if (!loggedIn() && window.location.pathname != "/signup.html") {
+	if (!loggedIn()) {
 		//redirect to login page
 		window.location.assign("index.html");	
 	}
