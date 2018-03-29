@@ -39,11 +39,11 @@ class MatchedPair {
 }
 
 class User {
-	constructor(name, rank, minCoachRank, minStudentRank, rating, strengths, weaknesses) {
+	constructor(name, rank, minCoachRank, maxStudentRank, rating, strengths, weaknesses) {
 		this.name = name
 		this.rank = rank
 		this.minCoachRank = minCoachRank
-		this.minStudentRank = minStudentRank
+		this.maxStudentRank = maxStudentRank
 		this.rating = rating
 		this.strengths = strengths
 		this.weaknesses = weaknesses
@@ -57,7 +57,7 @@ var coaches = [];
 // Calculates "matchmaking quotient" between a student and coach, based on 
 // how many skills they have in common (strengths and weaknesses)
 function calculateQuotient(student, coach) {
-	if (coach.minStudentRank > student.rank || student.minCoachRank > coach.rank) {
+	if (coach.maxStudentRank < student.rank || student.minCoachRank > coach.rank) {
 		return 0;
 	}
 
