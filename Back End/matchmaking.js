@@ -39,11 +39,11 @@ class MatchedPair {
 }
 
 class User {
-	constructor(name, rank, coachRanks, studentRanks, rating, strengths, weaknesses) {
+	constructor(name, rank, minCoachRank, minStudentRank, rating, strengths, weaknesses) {
 		this.name = name
 		this.rank = rank
-		this.coachRanks = coachRanks
-		this.studentRanks = studentRanks
+		this.minCoachRank = minCoachRank
+		this.minStudentRank = minStudentRank
 		this.rating = rating
 		this.strengths = strengths
 		this.weaknesses = weaknesses
@@ -57,15 +57,21 @@ var coaches = [];
 // Calculates "matchmaking quotient" between a student and coach, based on 
 // how many skills they have in common (strengths and weaknesses)
 function calculateQuotient(student, coach) {
-	return 3;
-	if (coach.studentRanks.indexOf(student.rank) == -1 || student.coachRanks.indexOf(coach.rank) == -1) {
+	if (coach.minStudentRank > student.rank || student.minCoachRank > coach.rank) {
 		return 0;
 	}
 
-	var skillWeight = 10 / student.weaknesses.length;
+	var numWeaknesses = 0;
+	for (var i = 0; i < student.weaknesses.length; i++) {
+		if (student.weaknesses[i] == true) {
+			numWeaknesses++;
+		}
+	}
+
+	var skillWeight = 10 / numWeaknesses;
 	var quotient = 0;
 	for (var i = 0; i < coach.strengths.length; i++) {
-		if (student.weaknesses.indexOf(coach.strengths[i]) != -1) {
+		if (student.weaknesses[i] == true && coach.strengths[i] == true) {
 			quotient += skillWeight;
 		}
 	}
@@ -108,7 +114,6 @@ function matchUsers() {
 // Adds student to student array
 function addStudent(student) {
 	students.push(student);
-	console.log(matchedUsers);
 	matchUsers();
 }
 
@@ -133,9 +138,20 @@ function findPartner(username) {
 	return null;
 }
 
+function removeMatchedPair(username) {
+	for (var i = 0; i < matchedUsers.length; i++) {
+		var student = matchedUsers[i].student;
+		var coach = matchedUsers[i].coach;
+		if (student.name == username || coach.name == username) {
+			matchedUsers.splice(i, 1);
+		}
+	}
+}
+
 module.exports = {
 	addStudent,
 	addCoach,
 	findPartner,
+	removeMatchedPair,
 	User
 }
