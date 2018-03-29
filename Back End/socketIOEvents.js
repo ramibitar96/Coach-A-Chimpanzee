@@ -3,6 +3,7 @@ const authUtils = require('./authenticationUtils.js');
 const ErrorCodeEnum = require('./errorCodes.js');
 const cookieParser = require('cookie');
 const matchmaking = require('./matchmaking.js');
+const {User} = require('./matchmaking.js')
 
 let userSockets = {};   // A dictionary mapping usernames to their sockets
 let socketUsers = {};   // A dictionary mapping sockets to their usernames
@@ -14,7 +15,8 @@ module.exports = function(io)
     // Associates the socket with the user
     io.on('connection', async function(socket)
     {
-        console.log('asdf');
+        debugger;
+        console.log('ASDF');
         // Check the session token to find out what user this is
         let cookie = cookieParser.parse(socket.handshake.headers.cookie);
         let session_token = cookie.session_token;
@@ -70,7 +72,22 @@ module.exports = function(io)
             // 0 = student, 1 = coach
             console.log("QUEUE TYPE: " + msg);
 
-            /*let partnerName = findPartner(username);
+            user = new User(authResult.username, authResult.rank, authResult.coachRanks, authResult.studentRanks, authResult.rating,
+                authResult.strengths, authResult.weaknesses)
+            if (msg == 0) {
+                console.log('test1');
+                matchmaking.addStudent(user);
+            } else if (msg == 1) {
+                console.log('test2');
+                matchmaking.addCoach(user);
+            }
+            console.log('test3');
+        });
+
+        socket.on('matchFound', function(msg)
+        {
+            console.log("MATCH FOUND: " + msg + "\n\n");
+            let partnerName = findPartner(username);
             let userSocket = userSockets[username];
             let partnerSocket = userSockets[partnerName];
 
@@ -84,8 +101,9 @@ module.exports = function(io)
                 partner: username
             };
 
-            userSocket.emit('partner_found', partnerObj);
-            partnerSocket.emit('partner_found', userObj);*/
+            debugger;
+            userSocket.emit('match_found', username);
+            partnerSocket.emit('match_found', partnerName);
         });
     });
 }

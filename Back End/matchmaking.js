@@ -1,7 +1,5 @@
 // Imports
-const authUtils = require('./authenticationUtils.js');
-const ErrorCodeEnum = require('./errorCodes.js');
-const cookieParser = require('cookie');
+const io = require('socket.io-client');
 
 var Rank = {
 	Any: 0,
@@ -79,6 +77,7 @@ var coaches = [];
 // Calculates "matchmaking quotient" between a student and coach, based on 
 // how many skills they have in common (strengths and weaknesses)
 function calculateQuotient(student, coach) {
+	return 3;
 	if (coach.studentRanks.indexOf(student.rank) == -1 || student.coachRanks.indexOf(coach.rank) == -1) {
 		return 0;
 	}
@@ -96,7 +95,7 @@ function calculateQuotient(student, coach) {
 
 // Iterates though lists of students and coaches and finds the best matches
 // prioritizing position in the list
-function matchUsers(students, coaches) {
+function matchUsers() {
 	var studentIndex = 0;
 	while (studentIndex < students.length) {
 		var i = 0;
@@ -116,10 +115,12 @@ function matchUsers(students, coaches) {
 		if (highestQuotient > 0) {
 			var mp = new MatchedPair(students.splice(studentIndex, 1)[0], coaches.splice(highestIndex, 1)[0]);
 			matchedUsers.push(mp);
-			//console.log("Student: " + students.splice(studentIndex, 1)[0].name);
-			//console.log("Coach: " + coaches.splice(highestIndex, 1)[0].name);
-			//console.log("Quotient: " + highestQuotient);
-			//console.log('\n');
+			console.log("Student: " + mp.student.name);
+			console.log("Coach: " + mp.coach.name);
+
+
+			var socket = io.connect('http://localhost:3000');
+			socket.emit('matchFound', 'asdf');
 		} else {
 			// If no match found, proceed to the next student in the list
 			studentIndex += 1;
@@ -130,11 +131,13 @@ function matchUsers(students, coaches) {
 // Adds student to student array
 function addStudent(student) {
 	students.push(student);
+	matchUsers();
 }
 
 // Adds coach to coach array
 function addCoach(coach) {
 	coaches.push(coach);
+	matchUsers();
 }
 
 // Finds the specified user's pair by username
@@ -155,14 +158,15 @@ function findPartner(username) {
 module.exports = {
 	addStudent,
 	addCoach,
-	findPartner
+	findPartner,
+	User
 }
 
 let userSockets = {};   // A dictionary mapping usernames to their sockets
 let socketUsers = {};   // A dictionary mapping sockets to their usernames
 
 
-module.exports = function(io)
+/*module.exports = function(io)
 {
     // Called whenever a client connects to socket.io
     // Associates the socket with the user
@@ -222,7 +226,7 @@ module.exports = function(io)
             // 0 = student, 1 = coach
             console.log("QUEUE TYPE: " + msg);
 
-            /*let partnerName = findPartner(username);
+            let partnerName = findPartner(username);
             let userSocket = userSockets[username];
             let partnerSocket = userSockets[partnerName];
 
@@ -237,10 +241,10 @@ module.exports = function(io)
             };
 
             userSocket.emit('partner_found', partnerObj);
-            partnerSocket.emit('partner_found', userObj);*/
+            partnerSocket.emit('partner_found', userObj);
         });
     });
-}
+}*/
 
 //test1();
 
