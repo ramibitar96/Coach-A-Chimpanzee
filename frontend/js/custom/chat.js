@@ -4,6 +4,7 @@ var type = localStorage.getItem("queueType");
 var socket = io.connect('http://localhost:3000');
 
 var writeReview = false;
+var log = "";
 
 //send queue type
 socket.emit("queueType", type);
@@ -11,9 +12,11 @@ socket.emit("queueType", type);
 socket.on('message_received', function(msg)
 {
 	document.getElementById('alert').play();
+	var msg = msg.sender + ": " + msg.contents + "\n";
 	// Put it in the chatbox
 	let chatArea = document.getElementById("chatArea");
-	chatArea.textContent += msg.sender + ": " + msg.contents + "\n";
+	chatArea.textContent += msg;
+	log += msg;
 });
 
 socket.on('match_found', function(msg)
@@ -54,6 +57,7 @@ function sendMessage()
 
 	// Make it appear in the chat area
 	chatArea.textContent += "Me: " + msg + "\n";
+	log += "Me: " + msg + "\n";
 }
 
 function openModal() {
@@ -67,6 +71,7 @@ function openModal() {
 }
 
 function submitReview() {
+	alert(log);
 	//clear localstorage
 	localStorage.removeItem("queueType");
 
@@ -90,7 +95,7 @@ function submitReview() {
 		'"text":"' + review + '"' +
 		"}";
 
-	alert(body);
+	//alert(body);
 	/*
 	 $.ajax({
 	 type: "POST",
