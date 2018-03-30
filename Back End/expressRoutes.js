@@ -191,13 +191,16 @@ module.exports = function(app)
                 WHERE user_id = ?;
             `,
             student_uid
-        );
+        ).previous_parner_id;
+
+        console.log("last partner: " + coach_uid);
 
         // Get the stuff from the body
         let rating = req.body.rating;
         let text = req.body.text;
 
         dbUtils.add_review(student_uid, coach_uid, rating, text);
+        res.send({error_code: ErrorCodeEnum.SUCCESS});
     });
 
     app.get('/get_reviews', async function(req, res)
