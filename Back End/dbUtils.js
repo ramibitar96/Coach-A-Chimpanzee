@@ -286,7 +286,7 @@ async function add_review(student_uid, coach_uid, rating, text)
 			coach_user_id,
 			review_date,
 			rating,
-			review_text,
+			review_text
 		)
 		VALUES
 		(?, ?, ?, ?, ?);
