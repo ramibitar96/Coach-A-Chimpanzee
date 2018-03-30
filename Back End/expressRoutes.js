@@ -81,6 +81,14 @@ module.exports = function(app)
 	// Retrieves the user preferences of the currently logged-in user.
 	app.get('/get_prefs', async function(req, res)
     {
+        // If a query string was provided, look up that specific user's preferences instead.
+        if (Object.keys(req.query).length !== 0)
+        {
+            // TODO: Error if bad query string
+            let results = await dbUtils.getUserPrefs(req.query.user);
+            res.send(results);
+        }
+
         // TODO: Error if bad json object for cookie
         let token = req.cookies.session_token;
         let authResults = await auth.checkToken(token);
