@@ -5,6 +5,7 @@ const dbUtils = require('./dbUtils.js');
 const auth = require('./authenticationUtils.js');
 const ErrorCodeEnum = require('./errorCodes.js');
 const fs = require('fs');
+const path = require('path');
 module.exports = function(app)
 {
 	// Tell expressjs that we want to allow cookies from mutliple origins
@@ -15,6 +16,7 @@ module.exports = function(app)
 			});
 
 	app.use(bodyParser.json());					// Tell expressjs that we want it to parse the request bodies as json.
+	app.use(bodyParser({uploadDir:'/images/tmp'}));
 	app.use(cookieParser());                    // Tell expressjs that we want it to parse cookies it receives.
 
 	// Handles registration requests
@@ -110,7 +112,6 @@ secure: false,      // TODO: Set this to true once we get HTTPS working
 
 			//uploadImagetoServer
 
-
 			let results = await dbUtils.setProfileImg(authResults.username,req.body);
 			res.send(results);
 			});
@@ -125,10 +126,23 @@ secure: false,      // TODO: Set this to true once we get HTTPS working
 			res.send({error_code: authResults.error_code});
 			return;
 			}
-
+			//uploiad to server
+			var tempPath = req.files.file.path;
+			var targetPath = path.resolve('./replays/001.rofl');
+			if(path.etxname(req.files.file.name).toLowerCase() === '.rofl') {
+				fs.rename(tempPath, targetPath, function(err) {
+						if (err) throw err;
+						console.log("upload completed");
+						});
+			} else {
+				fs.unlink(tempPath, function() {
+						if(err) throw err;
+						console.error("only .rolf files are allowed");
+				});
+			}
 			let results = await dbUtils.uploadReplayFile(authResults.username,req.body);
 			res.send(results);
-			});
+	});
 
 	// Sets the user preferences of the currently logged-in user.
 	app.post('/set_prefs', async function(req, res)
