@@ -64,6 +64,9 @@ CREATE TABLE IF NOT EXISTS user_misc_preferences
 	min_coach_rank int,
 	max_coachee_rank int,
 
-	FOREIGN KEY(user_id) REFERENCES user(rowid)
+	previous_partner_id int, -- The last student/coach this user was matched with.
+
+	FOREIGN KEY(user_id) REFERENCES user(rowid),
+	FOREIGN KEY(previous_partner_id) REFERENCES user(rowid)
 );
 
