@@ -349,6 +349,28 @@ async function get_reviews(coach_uid)
 	return results;
 }
 
+// Records the pervious partners of a newly matched pair
+async function set_previous_partners(coach_username, student_username)
+{
+	// Get the uids
+	let studentPromise = getUID(student_username);
+	let coachPromise = getUID(coach_username);
+
+	let student_uid = await studentPromise;
+	let coach_uid = await coachPromise;
+
+	// Insert them into the database
+	let query = 
+	`
+		UPDATE user_misc_prefs
+		SET previous_partner_id = ?
+		WHERE user_id = ?;
+	`;
+	
+	db.run(query, coach_uid, student_ui);
+	db.run(query, student_uid, coach_uid);
+}
+
 // Executes the SQL script specified by filePath.
 // Returns a Promise<sqlite.Statement> when it's done.
 // filePath's type is string.  db's type is sqlite.Database
@@ -370,5 +392,6 @@ module.exports =
 	add_review,
 	get_reviews,
 	getUID,
+	set_previous_partners,
     db
 }

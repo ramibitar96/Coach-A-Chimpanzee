@@ -1,5 +1,6 @@
 // Imports
 const io = require('socket.io-client');
+const dbUtils = require('./dbUtils.js');
 
 var Rank = {
 	Any: 0,
@@ -99,9 +100,14 @@ function matchUsers() {
 		}
 
 		if (highestQuotient > 0) {
+			// Put them in the list of matched users
 			var mp = new MatchedPair(students.splice(studentIndex, 1)[0], coaches.splice(highestIndex, 1)[0]);
 			matchedUsers.push(mp);
 
+			// Update the previous partners in the database
+			dbUtils.set_previous_partners(mp.coach, mp.student);
+
+			// Tell the user they've found a match
 			var socket = io.connect('http://localhost:3000');
 			socket.emit('matchFound', mp.student.name);
 		} else {
