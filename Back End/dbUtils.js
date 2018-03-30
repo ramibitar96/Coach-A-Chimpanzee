@@ -304,6 +304,44 @@ async function add_review(student_uid, coach_uid, rating, text)
 	);
 }
 
+// Returns all reviews for the given user
+async function get_reviews(coach_uid)
+{
+	// TODO: Error checking
+
+	// Grab the reviews from the database
+	let query = 
+	`
+		SELECT 
+			user.user_name,
+			coach_reviews.review_date,
+			coach_reviews.rating,
+			coach_reviews.review_text,
+		FROM coach_reviews 
+		FULL JOIN user ON coach_reviews.student_user_id = user.rowid;
+	`;
+	let rows = await db.all(query, coach_uid);
+
+	console.log("retrieved review rows: " + rows);
+
+	// Put them in a form that matches the documentation
+	let results = {};
+	for (let row of rows)
+	{
+		let reviewObj =
+		{
+			author: row.user.user_name,
+			date: row.coach_reviews.review_date,
+			rating: row.coach_reviews.rating,
+			text: row.coach_reviews.review_text
+		};
+
+		results.push(reviewObj);
+	}
+
+	return results;
+}
+
 // Executes the SQL script specified by filePath.
 // Returns a Promise<sqlite.Statement> when it's done.
 // filePath's type is string.  db's type is sqlite.Database

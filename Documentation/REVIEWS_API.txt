@@ -36,6 +36,6 @@ An individual review object has the following format:
     "author":   <username of the author of the review>,
     "date":     <A Javascript Date object representing the date the review was written>,
 
-    "upvoteOrDownvote": <true if upvote, false if downvote>,
+    "rating":   <number between 1-5>
     "text":     <the text contents of the review>
 }
