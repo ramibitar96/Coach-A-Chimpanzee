@@ -183,6 +183,17 @@ module.exports = function(app)
         dbUtils.add_review(student_uid, coach_uid, rating, text);
     });
 
+    app.get('/get_reviews', async function(req, res)
+    {
+        // Get the userid of the player we want to look up
+        let coach_uid = await dbUtils.getUID(req.query.coach);
+        // TODO: Error checking
+
+        // Get the reviews and send them
+        let reviews = await dbUtils.get_reviews(coach_uid);
+        res.send({reviews: reviews});
+    });
+
     // Returns a webpage displaying the username of the currently-logged-in user.
     app.get('/whats_my_username', async function(req, res)
     {

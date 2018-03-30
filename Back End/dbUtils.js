@@ -314,11 +314,13 @@ async function get_reviews(coach_uid)
 	`
 		SELECT 
 			user.user_name,
+			user.rowid,
+			coach_reviews.student_user_id,
 			coach_reviews.review_date,
 			coach_reviews.rating,
-			coach_reviews.review_text,
-		FROM coach_reviews 
-		FULL JOIN user ON coach_reviews.student_user_id = user.rowid;
+			coach_reviews.review_text
+		FROM coach_reviews, user
+		WHERE user.rowid = coach_reviews.student_user_id;
 	`;
 	let rows = await db.all(query, coach_uid);
 
@@ -361,5 +363,7 @@ module.exports =
 	getUserPrefs,
 	setUserPrefs,
 	add_review,
+	get_reviews,
+	getUID,
     db
 }
