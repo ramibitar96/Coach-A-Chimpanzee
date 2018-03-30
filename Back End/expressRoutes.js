@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const dbUtils = require('./dbUtils.js');
 const auth = require('./authenticationUtils.js');
+const matchmaking = require('./matchmaking.js');
 const ErrorCodeEnum = require('./errorCodes.js');
 const fs = require('fs');
 module.exports = function(app)
@@ -154,8 +155,47 @@ module.exports = function(app)
         res.send(results);
     });
 
-	// Returns a webpage displaying the username of the currently-logged-in user.
-	app.get('/whats_my_username', async function(req, res)
+    app.post('/add_review', async function(req, res)
+    {
+        // TODO: Error if bad json object for cookie
+        let token = req.cookies.session_token;
+        let authResults = await auth.checkToken(token);
+
+        // Send the error code if the token is bad
+        // TODO: Refactor this copypasta code
+        if (authResults.error_code != 0)
+        {
+            res.send({error_code: authResults.error_code});
+            return;
+        }
+
+        // TODO: Error if bad json object for body
+
+        // Get the user ids
+        let coach_username = matchmaking.findPartner(authResults.username);
+        let coach_uid = await dbUtils.getUID(coach_username);
+        let student_uid = await dbUtils.getUID(authResults.username);
+
+        // Get the stuff from the body
+        let rating = req.body.rating;
+        let text = req.body.text;
+
+        dbUtils.add_review(student_uid, coach_uid, rating, text);
+    });
+
+    app.get('/get_reviews', async function(req, res)
+    {
+        // Get the userid of the player we want to look up
+        let coach_uid = await dbUtils.getUID(req.query.coach);
+        // TODO: Error checking
+
+        // Get the reviews and send them
+        let reviews = await dbUtils.get_reviews(coach_uid);
+        res.send({reviews: reviews});
+    });
+
+    // Returns a webpage displaying the username of the currently-logged-in user.
+    app.get('/whats_my_username', async function(req, res)
     {
         // TODO: Error if bad json object for cookie.
 
