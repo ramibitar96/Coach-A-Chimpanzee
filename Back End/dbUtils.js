@@ -366,8 +366,8 @@ async function set_previous_partners(coach_username, student_username)
 		SET previous_partner_id = ?
 		WHERE user_id = ?;
 	`;
-	
-	db.run(query, coach_uid, student_ui);
+
+	db.run(query, coach_uid, student_uid);
 	db.run(query, student_uid, coach_uid);
 }
 
