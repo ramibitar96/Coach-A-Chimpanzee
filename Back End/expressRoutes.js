@@ -179,10 +179,19 @@ module.exports = function(app)
 
         // TODO: Error if bad json object for body
 
+        console.log("user " + authResults.username + " sent review " + req.body);
+
         // Get the user ids
-        let coach_username = matchmaking.findPartner(authResults.username);
-        let coach_uid = await dbUtils.getUID(coach_username);
         let student_uid = await dbUtils.getUID(authResults.username);
+        let coach_uid = await dbUtils.db.get
+        (
+            `
+                SELECT previous_partner_id
+                FROM user_misc_preferences
+                WHERE user_id = ?;
+            `,
+            student_uid
+        );
 
         // Get the stuff from the body
         let rating = req.body.rating;
