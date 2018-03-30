@@ -329,7 +329,7 @@ async function get_reviews(coach_uid)
 	`;
 	let rows = await db.all(query, coach_uid);
 
-	console.log("retrieved review rows: " + rows);
+	console.log("retrieved review rows: " + JSON.stringify(rows));
 
 	// Put them in a form that matches the documentation
 	let results = {};
@@ -337,10 +337,10 @@ async function get_reviews(coach_uid)
 	{
 		let reviewObj =
 		{
-			author: row.user.user_name,
-			date: row.coach_reviews.review_date,
-			rating: row.coach_reviews.rating,
-			text: row.coach_reviews.review_text
+			author: row.user_name,
+			date: row.review_date,
+			rating: row.rating,
+			text: row.review_text
 		};
 
 		results.push(reviewObj);
