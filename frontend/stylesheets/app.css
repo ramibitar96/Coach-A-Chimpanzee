@@ -6764,6 +6764,11 @@ th.hide-for-touch {
   background-image: url("../img/queue-bg.jpg");
   background-size: cover; }
 
+.user {
+  font-size: 16px;
+  color: white;
+  margin-right: 10px; }
+
 .profile-main {
   padding-top: 100px; }
   .profile-main .basic-info {
