@@ -44,8 +44,3 @@ function parseData(json) {
 		player.play();
 	});
 }
-
-$('#picUpdate').on('submit', function() {
-	var pic = document.getElementById("profile_pic").value;
-	alert(pic);
-}
