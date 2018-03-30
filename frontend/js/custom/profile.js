@@ -31,16 +31,18 @@ function parseData(json) {
 	twitch = twitch.replace("twitch.tv/","");
 	twitch = twitch.replace("/", "");
 
-	var embed = new Twitch.Embed("twitch-embed", {
-			width: "100%",
-			height: 480,
-			channel: twitch,
-			layout: "video",
-			autoplay: false
-	});
+	if (twitch != "" && twitch != null) {
+		var embed = new Twitch.Embed("twitch-embed", {
+				width: "100%",
+				height: 480,
+				channel: twitch,
+				layout: "video",
+				autoplay: false
+		});
 
-	embed.addEventListener(Twitch.Embed.VIDEO_READY, () => {
-		var player = embed.getPlayer();
-		player.play();
-	});
-}
+		embed.addEventListener(Twitch.Embed.VIDEO_READY, () => {
+			var player = embed.getPlayer();
+			player.play();
+		});
+	}
+	}

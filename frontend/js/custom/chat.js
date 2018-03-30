@@ -68,50 +68,46 @@ function openModal() {
 	else {
 		window.location.assign("queue.html");
 	}
-}
-
-function submitReview() {
-	//clear localstorage
-	localStorage.removeItem("queueType");
-
-	//submit review
-	var rating = $('input[name="rating"]:checked').val();	
-	if (rating == null) {
-		rating = 3;
 	}
 
-	var review = $("#review_txt").val();
+	function submitReview() {
+		//clear localstorage
+		localStorage.removeItem("queueType");
 
-	//clean input if all spaces
-	if (review.trim() == '') {
-		review = "";
-	}
-	review = review.replace(/"/g, "'");
-
-	let body =
-	{
-		rating: rating,
-		text: review
-	};
-
-	alert(JSON.stringify(body));
-	 $.ajax(
-	{
-		type: "POST",
-		url: "http://localhost:3000/add_review",
-		contentType: 'application/json',
-		processData: false,
-		async: false,
-		data: JSON.stringify(body),
-		success: function (data)
-		{
-			var response = data;
-			if (response["error_code"] == 0)
-			{
-				window.location.assign("queue.html");
-			}
+		//submit review
+		var rating = $('input[name="rating"]:checked').val();	
+		if (rating == null) {
+			rating = 3;
 		}
-	});
 
-	window.location.assign("queue.html");
-}
+		var review = $("#review_txt").val();
+
+		//clean input if all spaces
+		if (review.trim() == '') {
+			review = "";
+		}
+		review = review.replace(/"/g, "'");
+
+		let body = {
+			rating: rating,
+			text: review
+		};
+
+		//alert(JSON.stringify(body));
+		$.ajax({
+				type: "POST",
+				url: "http://localhost:3000/add_review",
+				contentType: 'application/json',
+				processData: false,
+				async: false,
+				data: JSON.stringify(body),
+				success: function (data)
+				{
+					var response = data;
+					if (response["error_code"] == 0)
+					{
+						window.location.assign("queue.html");
+					}
+				}
+		});
+		}
