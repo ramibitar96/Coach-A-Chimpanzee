@@ -29,6 +29,10 @@ The server will respond with a JSON object of the following format:
         }
     }
 
+To retrieve the preferences of ANY arbitrary user(not just the one logged in), send
+the same request as above to "localhost:3000/get_prefs?user=mike_wizowski".
+Just replace "mike_wizowski" with the username you're interested in.
+
 ## What is the "skills" array?
 
 Each element in the array coresponds to a skill, such as freezing, macro play, etc.

@@ -91,6 +91,9 @@ module.exports = function(io)
             if (getPartner(username) != null) {
                 console.log("Returning user to existing chatroom");
                 return;
+            } else if (matchmaking.isInQueue(username)) {
+                console.log("User is already in queue; returning to empty chatroom");
+                return;
             }
 
             let userPrefs = await dbUtils.getUserPrefs(username);
