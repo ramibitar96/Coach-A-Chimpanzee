@@ -105,7 +105,7 @@ function matchUsers() {
 			matchedUsers.push(mp);
 
 			// Update the previous partners in the database
-			dbUtils.set_previous_partners(mp.coach, mp.student);
+			dbUtils.set_previous_partners(mp.coach.name, mp.student.name);
 
 			// Tell the user they've found a match
 			var socket = io.connect('http://localhost:3000');
