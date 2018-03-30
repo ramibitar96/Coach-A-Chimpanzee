@@ -177,10 +177,10 @@ module.exports = function(app)
         let student_uid = await dbUtils.getUID(authResults.username);
 
         // Get the stuff from the body
-        let upvoteDownvote = req.body.upvoteOrDownvote;
+        let rating = req.body.rating;
         let text = req.body.text;
 
-        dbUtils.add_review(student_uid, coach_uid, upvoteDownvote, text);
+        dbUtils.add_review(student_uid, coach_uid, rating, text);
     });
 
     // Returns a webpage displaying the username of the currently-logged-in user.

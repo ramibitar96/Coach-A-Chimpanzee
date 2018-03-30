@@ -274,7 +274,7 @@ async function setSkillPrefs(userid, skills, coachee)
 // Adds a review from the given student for the given coach
 // upvoteOrDownvote is a bool.  If true, it's an upvote, else downvote
 // text is the text of the review
-async function add_review(student_uid, coach_uid, upvoteOrDownvote, text)
+async function add_review(student_uid, coach_uid, rating, text)
 {
 	// TODO: Error checking
 
@@ -285,7 +285,7 @@ async function add_review(student_uid, coach_uid, upvoteOrDownvote, text)
 			student_user_id,
 			coach_user_id,
 			review_date,
-			upvote_or_downvote,
+			rating,
 			review_text,
 		)
 		VALUES
@@ -299,6 +299,7 @@ async function add_review(student_uid, coach_uid, upvoteOrDownvote, text)
 		student_uid,
 		coach_uid,
 		date,
+		rating,
 		text
 	);
 }

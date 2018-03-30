@@ -4,7 +4,7 @@ To add a review for your coach, send a post request to "http://our.domain.name:3
 The request's body should be a JSON object of the following form:
 
 {
-    "upvoteOrDownvote": false,   // True if upvote, false if downvote
+    "rating": 1,   // A number between 1 and 5, inclusive
     "text": "Awesome coach, but I downvoted him because he's not a Pixar character"
 }
 

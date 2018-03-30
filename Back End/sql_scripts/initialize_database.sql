@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS coach_reviews
 	coach_user_id int,
 	review_date datetime,
 
-	upvote_or_downvote boolean,		-- If it's true, it's an upvote.  Else, it's a downvote.
+	rating int,
 	review_text varchar,
 
 	FOREIGN KEY(student_user_id) REFERENCES user(user_id),
