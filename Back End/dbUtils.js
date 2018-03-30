@@ -315,12 +315,17 @@ async function get_reviews(coach_uid)
 		SELECT 
 			user.user_name,
 			user.rowid,
+			coach_reviews.coach_user_id,
 			coach_reviews.student_user_id,
 			coach_reviews.review_date,
 			coach_reviews.rating,
 			coach_reviews.review_text
-		FROM coach_reviews, user
-		WHERE user.rowid = coach_reviews.student_user_id;
+		FROM 
+			coach_reviews,
+			user
+		WHERE
+			coach_reviews.coach_user_id = ? AND
+			user.rowid = coach_reviews.student_user_id;
 	`;
 	let rows = await db.all(query, coach_uid);
 
