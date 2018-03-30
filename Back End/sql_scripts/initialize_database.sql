@@ -1,7 +1,7 @@
 --primary key is rowid
 CREATE TABLE IF NOT EXISTS user
 (
-	summoner_id int PRIMARY KEY,
+	summoner_id int,
 	user_name varchar,
 	profile_img varchar,
 	email varchar,
