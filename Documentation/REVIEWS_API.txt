@@ -1,0 +1,41 @@
+# Adding a review
+
+To add a review for your coach, send a post request to "http://our.domain.name:3000/add_review".
+The request's body should be a JSON object of the following form:
+
+{
+    "rating": 1,   // A number between 1 and 5, inclusive
+    "text": "Awesome coach, but I downvoted him because he's not a Pixar character"
+}
+
+As always, a cookie should be attached containing the student's session token.  The server will
+look up the correct coach.
+
+
+# Getting all reviews for a coach
+
+To get all the reviews for a given coach, send a get request to 
+"http://our.domain.name:3000/get_reviews?coach=mike_wizowski"
+
+Obviously, replace "mike_wizowski" with the username of the coach.
+
+The server will reply with a JSON object of the following form:
+
+{
+    "reviews":
+    [
+        {<a review object>},
+        {<another review object>},
+        {<etc.>},
+        {<you get the picture>}
+    ]
+}
+
+An individual review object has the following format:
+{
+    "author":   <username of the author of the review>,
+    "date":     <A Javascript Date object representing the date the review was written>,
+
+    "rating":   <number between 1-5>
+    "text":     <the text contents of the review>
+}
