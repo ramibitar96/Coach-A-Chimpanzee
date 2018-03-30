@@ -352,6 +352,8 @@ async function get_reviews(coach_uid)
 // Records the pervious partners of a newly matched pair
 async function set_previous_partners(coach_username, student_username)
 {
+	console.log("updating last partners of " + coach_username + " and " + student_username);
+
 	// Get the uids
 	let studentPromise = getUID(student_username);
 	let coachPromise = getUID(coach_username);
@@ -362,7 +364,7 @@ async function set_previous_partners(coach_username, student_username)
 	// Insert them into the database
 	let query = 
 	`
-		UPDATE user_misc_prefs
+		UPDATE user_misc_preferences
 		SET previous_partner_id = ?
 		WHERE user_id = ?;
 	`;
