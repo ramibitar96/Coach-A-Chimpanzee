@@ -191,7 +191,7 @@ module.exports = function(app)
                 WHERE user_id = ?;
             `,
             student_uid
-        ).previous_parner_id;
+        ).previous_partner_id;
 
         console.log("last partner: " + coach_uid);
 

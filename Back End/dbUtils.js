@@ -361,9 +361,6 @@ async function set_previous_partners(coach_username, student_username)
 	let student_uid = await studentPromise;
 	let coach_uid = await coachPromise;
 
-	console.log("student uid = " + student_uid);
-	console.log("coac_uid = " + coach_uid);
-
 	// Insert them into the database
 	let query = 
 	`
