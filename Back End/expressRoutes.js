@@ -208,16 +208,19 @@ module.exports = function(app)
 
         // TODO: Error if bad json object for body
 
-        // Get the user ids
-        let coach_username = matchmaking.findPartner(authResults.username);
-        let coach_uid = await dbUtils.getUID(coach_username);
+        console.log("user " + authResults.username + " sent review " + req.body);
+
+        // Get the UIDs
         let student_uid = await dbUtils.getUID(authResults.username);
+        let coach_username = await dbUtils.get_previous_partner(authResults.username);
+        let coach_uid = await dbUtils.getUID(coach_username);
 
         // Get the stuff from the body
         let rating = req.body.rating;
         let text = req.body.text;
 
         dbUtils.add_review(student_uid, coach_uid, rating, text);
+        res.send({error_code: ErrorCodeEnum.SUCCESS});
     });
 
     app.get('/get_reviews', async function(req, res)

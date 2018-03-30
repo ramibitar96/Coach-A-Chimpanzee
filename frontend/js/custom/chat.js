@@ -71,7 +71,6 @@ function openModal() {
 }
 
 function submitReview() {
-	alert(log);
 	//clear localstorage
 	localStorage.removeItem("queueType");
 
@@ -89,28 +88,30 @@ function submitReview() {
 	}
 	review = review.replace(/"/g, "'");
 
-	var body =
-		"{" +
-		'"rating":' + rating + ',' +
-		'"text":"' + review + '"' +
-		"}";
+	let body =
+	{
+		rating: rating,
+		text: review
+	};
 
-	//alert(body);
-	/*
-	 $.ajax({
-	 type: "POST",
-	 url: "http://localhost:3000/add_review",
-	 contentType: 'application/json',
-	 processData: false,
-	 async: false,
-	 data: body,
-	 success: function (data){
-	 var response = data;
-	 if (response["error_code"] == 0) {
-	 window.location.assign("queue.html");
-}
-}
-});
-*/
+	alert(JSON.stringify(body));
+	 $.ajax(
+	{
+		type: "POST",
+		url: "http://localhost:3000/add_review",
+		contentType: 'application/json',
+		processData: false,
+		async: false,
+		data: JSON.stringify(body),
+		success: function (data)
+		{
+			var response = data;
+			if (response["error_code"] == 0)
+			{
+				window.location.assign("queue.html");
+			}
+		}
+	});
+
 	window.location.assign("queue.html");
 }
