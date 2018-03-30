@@ -1,6 +1,6 @@
 if (window.location.pathname == "/index.html" || 
 	window.location.pathname == "/" || 
-	window.location.pathname == "signup.html") {
+	window.location.pathname == "/signup.html") {
 	if (loggedIn()) {
 		window.location.assign("queue.html");
 	}

@@ -3,7 +3,7 @@ Error: Undefined variable: "$grey".
         on line 6 of /Users/james/Desktop/Coach-A-Chimpanzee/frontend/stylesheets/topbar.scss
 
 1: .top-bar {
-2: 	z-index:1;
+2: 	z-index:100;
 3: 	position:fixed;
 4: 	width:100%;
 5: 	height: 50px;
@@ -62,4 +62,4 @@ Backtrace:
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: Undefined variable: \"$grey\".\A         on line 6 of /Users/james/Desktop/Coach-A-Chimpanzee/frontend/stylesheets/topbar.scss\A \A 1: .top-bar {\A 2: 	z-index:1;\A 3: 	position:fixed;\A 4: 	width:100%;\A 5: 	height: 50px;\A 6: 	background-color: $grey;\A 7: 	opacity: .9;\A 8: \A 9: 	.title-area a {\A 10: 		line-height: 50px !important;\A 11: 	}"; }
+  content: "Error: Undefined variable: \"$grey\".\A         on line 6 of /Users/james/Desktop/Coach-A-Chimpanzee/frontend/stylesheets/topbar.scss\A \A 1: .top-bar {\A 2: 	z-index:100;\A 3: 	position:fixed;\A 4: 	width:100%;\A 5: 	height: 50px;\A 6: 	background-color: $grey;\A 7: 	opacity: .9;\A 8: \A 9: 	.title-area a {\A 10: 		line-height: 50px !important;\A 11: 	}"; }

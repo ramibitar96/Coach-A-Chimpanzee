@@ -62,13 +62,13 @@
 
 													<label><b>Your Current Elo:</b></label>
 													<select name="rank" id="rank">
-														<option value="1"> Bronze</option>
-														<option value="2"> Silver</option>
-														<option value="3"> Gold</option>
-														<option value="4"> Platinum</option>
-														<option value="5"> Diamond</option>
-														<option value="6"> Master</option>
-														<option value="7"> Challenger</option>
+														<option value="0"> Bronze</option>
+														<option value="1"> Silver</option>
+														<option value="2"> Gold</option>
+														<option value="3"> Platinum</option>
+														<option value="4"> Diamond</option>
+														<option value="5"> Master</option>
+														<option value="6"> Challenger</option>
 													</select>
 
 													<label><b>Twitch TV Stream</b></label>
@@ -110,8 +110,8 @@
 															<input type="checkbox" id="SetUp" name="focus" value="SetUp">
 															<label for = "SetUp">Set-up</label><br>
 														</fieldset>
-
-														<p>Select the minimum rank you would like your coach to be (Example: Selecting Platinum would allow anyone who is Platinum 5 or higher to coach you).</p>
+	
+														<p>Select the lowest elo your coach can be</p>
 														<select name="minRank" id="min_rank">
 															<option value="0" selected = "selected"> No Preference</option>
 															<option value="1"> Bronze</option>
@@ -162,7 +162,7 @@
 												<label for = "SetUpC">Set-up</label><br>
 											</fieldset>
 
-											<p>Select the minimum rank you would like to coach (Example: Selecting Silver would allow anyone who is Silver 5 or higher to be your student).</p>
+											<p>Select the highest elo student you would be willing to coach</p>
 											<select name="minRankC" id="maxStudentRank">
 												<option value="0" selected = "selected"> No Preference</option>
 												<option value="1"> Bronze</option>
