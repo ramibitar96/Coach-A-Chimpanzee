@@ -332,7 +332,7 @@ async function get_reviews(coach_uid)
 	console.log("retrieved review rows: " + JSON.stringify(rows));
 
 	// Put them in a form that matches the documentation
-	let results = {};
+	let results = [];
 	for (let row of rows)
 	{
 		let reviewObj =
