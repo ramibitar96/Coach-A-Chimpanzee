@@ -210,19 +210,10 @@ module.exports = function(app)
 
         console.log("user " + authResults.username + " sent review " + req.body);
 
-        // Get the user ids
+        // Get the UIDs
         let student_uid = await dbUtils.getUID(authResults.username);
-        let coach_uid = await dbUtils.db.get
-        (
-            `
-                SELECT previous_partner_id
-                FROM user_misc_preferences
-                WHERE user_id = ?;
-            `,
-            student_uid
-        ).previous_partner_id;
-
-        console.log("last partner: " + coach_uid);
+        let coach_username = await dbUtils.get_previous_partner(authResults.username);
+        let coach_uid = await dbUtils.getUID(coach_username);
 
         // Get the stuff from the body
         let rating = req.body.rating;

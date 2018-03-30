@@ -350,27 +350,20 @@ async function get_reviews(coach_uid)
 }
 
 // Records the pervious partners of a newly matched pair
+// TODO: Save this in the database instead of in memory
+let previousPartners = {};
 async function set_previous_partners(coach_username, student_username)
 {
 	console.log("updating last partners of " + coach_username + " and " + student_username);
+	previousPartners[coach_username] = student_username;
+	previousPartners[student_username] = coach_username;
+}
 
-	// Get the uids
-	let studentPromise = getUID(student_username);
-	let coachPromise = getUID(coach_username);
-
-	let student_uid = await studentPromise;
-	let coach_uid = await coachPromise;
-
-	// Insert them into the database
-	let query = 
-	`
-		UPDATE user_misc_preferences
-		SET previous_partner_id = ?
-		WHERE user_id = ?;
-	`;
-
-	db.run(query, coach_uid, student_uid);
-	db.run(query, student_uid, coach_uid);
+// Retrieves the previous partner of the given user
+// TODO: retrieve this from database instead of memory
+async function get_previous_partner(username)
+{
+	return previousPartners[username];
 }
 
 // Executes the SQL script specified by filePath.
@@ -395,5 +388,6 @@ module.exports =
 	get_reviews,
 	getUID,
 	set_previous_partners,
+	get_previous_partner,
     db
 }
