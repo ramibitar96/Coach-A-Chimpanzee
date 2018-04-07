@@ -234,7 +234,14 @@ module.exports = function(app)
 
     app.get('/get_reviews', async function(req, res)
     {
-        // TODO: Error checking
+        // Error if bad query string
+        if (req.query.user === undefined)
+        {
+            res.send({error_code: ErrorCodeEnum.BAD_QUERY_STRING});
+            return;
+        }
+
+        // TODO: Error checking for non-existent user
         // Get the reviews and send them
         let reviews = await dbUtils.get_reviews(req.query.coach);
         res.send({reviews: reviews});
