@@ -2,6 +2,8 @@ If you send a GET request to http://<our_domain_name>/get_profile?user=<username
 respond with a JSON object of the following format:
 
 {
+    "error_code": 0,
+
     "user":
     {
         "summoner_name": <summoner name>,
@@ -17,6 +19,8 @@ respond with a JSON object of the following format:
         {<you get the picture>}
     ]
 }
+
+error_code is 0 on success.  Otherwise, see errorCodes.js
 
 An individual review object has the following format:
 {

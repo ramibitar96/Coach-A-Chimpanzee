@@ -243,6 +243,29 @@ module.exports = function(app)
         res.send({reviews: reviews});
     });
 
+    app.get('/get_profile', async function(req, res)
+    {
+        // TODO: Error checking
+
+        // Simultaneously get the reviews and user prefs
+        let uid = await dbUtils.getUID(req.query.user);
+        let reviewPromise = dbUtils.get_reviews(uid);
+        let prefsPromise = dbUtils.getUserPrefs(req.query.user);
+
+        let prefs = await prefsPromise;
+        let reviews = await reviewPromise;
+
+        // Combine them into a single json object and send the reply
+        let results = 
+        {
+            error_code: ErrorCodeEnum.SUCCESS,
+            user: prefs.user,
+            reviews: reviews
+        };
+
+        res.send(results);
+    });
+
     // Returns a webpage displaying the username of the currently-logged-in user.
     app.get('/whats_my_username', async function(req, res)
     {
