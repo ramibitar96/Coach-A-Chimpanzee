@@ -19,6 +19,7 @@ async function initializeDatabase()
 }
 
 // Returns the given user's uid.
+// If there is no such user, returns undefined.
 async function getUID(username)
 {
 	let query = "SELECT rowid FROM user WHERE user_name = ?;"
@@ -305,11 +306,16 @@ async function add_review(student_uid, coach_uid, rating, text)
 }
 
 // Returns all reviews for the given user
+// If there is no such users, returns undefined
 async function get_reviews(coach_username)
 {
 	// Get the userid
 	// TODO: Error checking
 	let coach_uid = await getUID(coach_username);
+
+	// Error if the username doesn't exist
+	if (coach_uid === undefined)
+		return undefined;
 
 	// Grab the reviews from the database
 	let query = 

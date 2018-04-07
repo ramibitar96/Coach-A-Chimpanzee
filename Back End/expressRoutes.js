@@ -263,6 +263,13 @@ module.exports = function(app)
         let prefs = await prefsPromise;
         let reviews = await reviewPromise;
 
+        // Error if no such user
+        if (reviews === undefined)
+        {
+            res.send({error_code: ErrorCodeEnum.USERNAME_DOESNT_EXIST});
+            return;
+        }
+
         // Combine them into a single json object and send the reply
         let results = 
         {
