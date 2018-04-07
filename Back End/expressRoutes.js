@@ -234,12 +234,9 @@ module.exports = function(app)
 
     app.get('/get_reviews', async function(req, res)
     {
-        // Get the userid of the player we want to look up
-        let coach_uid = await dbUtils.getUID(req.query.coach);
         // TODO: Error checking
-
         // Get the reviews and send them
-        let reviews = await dbUtils.get_reviews(coach_uid);
+        let reviews = await dbUtils.get_reviews(req.query.coach);
         res.send({reviews: reviews});
     });
 
@@ -248,8 +245,7 @@ module.exports = function(app)
         // TODO: Error checking
 
         // Simultaneously get the reviews and user prefs
-        let uid = await dbUtils.getUID(req.query.user);
-        let reviewPromise = dbUtils.get_reviews(uid);
+        let reviewPromise = dbUtils.get_reviews(req.query.user);
         let prefsPromise = dbUtils.getUserPrefs(req.query.user);
 
         let prefs = await prefsPromise;

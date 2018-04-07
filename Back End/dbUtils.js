@@ -305,9 +305,11 @@ async function add_review(student_uid, coach_uid, rating, text)
 }
 
 // Returns all reviews for the given user
-async function get_reviews(coach_uid)
+async function get_reviews(coach_username)
 {
+	// Get the userid
 	// TODO: Error checking
+	let coach_uid = await getUID(coach_username);
 
 	// Grab the reviews from the database
 	let query = 
