@@ -242,7 +242,12 @@ module.exports = function(app)
 
     app.get('/get_profile', async function(req, res)
     {
-        // TODO: Error checking
+        // Error if bad query string
+        if (req.query.user === undefined)
+        {
+            res.send({error_code: ErrorCodeEnum.BAD_QUERY_STRING});
+            return;
+        }
 
         // Simultaneously get the reviews and user prefs
         let reviewPromise = dbUtils.get_reviews(req.query.user);
