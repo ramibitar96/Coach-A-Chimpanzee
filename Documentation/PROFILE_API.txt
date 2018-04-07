@@ -1,0 +1,30 @@
+If you send a GET request to http://<our_domain_name>/get_profile?user=<username> , the server will
+respond with a JSON object of the following format:
+
+{
+    "user":
+    {
+        "summoner_name": <summoner name>,
+        "twitch_name": <user's twitch username>
+        "current_rank": <their rank, an integer from 0 to 6>    // NOTE: we should probably get this from Riot.
+    },
+
+    "reviews":
+    [
+        {<a review object>},
+        {<another review object>},
+        {<etc.>},
+        {<you get the picture>}
+    ]
+}
+
+An individual review object has the following format:
+{
+    "author":   <username of the author of the review>,
+    "date":     <A Javascript Date object representing the date the review was written>,
+
+    "rating":   <number between 1-5>
+    "text":     <the text contents of the review>
+}
+
+This is simply a partial mix of get_prefs and get_reviews.
