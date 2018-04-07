@@ -71,6 +71,7 @@ that means the user selected LAST_HITTING and MACRO, and no others.
 | 0             | successful (no error)     |
 | 5             | session token expired     |
 | 6             | session token invalid (IE: fake) |
+| 7             | username doesn't exist    |
 
 
 # Changing preferences

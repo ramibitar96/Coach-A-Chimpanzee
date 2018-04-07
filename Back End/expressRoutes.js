@@ -234,13 +234,51 @@ module.exports = function(app)
 
     app.get('/get_reviews', async function(req, res)
     {
-        // Get the userid of the player we want to look up
-        let coach_uid = await dbUtils.getUID(req.query.coach);
-        // TODO: Error checking
+        // Error if bad query string
+        if (req.query.user === undefined)
+        {
+            res.send({error_code: ErrorCodeEnum.BAD_QUERY_STRING});
+            return;
+        }
 
+        // TODO: Error checking for non-existent user
         // Get the reviews and send them
-        let reviews = await dbUtils.get_reviews(coach_uid);
+        let reviews = await dbUtils.get_reviews(req.query.coach);
         res.send({reviews: reviews});
+    });
+
+    app.get('/get_profile', async function(req, res)
+    {
+        // Error if bad query string
+        if (req.query.user === undefined)
+        {
+            res.send({error_code: ErrorCodeEnum.BAD_QUERY_STRING});
+            return;
+        }
+
+        // Simultaneously get the reviews and user prefs
+        let reviewPromise = dbUtils.get_reviews(req.query.user);
+        let prefsPromise = dbUtils.getUserPrefs(req.query.user);
+
+        let prefs = await prefsPromise;
+        let reviews = await reviewPromise;
+
+        // Error if no such user
+        if (reviews === undefined)
+        {
+            res.send({error_code: ErrorCodeEnum.USERNAME_DOESNT_EXIST});
+            return;
+        }
+
+        // Combine them into a single json object and send the reply
+        let results = 
+        {
+            error_code: ErrorCodeEnum.SUCCESS,
+            user: prefs.user,
+            reviews: reviews
+        };
+
+        res.send(results);
     });
 
     // Returns a webpage displaying the username of the currently-logged-in user.
