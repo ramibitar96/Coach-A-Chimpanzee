@@ -30,10 +30,10 @@
 				<ul class="right">
 					<div class="row profile-search">
 						<div class="large-9 medium-9 columns">
-							<input type="text" placeholder="Search for a profile"/>
+							<input id="search" type="text" placeholder="Search for a profile"/>
 						</div>
 						<div class="large-3 medium-3 columns">
-							<a href="#" class="button">Search</a>
+							<a href="#" class="button" onclick="search_profile(document.getElementById('search').value)">Search</a>
 						</div>
 					</div>
 				</ul>
@@ -52,6 +52,7 @@
 				<div class="name large-9 medium-9 columns">
 					<h2 class="summoner_name"></h2>
 					<h2 class="summoner_rank"></h2>
+					<h2 class="summoner_rating"></h2>
 					<!--<h2>In Game</h2>-->
 				</div>
 			</div>
@@ -59,15 +60,6 @@
 			<div class="reviews row columns">
 				<div class="row">
 					<h2>Reviews</h2>
-				</div>
-				<div class="review-card row">
-					<p class="review-text">Sample review text</p>
-				</div>
-				<div class="review-card row">
-					<p class="review-text">Sample review text</p>
-				</div>
-				<div class="review-card row">
-					<p class="review-text">Sample review text</p>
 				</div>
 			</div>
 		</div>

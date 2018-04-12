@@ -1,10 +1,29 @@
-$.ajax({
-		type: "GET",
-		url: "http://localhost:3000/get_prefs",
-		success: function(data) {
-			parseData(data);
-		}
-});
+var u;
+var name = "session_token=";
+var ca = document.cookie.split(';');
+for(var i = 0; i < ca.length; i++) {
+	var c = ca[i];
+	while (c.charAt(0) == ' ') {
+		c = c.substring(1);
+	}
+	if (c.indexOf(name) == 0) {
+		u = c.substring(name.length, c.length);
+	}
+}
+search_profile(u);
+
+function search_profile(user) {
+	if (user == null || user == "") {
+		return;
+	}
+	$.ajax({
+			type: "GET",
+			url: "http://localhost:3000/get_profile?user=" + user,
+			success: function(data) {
+				parseData(data);
+			}
+	});
+}
 
 function parseData(json) {
 	var json_user = json["user"];
@@ -26,12 +45,14 @@ function parseData(json) {
 
 	//twitch link 
 	var twitch = json_user["twitch_name"];
-	twitch = twitch.replace("http://","");
-	twitch = twitch.replace("www.","");
-	twitch = twitch.replace("twitch.tv/","");
-	twitch = twitch.replace("/", "");
 
 	if (twitch != "" && twitch != null) {
+
+		twitch = twitch.replace("http://","");
+		twitch = twitch.replace("www.","");
+		twitch = twitch.replace("twitch.tv/","");
+		twitch = twitch.replace("/", "");
+
 		var embed = new Twitch.Embed("twitch-embed", {
 				width: "100%",
 				height: 480,
@@ -45,4 +66,20 @@ function parseData(json) {
 			player.play();
 		});
 	}
+
+	//clear old reviews
+	$(".review-card").remove();
+
+	var json_review = json["reviews"];
+	var ratings = 0;
+	var total = 0;
+	for (var k in json_review) {	
+		var r = json_review[k];
+		ratings += r["rating"];
+		total++;
+
+		var div = "<div class='review-card row'><p class=\"review-text\">\"" + r["text"] + "\" - " + r["author"] + "</p></div>";
+		$(".reviews").append(div);	
 	}
+	$(".summoner_rating").text("Rating: " + (ratings/total).toFixed(1));
+}
