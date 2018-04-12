@@ -6813,6 +6813,58 @@ th.hide-for-touch {
     .star-rating label:hover, .star-rating label:hover ~ label {
       color: #f2b600; }
 
+.chatroom .cr-topbar {
+  height: 75px;
+  background-color: black; }
+  .chatroom .cr-topbar .cr-topbar-content .cr-topbar-left {
+    float: left;
+    padding-left: 5px;
+    width: 700px; }
+    .chatroom .cr-topbar .cr-topbar-content .cr-topbar-left .cr-topbar-champion {
+      display: inline-block;
+      height: 65px;
+      width: 65px;
+      margin-top: 5px;
+      border: 1px solid white; }
+  .chatroom .cr-topbar .cr-topbar-content .cr-topbar-right {
+    float: right;
+    width: 100px;
+    height: 75px;
+    border: 1px solid white; }
+.chatroom .cr-bottom {
+  height: calc(100vh - 75px); }
+  .chatroom .cr-bottom .cr-dynamic {
+    height: 100%;
+    display: inline-block;
+    margin-right: 1px;
+    float: left;
+    background-color: pink; }
+  .chatroom .cr-bottom .cr-chat {
+    height: 100%;
+    display: inline-block;
+    float: right;
+    background-color: blue;
+    position: relative; }
+    .chatroom .cr-bottom .cr-chat textarea {
+      resize: none;
+      height: inherit; }
+    .chatroom .cr-bottom .cr-chat .cr-chat-form {
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      background-color: green; }
+      .chatroom .cr-bottom .cr-chat .cr-chat-form input, .chatroom .cr-bottom .cr-chat .cr-chat-form button {
+        margin: 0;
+        padding: 0;
+        display: inline-block;
+        height: 50px; }
+      .chatroom .cr-bottom .cr-chat .cr-chat-form input {
+        width: 80%;
+        float: left; }
+      .chatroom .cr-bottom .cr-chat .cr-chat-form button {
+        width: 20%;
+        float: right; }
+
 body {
   overflow: hidden; }
   body.scroll {

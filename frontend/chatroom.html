@@ -11,14 +11,57 @@
 		<script src="js/vendor/modernizr.js"></script>
 	</head>
 
-	<body>
+	<body onresize="resizeChat()">
 		<audio id="alert" src="audio/alert.mp3" preload="auto"></audio>
-		<div class="section large-6 medium-6 columns left">		
-			<textarea id = "chatArea" style=" resize: none; height: 70vh" readonly></textarea>
-			<input type = "text" id = "inputText" onkeypress="keypressHandle(event)" style="width:80vh"/>
-			<button onclick="sendMessage()">Send</button>
-		</div>		
-		<a class="button" href="#" onclick="openModal()">End Chat</a>
+
+
+		<!-- STYLING FOR CHATROOM -->
+		<div class="chatroom">
+				<!-- topbar -->
+				<div class="cr-topbar">
+					<div class="cr-topbar-content large-10 large-push-1">
+						<!-- options (stats, skills, items, map) -->
+						<div class="cr-topbar-left">
+							<div class="cr-topbar-champion cr-topbar-1"></div>
+							<div class="cr-topbar-champion cr-topbar-2"></div>
+							<div class="cr-topbar-champion cr-topbar-3"></div>
+							<div class="cr-topbar-champion cr-topbar-4"></div>
+							<div class="cr-topbar-champion cr-topbar-5"></div>
+							<div class="cr-topbar-champion cr-topbar-6"></div>
+							<div class="cr-topbar-champion cr-topbar-7"></div>
+							<div class="cr-topbar-champion cr-topbar-8"></div>
+							<div class="cr-topbar-champion cr-topbar-9"></div>
+							<div class="cr-topbar-champion cr-topbar-10"></div>
+						</div>
+
+						<!-- disconnect and public switch -->
+						<div class="cr-topbar-right">
+							<a class="button" href="#" onclick="openModal()">End Chat</a>
+						</div>
+					</div>
+				</div>
+			
+				<div class="cr-bottom large-10 large-push-1">
+					<!-- dynamic area -->
+					<div class="cr-dynamic">
+						test
+					</div>
+
+					<!-- chat area -->
+					<div class="cr-chat">
+						<textarea id="chatArea" readonly></textarea>
+						<div class="cr-chat-form">
+							<input type="text" id="inputText" onkeypress="keypressHandle(event)"></input>
+						<button onclick="sendMessage()">Send</button>
+						</div>	
+
+					</div>
+				</div>
+
+
+			</div>
+
+		</div>
 
 		<!-- modal -->
 		<div id="endChat" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" data-options="close_on_background_click:false; close_on_esc: false;">
@@ -62,8 +105,6 @@
 				</div>
 			</form>
 		</div>
-
-
 	</body>
 	<script src="js/vendor/jquery.js"></script>
 	<script src="js/foundation.min.js"></script>
@@ -74,5 +115,21 @@
 	<script>
 		$(document).foundation();
 	</script> 
+	<script>
+		//styling
+		$(".cr-dynamic").width($(".cr-dynamic").height());
+
+		var w = $(".cr-bottom").width() - $(".cr-dynamic").width();
+		$(".cr-chat").width(w - 3);
+
+		function resizeChat() {
+			//styling
+			$(".cr-dynamic").width($(".cr-dynamic").height());
+
+			var w = $(".cr-bottom").width() - $(".cr-dynamic").width();
+			$(".cr-chat").width(w - 3);
+		}
+
+	</script>
 </html>
 
