@@ -7,7 +7,9 @@ const ErrorCodeEnum =
     BAD_JSON_OBJECT: 3,
     WRONG_PASSWORD: 4,
     TOKEN_EXPIRED: 5,
-    TOKEN_INVALID: 6
+    TOKEN_INVALID: 6,
+    USERNAME_DOESNT_EXIST: 7,
+    BAD_QUERY_STRING: 8
 };
 
 module.exports = ErrorCodeEnum;

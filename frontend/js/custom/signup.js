@@ -58,7 +58,7 @@ function login(body) {
 			success: function (data){
 				var response = data;
 				if (response["error_code"] == 0) {
-					window.location.assign("queue.html");
+					window.location.assign("PLpreferences.html");
 				}
 			}
 	});

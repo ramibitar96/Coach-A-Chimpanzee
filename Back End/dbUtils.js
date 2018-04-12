@@ -18,6 +18,16 @@ async function initializeDatabase()
 	await executeSQLScript("./sql_scripts/initialize_database.sql", db);
 }
 
+// Returns the given user's uid.
+// If there is no such user, returns undefined.
+async function getUID(username)
+{
+	let query = "SELECT rowid FROM user WHERE user_name = ?;"
+	let queryResult = await db.get(query, username);
+
+	return queryResult.rowid;
+}
+
 // Queries the database for the given user's preferences.
 // See PREFERENCES_API for the structure of the object it returns.
 async function getUserPrefs(username)
@@ -98,7 +108,50 @@ async function getUserPrefs(username)
 
 	return output;
 }
+//allows user to set profile image
+async function setProfileImg(username,data)
+{
+	//get user id
+	let uidQuery = `Select rowid FROM user WHERE user_name=?;`;
+	let uidResults = await db.run(uidQuery,username);
+	let uid = uidResults.rowid;
+	
+	//update the user's profile picture
+	let imgLink = data.imgURL;
+	var n = imgLink.lastIndexOf(".");
+	let imgLocalUrl = uid + imgLink.substring(n);
+	let updateQuery = "UPDATE user SET profile_img = ? WHERE user_id = ?";
+	let updatePromise = db.run
+		(
+		 updateQuery,
+		 imgLocalUrl,
+		 username,
+		);
+  await updatePromise;
+	return {error_code: ErrorCodeEnum.SUCCESS};
+}
 
+async function uploadReplayFile(username, data)
+{
+	//get id
+	let uidQuery = `Select rowid FROM user WHERE user_name=?;`;
+	let uidResults = await db.run(uidQuery,username);
+	let uid = uidResults.rowid;
+
+	//add replay file
+	let replayLink = data.replayLink;
+	var n = replayLink.lastIndexOf(".");
+	let replayLocalUrl = uid + replayLink.substring(n);
+	let addQuery = "INSERT INTO replays (" +
+		"replay_owner_id, replay_url)" +
+		"VALUES (?, ?);";
+	let addQueryPromise = db.run(addQuery, uid, replayLocalUrl);
+
+	await addQueryPromise;
+
+	return {error_code: ErrorCodeEnum.SUCCESS};
+}
+	
 // Updates the database with the new preferences
 async function setUserPrefs(username, prefsData)
 {
@@ -219,6 +272,108 @@ async function setSkillPrefs(userid, skills, coachee)
 	await db.exec(query);
 }
 
+// Adds a review from the given student for the given coach
+// upvoteOrDownvote is a bool.  If true, it's an upvote, else downvote
+// text is the text of the review
+async function add_review(student_uid, coach_uid, rating, text)
+{
+	// TODO: Error checking
+
+	let query = 
+	`
+		INSERT INTO coach_reviews
+		(
+			student_user_id,
+			coach_user_id,
+			review_date,
+			rating,
+			review_text
+		)
+		VALUES
+		(?, ?, ?, ?, ?);
+	`;
+
+	let date = new Date();
+	db.run
+	(
+		query,
+		student_uid,
+		coach_uid,
+		date,
+		rating,
+		text
+	);
+}
+
+// Returns all reviews for the given user
+// If there is no such users, returns undefined
+async function get_reviews(coach_username)
+{
+	// Get the userid
+	// TODO: Error checking
+	let coach_uid = await getUID(coach_username);
+
+	// Error if the username doesn't exist
+	if (coach_uid === undefined)
+		return undefined;
+
+	// Grab the reviews from the database
+	let query = 
+	`
+		SELECT 
+			user.user_name,
+			user.rowid,
+			coach_reviews.coach_user_id,
+			coach_reviews.student_user_id,
+			coach_reviews.review_date,
+			coach_reviews.rating,
+			coach_reviews.review_text
+		FROM 
+			coach_reviews,
+			user
+		WHERE
+			coach_reviews.coach_user_id = ? AND
+			user.rowid = coach_reviews.student_user_id;
+	`;
+	let rows = await db.all(query, coach_uid);
+
+	console.log("retrieved review rows: " + JSON.stringify(rows));
+
+	// Put them in a form that matches the documentation
+	let results = [];
+	for (let row of rows)
+	{
+		let reviewObj =
+		{
+			author: row.user_name,
+			date: row.review_date,
+			rating: row.rating,
+			text: row.review_text
+		};
+
+		results.push(reviewObj);
+	}
+
+	return results;
+}
+
+// Records the pervious partners of a newly matched pair
+// TODO: Save this in the database instead of in memory
+let previousPartners = {};
+async function set_previous_partners(coach_username, student_username)
+{
+	console.log("updating last partners of " + coach_username + " and " + student_username);
+	previousPartners[coach_username] = student_username;
+	previousPartners[student_username] = coach_username;
+}
+
+// Retrieves the previous partner of the given user
+// TODO: retrieve this from database instead of memory
+async function get_previous_partner(username)
+{
+	return previousPartners[username];
+}
+
 // Executes the SQL script specified by filePath.
 // Returns a Promise<sqlite.Statement> when it's done.
 // filePath's type is string.  db's type is sqlite.Database
@@ -237,5 +392,10 @@ module.exports =
 	initializeDatabase,
 	getUserPrefs,
 	setUserPrefs,
+	add_review,
+	get_reviews,
+	getUID,
+	set_previous_partners,
+	get_previous_partner,
     db
 }
