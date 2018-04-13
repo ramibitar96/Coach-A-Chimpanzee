@@ -25,6 +25,9 @@ async function getUID(username)
 	let query = "SELECT rowid FROM user WHERE user_name = ?;"
 	let queryResult = await db.get(query, username);
 
+	if (queryResult === undefined)
+		return undefined;
+
 	return queryResult.rowid;
 }
 
@@ -34,9 +37,7 @@ async function getUserPrefs(username)
 {
 	// Get the user id
 	// TODO: Refactor this so user id is passed as a parameter isntead.
-	let uidQuery = "SELECT rowid FROM user WHERE user_name = ?;";
-	let uidResults = await db.get(uidQuery, username);
-	let uid = uidResults.rowid;
+	let uid = await getUID(username);
 
 	// Query for the summoner name and rank
 	// TODO: Replace summoner_name and current_rank with a query to Riot's servers
