@@ -28,6 +28,8 @@
 
 .chatroom {
 	.cr-topbar {
+		z-index: 10;
+		position: relative;
 		height: 75px;
 		background-color: black;
 
@@ -36,15 +38,26 @@
 			.cr-topbar-left {
 				float: left;
 				padding-left: 5px;
-				width: 700px;
+				margin: 0;
+				//width: 700px;
 
-				.cr-topbar-champion {
+				.cr-topbar-btn {
 					display: inline-block;
 					height: 65px;
 					width: 65px;
 					margin-top: 5px;
 					//margin-right: -2px;
 					border: 1px solid white;
+
+					& > a {
+						display: block;
+						height: 63px;
+						padding: 1px;
+
+						&:focus {
+							outline: none;
+						}
+					}
 				}
 			}
 
@@ -60,12 +73,48 @@
 	.cr-bottom {
 		height: calc(100vh - 75px);
 
+		.cr-filler {
+			height: 100%;
+			display: inline-block;
+			float: left;
+			//background-color: blue;
+			position: relative;
+			z-index: 10;
+		}
+
 		.cr-dynamic {
 			height: 100%;
 			display:inline-block;
 			margin-right: 1px;
-			float:left;
-			background-color: pink;
+			//float:left;
+			//background-color: pink;
+
+			.cr-dynamic-champion,
+			.cr-dynamic-whiteboard {
+				height: 100%;
+			}
+
+			.cr-dynamic-champion {
+				background-color: pink;
+			}
+
+			.cr-dynamic-whiteboard {
+				//background-color: blue;
+				background-image: url("../img/minimap.jpg");
+				background-size: contain;
+				background-repeat: no-repeat;
+
+				canvas {
+					position: absolute;
+					height: 100%;
+					width: 100%;
+					border: 1px solid white;
+					top: 0;
+					bottom: 0;
+					left: 0;
+					right: 0;
+				}
+			}
 		}
 		
 		.cr-chat {
@@ -74,6 +123,7 @@
 			float: right;
 			background-color: blue;
 			position: relative;
+			z-index: 10;
 
 			textarea {
 				resize: none;
