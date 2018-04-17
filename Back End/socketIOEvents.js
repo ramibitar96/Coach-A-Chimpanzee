@@ -8,6 +8,20 @@ const {User} = require('./matchmaking.js');
 
 let userSockets = {};   // A dictionary mapping usernames to their sockets
 let socketUsers = {};   // A dictionary mapping sockets to their usernames
+let userChatrooms = {}; // A dictionary mapping usernames to their sockets
+let chatroomUsers = {}; // A dictionary mapping sockets to their usernames
+let chatrooms = {};     // A dictionary mapping a chatroom's number to the actual chatroom
+
+let chatroomCount = 0;
+
+class chatroom {
+    constructor(user1, user2, chatroomNumber) {
+        this.user1 = user1;
+        this.user2 = user2;
+        this.chatroomNumber = chatroomNumber;
+        this.log = "";
+    }
+}
 
 module.exports = function(io)
 {
@@ -24,6 +38,14 @@ module.exports = function(io)
 
             console.log("Username: " + msg);
             console.log("Partner name: " + partnerName);
+            console.log("Chatroom: " + chatroomCount);
+
+            userChatrooms[msg] = chatroomCount;
+            userChatrooms[partnerName] = chatroomCount;
+            chatroomUsers[chatroomCount] = [msg, partnerName];
+            chatrooms[chatroomCount++] = "";
+
+            console.log(chatroomUsers[0]);
 
             userSocket.emit('match_found', msg);
             partnerSocket.emit('match_found', partnerName);
@@ -65,13 +87,13 @@ module.exports = function(io)
         {
             console.log(authResult.username + ": " + msg);
 
-            let partnerName = getPartner(username);
-            if (partnerName == undefined) {
-                console.log("ERROR: no match for this user");
-                return;
+            let partnerList = chatroomUsers[userChatrooms[username]];
+            var chatroomSocketList = [];
+            for (var i = 0; i < partnerList.length; i++) {
+                if (partnerList[i] != username) {
+                    chatroomSocketList.push(userSockets[partnerList[i]]);
+                }
             }
-            let partnerSocket = userSockets[partnerName];
-            console.log("Partner: " + partnerName);
 
             let msgObj =
             {
@@ -79,7 +101,9 @@ module.exports = function(io)
                 contents: msg
             };
 
-            partnerSocket.emit('message_received', msgObj);
+            for (var i = 0; i < chatroomSocketList.length; i++) {
+                chatroomSocketList[i].emit('message_received', msgObj);
+            }
         });
 
         // When a user enters the queue
@@ -122,6 +146,8 @@ module.exports = function(io)
             delete socketUsers[userSocket];
             delete socketUsers[partnerSocket];
             matchmaking.removeMatchedPair(username);
+
+            // TODO: Send chat log to database, remove from array
         });
     });
 }
