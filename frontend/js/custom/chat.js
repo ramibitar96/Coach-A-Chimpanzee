@@ -27,6 +27,14 @@ socket.on('match_found', function(msg)
 	writeReview = true;
 });
 
+socket.on('rejoin_chat', function(msg)
+{
+	// Fill chat box with previously sent messages
+	let chatArea = document.getElementById("chatArea");
+	chatArea.textContent = msg;
+	writeReview = true;
+});
+
 socket.on('end_chat', function(msg)
 {
 	let chatArea = document.getElementById("chatArea");

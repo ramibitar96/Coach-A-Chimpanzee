@@ -95,6 +95,9 @@ module.exports = function(io)
                 }
             }
 
+            // Add chat message to log
+            chatrooms[userChatrooms[username]] += (username + ": " + msg + "\n");
+
             let msgObj =
             {
                 sender: username,
@@ -114,6 +117,8 @@ module.exports = function(io)
 
             if (getPartner(username) != null) {
                 console.log("Returning user to existing chatroom");
+                let userSocket = userSockets[username];
+                userSocket.emit('rejoin_chat', chatrooms[userChatrooms[username]]);
                 return;
             } else if (matchmaking.isInQueue(username)) {
                 console.log("User is already in queue; returning to empty chatroom");
