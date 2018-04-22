@@ -78,7 +78,7 @@ module.exports = function(io)
             let username = socketUsers[socket.id];
             delete userSockets[username];
             delete socketUsers[socket.id];
-            if (userChatrooms[username] != undefined) {
+            if (userChatrooms[username] != undefined && chatroomUsers[userChatrooms[username]] != undefined) {
                 var index = chatroomUsers[userChatrooms[username]].indexOf(username);
                 chatroomUsers[userChatrooms[username]].splice(index, 1);
             }
@@ -129,6 +129,11 @@ module.exports = function(io)
 
             if (msg.type == 2) {
                 console.log("Chatroom number: " + msg.chatroomNumber);
+                if (chatroomUsers[msg.chatroomNumber] == undefined) {
+                    let userSocket = userSockets[username];
+                    userSocket.emit('invalid_chatroom');
+                    return;
+                }
                 userChatrooms[username] = msg.chatroomNumber;
                 chatroomUsers[msg.chatroomNumber].push(username);
                 return;

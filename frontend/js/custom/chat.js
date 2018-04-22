@@ -54,6 +54,13 @@ socket.on('end_chat', function(msg)
 	$('#endChat').foundation('reveal', 'open');
 });
 
+socket.on('invalid_chatroom', function(msg)
+{
+	// Alert user, then return them to the queue page
+	alert("Error: invalid chatroom specified");
+	window.location.assign("queue.html");
+});
+
 function keypressHandle(e)
 {
 	// keycode 13 is 'enter'

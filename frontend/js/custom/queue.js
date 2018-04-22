@@ -10,17 +10,17 @@ function queueCoach() {
 
 function enterChatroom() {
 	var chatroomNumber = prompt("Enter a chatroom number");
-	alert("Chatroom number: " + chatroomNumber);
+	/*alert(Number.isInteger(chatroomNumber));
 	// TODO: Perform sanity checks
-
-	// Check if requested chatroom exists/is public
+	if (chatroomNumber == null || chatroomNumber == NaN || chatroomNumber == "") {
+		alert("Error: not a valid input");
+		return;
+	}*/
 
 	// Join chatroom
 	localStorage.setItem("queueType","2");
 	localStorage.setItem("chatroomNumber", chatroomNumber);
 	window.location.assign("chatroom.html");
-
-	//alert("Chatroom number entered: " + chatroomNumber);
 }
 
 function getCookie(cname) {
