@@ -8,6 +8,21 @@ function queueCoach() {
 	window.location.assign("chatroom.html");
 }
 
+function enterChatroom() {
+	var chatroomNumber = prompt("Enter a chatroom number");
+	alert("Chatroom number: " + chatroomNumber);
+	// TODO: Perform sanity checks
+
+	// Check if requested chatroom exists/is public
+
+	// Join chatroom
+	localStorage.setItem("queueType","2");
+	localStorage.setItem("chatroomNumber", chatroomNumber);
+	window.location.assign("chatroom.html");
+
+	//alert("Chatroom number entered: " + chatroomNumber);
+}
+
 function getCookie(cname) {
 	var name = cname + "=";
 	var ca = document.cookie.split(';');

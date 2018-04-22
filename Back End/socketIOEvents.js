@@ -8,9 +8,9 @@ const {User} = require('./matchmaking.js');
 
 let userSockets = {};   // A dictionary mapping usernames to their sockets
 let socketUsers = {};   // A dictionary mapping sockets to their usernames
-let userChatrooms = {}; // A dictionary mapping usernames to their sockets
-let chatroomUsers = {}; // A dictionary mapping sockets to their usernames
-let chatrooms = {};     // A dictionary mapping a chatroom's number to the actual chatroom
+let userChatrooms = {}; // A dictionary mapping usernames to their chatrooms
+let chatroomUsers = {}; // A dictionary mapping chatrooms to the users in them
+let chatrooms = {};     // A dictionary mapping a chatroom's number to the chatroom's chat log
 
 let chatroomCount = 0;
 
@@ -78,16 +78,28 @@ module.exports = function(io)
             let username = socketUsers[socket.id];
             delete userSockets[username];
             delete socketUsers[socket.id];
+            if (userChatrooms[username] != undefined) {
+                var index = chatroomUsers[userChatrooms[username]].indexOf(username);
+                chatroomUsers[userChatrooms[username]].splice(index, 1);
+            }
 
             console.log("User " + username + " disconnected.");
         });
 
-        // When a user sends a message, forward it to their partner.
+        // When a user sends a message, forward it all users in the same chatroom
         socket.on('message', function(msg)
         {
             console.log(authResult.username + ": " + msg);
 
+            if (getPartner(username) == null) {
+                // TODO: check if chatroom allows users other than student/coach to chat
+                return;
+            }
+
             let partnerList = chatroomUsers[userChatrooms[username]];
+            if (partnerList == undefined) {
+                return;
+            }
             var chatroomSocketList = [];
             for (var i = 0; i < partnerList.length; i++) {
                 if (partnerList[i] != username) {
@@ -112,12 +124,21 @@ module.exports = function(io)
         // When a user enters the queue
         socket.on('queueType', async function(msg)
         {
-            // 0 = student, 1 = coach
+            // 0 = student, 1 = coach, 2 = guest
             console.log(authResult.username + ": " + " QUEUE TYPE: " + msg);
+
+            if (msg.type == 2) {
+                console.log("Chatroom number: " + msg.chatroomNumber);
+                userChatrooms[username] = msg.chatroomNumber;
+                chatroomUsers[msg.chatroomNumber].push(username);
+                return;
+            }
 
             if (getPartner(username) != null) {
                 console.log("Returning user to existing chatroom");
                 let userSocket = userSockets[username];
+                console.log("userChatrooms: " + userChatrooms[username]);
+                chatroomUsers[userChatrooms[username]].push(username);
                 userSocket.emit('rejoin_chat', chatrooms[userChatrooms[username]]);
                 return;
             } else if (matchmaking.isInQueue(username)) {
@@ -152,7 +173,15 @@ module.exports = function(io)
             delete socketUsers[partnerSocket];
             matchmaking.removeMatchedPair(username);
 
-            // TODO: Send chat log to database, remove from array
+            // TODO: Send chat log to database, delete all applicable chatroom dictionary entries
+            let chatroomNumber = userChatrooms[username];
+            delete userChatrooms[username];
+            if (chatroomUsers[chatroomNumber] != undefined) {
+                delete chatroomUsers[chatroomNumber];
+            }
+            if (chatrooms[chatroomNumber] != undefined) {
+                delete chatrooms[chatroomNumber];
+            }
         });
     });
 }

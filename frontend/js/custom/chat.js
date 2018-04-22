@@ -1,5 +1,6 @@
 //user type
 var type = localStorage.getItem("queueType");
+var chatroomNumber = localStorage.getItem("chatroomNumber");
 
 var socket = io.connect('http://localhost:3000');
 
@@ -7,7 +8,17 @@ var writeReview = false;
 var log = "";
 
 //send queue type
-socket.emit("queueType", type);
+if (type == 2) {
+	let msgObj =
+    {
+        type: type,
+        chatroomNumber: chatroomNumber
+    };
+
+    socket.emit("queueType", msgObj);
+} else {
+	socket.emit("queueType", type);
+}
 
 socket.on('message_received', function(msg)
 {
@@ -69,7 +80,7 @@ function sendMessage()
 }
 
 function openModal() {
-	if (writeReview) {
+	if (writeReview && type != 2) {
 		socket.emit("end_chat", "end_chat");
 		$('#endChat').foundation('reveal', 'open');
 	} 
