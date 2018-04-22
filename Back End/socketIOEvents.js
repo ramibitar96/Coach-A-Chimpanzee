@@ -123,6 +123,20 @@ module.exports = function(io)
             delete socketUsers[partnerSocket];
             matchmaking.removeMatchedPair(username);
         });
+
+			//whiteboard
+			socket.on('drawing', function(data)
+			{
+            let partnerName = getPartner(username);
+            if (partnerName == undefined) {
+                console.log("ERROR: no match for this user");
+                return;
+            }
+            let partnerSocket = userSockets[partnerName];
+            console.log("Partner: " + partnerName);
+
+				partnerSocket.emit('drawing', data);
+			});
     });
 }
 

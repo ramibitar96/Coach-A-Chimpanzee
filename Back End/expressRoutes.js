@@ -163,22 +163,6 @@ module.exports = function(app)
         res.send(results);
     });
 
-	app.post('/add_replay', async function(req, res)
-    {
-        let token = req.cookies.session_token;
-        let authResults = await auth.checkToken(token);
-
-        //send error code for authError
-        if(authResults.error_code != 0)
-        {
-            res.send({error_code: authResults.error_code});
-            return;
-        }
-
-        let results = await dbUtils.uploadReplayFile(authResults.username,req.body);
-        res.send(results);
-    });
-
 	// Sets the user preferences of the currently logged-in user.
 	app.post('/set_prefs', async function(req, res)
     {

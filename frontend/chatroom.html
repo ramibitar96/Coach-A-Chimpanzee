@@ -21,18 +21,19 @@
 				<div class="cr-topbar">
 					<div class="cr-topbar-content large-10 large-push-1">
 						<!-- options (stats, skills, items, map) -->
-						<div class="cr-topbar-left">
-							<div class="cr-topbar-champion cr-topbar-1"></div>
-							<div class="cr-topbar-champion cr-topbar-2"></div>
-							<div class="cr-topbar-champion cr-topbar-3"></div>
-							<div class="cr-topbar-champion cr-topbar-4"></div>
-							<div class="cr-topbar-champion cr-topbar-5"></div>
-							<div class="cr-topbar-champion cr-topbar-6"></div>
-							<div class="cr-topbar-champion cr-topbar-7"></div>
-							<div class="cr-topbar-champion cr-topbar-8"></div>
-							<div class="cr-topbar-champion cr-topbar-9"></div>
-							<div class="cr-topbar-champion cr-topbar-10"></div>
-						</div>
+						<ul class="cr-topbar-left tabs" data-tab>
+							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a href="#champion1"></a></li>
+							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a href="#champion2"></a></li>
+							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a href="#champion3"></a></li>
+							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a href="#champion4"></a></li>
+							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a href="#champion5"></a></li>
+							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a href="#champion6"></a></li>
+							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a href="#champion7"></a></li>
+							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a href="#champion8"></a></li>
+							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a href="#champion9"></a></li>
+							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a href="#champion10"></a></li>
+							<li class="tab-title cr-topbar-btn cr-topbar-whiteboard active"><a href="#whiteboard"></a></li>
+						</ul>
 
 						<!-- disconnect and public switch -->
 						<div class="cr-topbar-right">
@@ -41,14 +42,27 @@
 					</div>
 				</div>
 			
-				<div class="cr-bottom large-10 large-push-1">
-					<!-- dynamic area -->
-					<div class="cr-dynamic">
-						test
+				<div class="cr-bottom">
+					<div class="large-only large-1 cr-filler"></div>
+					<!-- dynamic area TABS -->
+					<div class="cr-dynamic tabs-content">
+						<div class="content active cr-dynamic-whiteboard" id="whiteboard">
+							<canvas class="whiteboard"></canvas>	
+						</div>
+						<div class="content cr-dynamic-champion" id="champion1"></div>
+						<div class="content cr-dynamic-champion" id="champion2"></div>
+						<div class="content cr-dynamic-champion" id="champion3"></div>
+						<div class="content cr-dynamic-champion" id="champion4"></div>
+						<div class="content cr-dynamic-champion" id="champion5"></div>
+						<div class="content cr-dynamic-champion" id="champion6"></div>
+						<div class="content cr-dynamic-champion" id="champion7"></div>
+						<div class="content cr-dynamic-champion" id="champion8"></div>
+						<div class="content cr-dynamic-champion" id="champion9"></div>
+						<div class="content cr-dynamic-champion" id="champion10"></div>
 					</div>
 
 					<!-- chat area -->
-					<div class="cr-chat">
+				 	<div class="cr-chat large-pull-1">
 						<textarea id="chatArea" readonly></textarea>
 						<div class="cr-chat-form">
 							<input type="text" id="inputText" onkeypress="keypressHandle(event)"></input>
@@ -119,14 +133,14 @@
 		//styling
 		$(".cr-dynamic").width($(".cr-dynamic").height());
 
-		var w = $(".cr-bottom").width() - $(".cr-dynamic").width();
+		var w = $(".cr-bottom").width() - $(".cr-dynamic").width() - (2*$(".cr-filler").width());
 		$(".cr-chat").width(w - 3);
 
 		function resizeChat() {
 			//styling
 			$(".cr-dynamic").width($(".cr-dynamic").height());
 
-			var w = $(".cr-bottom").width() - $(".cr-dynamic").width();
+			var w = $(".cr-bottom").width() - $(".cr-dynamic").width() - (2*$(".cr-filler").width());
 			$(".cr-chat").width(w - 3);
 		}
 
