@@ -18,7 +18,7 @@ class Chatroom {
     constructor(user1, user2, chatroomNumber) {
         this.user1 = user1;
         this.user2 = user2;
-        this.public = false;
+        this.public = true;
         this.chatroomNumber = chatroomNumber;
         this.log = "";
     }
@@ -145,7 +145,7 @@ module.exports = function(io)
 
             if (msg.type == 2) {
                 console.log("Chatroom number: " + msg.chatroomNumber);
-                if (chatroomUsers[msg.chatroomNumber] == undefined || chatrooms[msg.chatroomNumber].public != false) {
+                if (chatroomUsers[msg.chatroomNumber] == undefined || chatrooms[msg.chatroomNumber].public == false) {
                     let userSocket = userSockets[username];
                     userSocket.emit('invalid_chatroom');
                     return;
