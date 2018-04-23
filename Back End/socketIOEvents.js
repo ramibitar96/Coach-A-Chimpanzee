@@ -45,12 +45,26 @@ module.exports = function(io)
             userChatrooms[partnerName] = chatroomCount;
             chatroomUsers[chatroomCount] = [msg, partnerName];
             room = new Chatroom(msg, partnerName, chatroomCount);
-            chatrooms[chatroomCount++] = room;
+            chatrooms[chatroomCount] = room;
 
             console.log(room);
 
-            userSocket.emit('match_found', msg);
-            partnerSocket.emit('match_found', partnerName);
+            let userObj =
+            {
+                partner: msg,
+                roomid: chatroomCount
+            };
+
+            let partnerObj =
+            {
+                partner: partnerName,
+                roomid: chatroomCount
+            };
+
+            chatroomCount++;
+
+            userSocket.emit('match_found', userObj);
+            partnerSocket.emit('match_found', partnerObj);
         });
 
         // Check the session token to find out what user this is
@@ -131,7 +145,7 @@ module.exports = function(io)
 
             if (msg.type == 2) {
                 console.log("Chatroom number: " + msg.chatroomNumber);
-                if (chatroomUsers[msg.chatroomNumber] == undefined || chatrooms[msg.chatroomNumber].public == false) {
+                if (chatroomUsers[msg.chatroomNumber] == undefined || chatrooms[msg.chatroomNumber].public != false) {
                     let userSocket = userSockets[username];
                     userSocket.emit('invalid_chatroom');
                     return;
@@ -191,10 +205,58 @@ module.exports = function(io)
             }
         });
 
+        socket.on('ask_to_toggle', function(data)
+        {
+            let partnerName = getPartner(username);
+            if (partnerName == undefined) {
+                console.log("ERROR: no match for this user");
+                return;
+            }
+            let partnerSocket = userSockets[partnerName];
+            partnerSocket.emit('ask_to_toggle');
+        });
+
+        socket.on('toggle_privacy', function(data)
+        {
+            let partnerName = getPartner(username);
+            if (partnerName == undefined) {
+                console.log("ERROR: no match for this user");
+                return;
+            }
+
+            // Toggle chatroom privacy settings if requested
+            if (data == true) {
+                chatrooms[userChatrooms[username]].public = !chatrooms[userChatrooms[username]].public;
+            }
+
+            let partnerSocket = userSockets[partnerName];
+            partnerSocket.emit('toggle_privacy', data);
+        });
+
 			//whiteboard
 			socket.on('drawing', function(data)
 			{
-            let partnerName = getPartner(username);
+            if (getPartner(username) == null) {
+                // TODO: check if chatroom allows users other than student/coach to chat
+                return;
+            }
+
+            let partnerList = chatroomUsers[userChatrooms[username]];
+            if (partnerList == undefined) {
+                return;
+            }
+            var chatroomSocketList = [];
+            for (var i = 0; i < partnerList.length; i++) {
+                if (partnerList[i] != username) {
+                    chatroomSocketList.push(userSockets[partnerList[i]]);
+                }
+            }
+
+            for (var i = 0; i < chatroomSocketList.length; i++) {
+                chatroomSocketList[i].emit('drawing', data);
+            }
+
+            /*let partnerName = getPartner(username);
             if (partnerName == undefined) {
                 console.log("ERROR: no match for this user");
                 return;
@@ -202,7 +264,7 @@ module.exports = function(io)
             let partnerSocket = userSockets[partnerName];
             console.log("Partner: " + partnerName);
 
-				partnerSocket.emit('drawing', data);
+				partnerSocket.emit('drawing', data);*/
 			});
     });
 }
