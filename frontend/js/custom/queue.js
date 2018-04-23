@@ -1,3 +1,6 @@
+// Testing
+var socket = io.connect('http://localhost:3000');
+
 function queueStudent() {
 	localStorage.setItem("queueType","0");
 	window.location.assign("chatroom.html");
@@ -9,19 +12,19 @@ function queueCoach() {
 }
 
 function enterChatroom() {
-	var chatroomNumber = prompt("Enter a chatroom number");
-	/*alert(Number.isInteger(chatroomNumber));
-	// TODO: Perform sanity checks
-	if (chatroomNumber == null || chatroomNumber == NaN || chatroomNumber == "") {
-		alert("Error: not a valid input");
-		return;
-	}*/
+	socket.emit('request_chatrooms');
+	//var chatroomNumber = prompt("Enter a chatroom number");
 
 	// Join chatroom
-	localStorage.setItem("queueType","2");
+	/*localStorage.setItem("queueType","2");
 	localStorage.setItem("chatroomNumber", chatroomNumber);
-	window.location.assign("chatroom.html");
+	window.location.assign("chatroom.html");*/
 }
+
+socket.on('chatroom_list', function(msg)
+{
+	alert(msg);
+});
 
 function getCookie(cname) {
 	var name = cname + "=";

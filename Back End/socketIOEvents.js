@@ -12,13 +12,15 @@ let userChatrooms = {}; // A dictionary mapping usernames to their chatrooms
 let chatroomUsers = {}; // A dictionary mapping chatrooms to the users in them
 let chatrooms = {};     // A dictionary mapping a chatroom's number to the chatroom's chat log
 
+let publicChatrooms = [];
+
 let chatroomCount = 0;
 
 class Chatroom {
     constructor(user1, user2, chatroomNumber) {
         this.user1 = user1;
         this.user2 = user2;
-        this.public = true;
+        this.public = true; // FIXME: Revert to false
         this.chatroomNumber = chatroomNumber;
         this.log = "";
     }
@@ -61,10 +63,24 @@ module.exports = function(io)
                 roomid: chatroomCount
             };
 
+            publicChatrooms.push(chatroomCount); // FIXME: Remove this when privacy settings toggling is implemented
+
             chatroomCount++;
 
             userSocket.emit('match_found', userObj);
             partnerSocket.emit('match_found', partnerObj);
+        });
+
+       socket.on('request_chatrooms', function(msg)
+        {
+            var chatroomList = "";
+            for (var i = 0; i < publicChatrooms.length; i++) {
+                if (i != 0)
+                    chatroomList += "\n";
+                chatroomList += (publicChatrooms[i] + ": " + chatrooms[publicChatrooms[i]].user1 + " & " + chatrooms[publicChatrooms[i]].user2);
+            }
+
+            socket.emit('chatroom_list', chatroomList);
         });
 
         // Check the session token to find out what user this is
@@ -227,6 +243,12 @@ module.exports = function(io)
             // Toggle chatroom privacy settings if requested
             if (data == true) {
                 chatrooms[userChatrooms[username]].public = !chatrooms[userChatrooms[username]].public;
+                if (!chatrooms[userChatrooms[username]].public) {
+                    publicChatrooms.push(userChatrooms[username]);
+                } else {
+                    var index = publicChatrooms.indexOf(userChatrooms[username]);
+                    publicChatrooms.splice(index, 1);
+                }
             }
 
             let partnerSocket = userSockets[partnerName];
@@ -237,7 +259,7 @@ module.exports = function(io)
 			socket.on('drawing', function(data)
 			{
             if (getPartner(username) == null) {
-                // TODO: check if chatroom allows users other than student/coach to chat
+                // TODO: check if chatroom allows users other than student/coach to draw
                 return;
             }
 
