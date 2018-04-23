@@ -54,10 +54,10 @@ async function get_rank(username)
     let results = await request.get(url, options);
 
     // Search for and return their solo queue rank
-    for (let leagueInfo in results)
+    for (let i = 0; i < results.length; i++)
     {
-        if (leagueInfo.queueType == "RANKED_SOLO_5x5")
-            return leagueInfo.tier;
+        if (results[i].queueType == "RANKED_SOLO_5x5")
+            return results[i].tier;
     }
 
     // We couldn't find their solo queue rank, so return "UNRANKED"
