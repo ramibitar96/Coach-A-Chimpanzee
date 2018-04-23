@@ -6621,6 +6621,11 @@ th.hide-for-touch {
       opacity: 1; }
     .top-bar .login-text:after {
       top: 25px !important; }
+  .top-bar .profile-search {
+    padding-right: 70px; }
+    .top-bar .profile-search .columns {
+      padding-left: 0 !important;
+      padding-right: 0 !important; }
   .top-bar .SignIn {
     width: 200px !important;
     padding-left: 10px;
@@ -6807,6 +6812,89 @@ th.hide-for-touch {
     transition: all .3s ease-in-out; }
     .star-rating label:hover, .star-rating label:hover ~ label {
       color: #f2b600; }
+
+.chatroom .cr-topbar {
+  z-index: 10;
+  position: relative;
+  height: 75px;
+  background-color: black; }
+  .chatroom .cr-topbar .cr-topbar-content .cr-topbar-left {
+    float: left;
+    padding-left: 5px;
+    margin: 0; }
+    .chatroom .cr-topbar .cr-topbar-content .cr-topbar-left .cr-topbar-btn {
+      display: inline-block;
+      height: 65px;
+      width: 65px;
+      margin-top: 5px;
+      border: 1px solid white; }
+      .chatroom .cr-topbar .cr-topbar-content .cr-topbar-left .cr-topbar-btn > a {
+        display: block;
+        height: 63px;
+        padding: 1px; }
+        .chatroom .cr-topbar .cr-topbar-content .cr-topbar-left .cr-topbar-btn > a:focus {
+          outline: none; }
+  .chatroom .cr-topbar .cr-topbar-content .cr-topbar-right {
+    float: right;
+    width: 100px;
+    height: 75px;
+    border: 1px solid white; }
+.chatroom .cr-bottom {
+  height: calc(100vh - 75px); }
+  .chatroom .cr-bottom .cr-filler {
+    height: 100%;
+    display: inline-block;
+    float: left;
+    position: relative;
+    z-index: 10; }
+  .chatroom .cr-bottom .cr-dynamic {
+    height: 100%;
+    display: inline-block;
+    margin-right: 1px; }
+    .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion,
+    .chatroom .cr-bottom .cr-dynamic .cr-dynamic-whiteboard {
+      height: 100%; }
+    .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion {
+      background-color: pink; }
+    .chatroom .cr-bottom .cr-dynamic .cr-dynamic-whiteboard {
+      background-image: url("../img/minimap.jpg");
+      background-size: contain;
+      background-repeat: no-repeat; }
+      .chatroom .cr-bottom .cr-dynamic .cr-dynamic-whiteboard canvas {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        border: 1px solid white;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0; }
+  .chatroom .cr-bottom .cr-chat {
+    height: 100%;
+    display: inline-block;
+    float: right;
+    background-color: blue;
+    position: relative;
+    z-index: 10; }
+    .chatroom .cr-bottom .cr-chat textarea {
+      resize: none;
+      height: inherit; }
+    .chatroom .cr-bottom .cr-chat .cr-chat-form {
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      background-color: green; }
+      .chatroom .cr-bottom .cr-chat .cr-chat-form input, .chatroom .cr-bottom .cr-chat .cr-chat-form button {
+        margin: 0;
+        padding: 0;
+        display: inline-block;
+        height: 50px; }
+      .chatroom .cr-bottom .cr-chat .cr-chat-form input {
+        width: 80%;
+        float: left; }
+      .chatroom .cr-bottom .cr-chat .cr-chat-form button {
+        width: 20%;
+        float: right; }
 
 body {
   overflow: hidden; }
