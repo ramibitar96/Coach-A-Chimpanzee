@@ -30,7 +30,7 @@ async function get_summoner_data(username)
 
 /**
  * Returns the given user's solo queue rank
- * If they don't have a solo queue rank, returns null
+ * If they don't have a solo queue rank, returns "UNRANKED"
  * @param {*} username 
  */
 async function get_rank(username)
@@ -60,8 +60,8 @@ async function get_rank(username)
             return leagueInfo.tier;
     }
 
-    // We couldn't find their solo queue rank, so return null
-    return null;
+    // We couldn't find their solo queue rank, so return "UNRANKED"
+    return "UNRANKED";
 }
 
 
