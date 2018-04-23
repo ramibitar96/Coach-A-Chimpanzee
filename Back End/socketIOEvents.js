@@ -14,10 +14,11 @@ let chatrooms = {};     // A dictionary mapping a chatroom's number to the chatr
 
 let chatroomCount = 0;
 
-class chatroom {
+class Chatroom {
     constructor(user1, user2, chatroomNumber) {
         this.user1 = user1;
         this.user2 = user2;
+        this.public = false;
         this.chatroomNumber = chatroomNumber;
         this.log = "";
     }
@@ -43,9 +44,10 @@ module.exports = function(io)
             userChatrooms[msg] = chatroomCount;
             userChatrooms[partnerName] = chatroomCount;
             chatroomUsers[chatroomCount] = [msg, partnerName];
-            chatrooms[chatroomCount++] = "";
+            room = new Chatroom(msg, partnerName, chatroomCount);
+            chatrooms[chatroomCount++] = room;
 
-            console.log(chatroomUsers[0]);
+            console.log(room);
 
             userSocket.emit('match_found', msg);
             partnerSocket.emit('match_found', partnerName);
@@ -108,7 +110,7 @@ module.exports = function(io)
             }
 
             // Add chat message to log
-            chatrooms[userChatrooms[username]] += (username + ": " + msg + "\n");
+            chatrooms[userChatrooms[username]].log += (username + ": " + msg + "\n");
 
             let msgObj =
             {
@@ -129,7 +131,7 @@ module.exports = function(io)
 
             if (msg.type == 2) {
                 console.log("Chatroom number: " + msg.chatroomNumber);
-                if (chatroomUsers[msg.chatroomNumber] == undefined) {
+                if (chatroomUsers[msg.chatroomNumber] == undefined || chatrooms[msg.chatroomNumber].public == false) {
                     let userSocket = userSockets[username];
                     userSocket.emit('invalid_chatroom');
                     return;
@@ -144,7 +146,7 @@ module.exports = function(io)
                 let userSocket = userSockets[username];
                 console.log("userChatrooms: " + userChatrooms[username]);
                 chatroomUsers[userChatrooms[username]].push(username);
-                userSocket.emit('rejoin_chat', chatrooms[userChatrooms[username]]);
+                userSocket.emit('rejoin_chat', chatrooms[userChatrooms[username]].log);
                 return;
             } else if (matchmaking.isInQueue(username)) {
                 console.log("User is already in queue; returning to empty chatroom");
