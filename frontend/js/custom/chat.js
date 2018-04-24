@@ -7,6 +7,10 @@ var socket = io.connect('http://localhost:3000');
 var writeReview = false;
 var log = "";
 
+var partner = "";
+var public_room = false;
+var roomid = "";
+
 //send queue type
 if (type == 2) {
 	let msgObj =
@@ -32,6 +36,10 @@ socket.on('message_received', function(msg)
 
 socket.on('match_found', function(msg)
 {
+	//get roomid and partnerid
+	roomid = msg.roomid;
+	partner = msg.partner;
+
 	// Put it in the chatbox
 	let chatArea = document.getElementById("chatArea");
 	chatArea.textContent = "MATCH FOUND\n";
