@@ -3,6 +3,7 @@ const sqlite = require('sqlite');
 const fs = require('fs');
 const strip = require('sql-strip-comments');
 const ErrorCodeEnum = require('./errorCodes.js');
+const riotUtils = require('./riotUtils.JS');
 
 var db;     // The connection to the SQLite database.
 
@@ -39,15 +40,13 @@ async function getUserPrefs(username)
 	// TODO: Refactor this so user id is passed as a parameter isntead.
 	let uid = await getUID(username);
 
-	// Query for misc stuff
-	// TODO: Replace current_rank with a query to Riot's servers
+	// Query for current rank and misc stuff
 	let miscPrefsQuery = 
 	`
 		SELECT
 			user_id,
 			view_replay,
 			twitch_name,
-			current_rank,
 			min_coach_rank,
 			max_coachee_rank
 		FROM 
@@ -56,20 +55,24 @@ async function getUserPrefs(username)
 			user_id = ?;
 	`;
 
-	let miscPrefs = await db.get(miscPrefsQuery, uid);
+	let miscPrefsPromise = db.get(miscPrefsQuery, uid);
+	let current_rank_promise = riotUtils.get_rank(username);
 
-	// TODO: What was I thinking?  Refactor this bullshit.
+	let miscPrefs = await miscPrefsPromise
+	let current_rank = await current_rank_promise;
+
+	// If misc prefs weren't found, they'll have these default values
 	let view_replay = null;
 	let twitch_name = null;
-	let current_rank = -1;
+	
 	let min_coach_rank = -1;
 	let max_coachee_rank = -1;
 
+	// If the misc prefs were found, get them
 	if (miscPrefs != undefined)
 	{
 		view_replay = Boolean(miscPrefs.view_replay);	// SQLite returns integers 0 and 1, so we need to cast to a bool
 		twitch_name = miscPrefs.twitch_name;
-		current_rank = miscPrefs.current_rank;
 		min_coach_rank = miscPrefs.min_coach_rank;
 		max_coachee_rank = miscPrefs.max_coachee_rank;
 	}
