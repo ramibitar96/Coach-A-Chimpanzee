@@ -7,7 +7,7 @@ respond with a JSON object of the following format:
     "user":
     {
         "twitch_name": <user's twitch username>
-        "current_rank": <their rank, an integer from 0 to 6>    // NOTE: we should probably get this from Riot.
+        "current_rank": <their rank, an all-caps string from Riot's API>
     },
 
     "reviews":
