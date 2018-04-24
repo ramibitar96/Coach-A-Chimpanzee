@@ -305,7 +305,7 @@ function respondToggle(bool) {
 	$('#askToToggle').foundation('reveal', 'close');
 
 	if (bool) { //if true, turn room to public
-		toColor("green", "Public");
+		toColor("green", "Public: " + roomid);
 		public_room = true;
 
 		socket.emit("toggle_privacy", true);
@@ -322,7 +322,7 @@ socket.on('toggle_privacy', function(msg) {
 	}
 
 	if (public_room) { //if public
-		toColor("green", "Public");
+		toColor("green", "Public: " + roomid);
 	}
 	else {
 		toColor("red", "Private");
