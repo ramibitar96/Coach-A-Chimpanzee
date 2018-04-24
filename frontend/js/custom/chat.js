@@ -240,33 +240,91 @@ function throttle(callback, delay) {
 			callback.apply(null, arguments);
 		}
 	};
+}
+
+function onDrawingEvent(data){
+	//whiteboard is a square, ignore topbar
+	var h = canvas.height - 75;
+	var w = h;
+
+	//multiply by canvas height and then adjust for the topbar
+	var y0 = (data.y0 * h) + 75;
+	var y1 = (data.y1 * h) + 75;
+
+	//multiply by canvas width
+	var x0 = (data.x0 * w);
+	var x1 = (data.x1 * w);
+
+	//if map is not on edge of screen
+	var filler = $(".cr-filler").width();
+	if (filler != 0) {
+		x0 = x0 + filler;
+		x1 = x1 + filler;
 	}
 
-	function onDrawingEvent(data){
-		//whiteboard is a square, ignore topbar
-		var h = canvas.height - 75;
-		var w = h;
+	drawLine(x0, y0, x1, y1, data.color, false);
+}
 
-		//multiply by canvas height and then adjust for the topbar
-		var y0 = (data.y0 * h) + 75;
-		var y1 = (data.y1 * h) + 75;
+// make the canvas fill its parent
+function onResize() {
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
+}
 
-		//multiply by canvas width
-		var x0 = (data.x0 * w);
-		var x1 = (data.x1 * w);
+function toColor(color, text) {
+	//switch color to red
+	$(".privacy").removeClass("green");
+	$(".privacy").removeClass("yellow");
+	$(".privacy").removeClass("red");
+	$(".privacy").addClass(color);
+	
+	//change text
+	$(".privacy").children().text(text)
+}
 
-		//if map is not on edge of screen
-		var filler = $(".cr-filler").width();
-		if (filler != 0) {
-			x0 = x0 + filler;
-			x1 = x1 + filler;
-		}
+function askToggle() {
+	if (public_room) {
+		socket.emit("toggle_privacy", true);
+		toColor("red", "Private");
 
-		drawLine(x0, y0, x1, y1, data.color, false);
+		public_room = false;
+	}
+	else {
+		toColor("yellow", "Waiting...");
+		socket.emit("ask_to_toggle", "");
+	}
+}
+
+//respond to privacy question
+socket.on('ask_to_toggle', function(msg)
+{
+	$('#askToToggle').foundation('reveal', 'open');
+});
+
+function respondToggle(bool) {
+	$('#askToToggle').foundation('reveal', 'close');
+
+	if (bool) { //if true, turn room to public
+		toColor("green", "Public");
+		public_room = true;
+
+		socket.emit("toggle_privacy", true);
+	} 
+	else { //emit false
+		socket.emit("toggle_privacy", false);
+		public_room = false;
+	}
+}
+
+socket.on('toggle_privacy', function(msg) {
+	if (msg) { //swap
+		public_room = !public_room
 	}
 
-	// make the canvas fill its parent
-	function onResize() {
-		canvas.width = window.innerWidth;
-		canvas.height = window.innerHeight;
+	if (public_room) { //if public
+		toColor("green", "Public");
 	}
+	else {
+		toColor("red", "Private");
+	}
+});

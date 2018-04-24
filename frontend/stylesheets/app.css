@@ -6836,9 +6836,26 @@ th.hide-for-touch {
           outline: none; }
   .chatroom .cr-topbar .cr-topbar-content .cr-topbar-right {
     float: right;
-    width: 100px;
     height: 75px;
     border: 1px solid white; }
+    .chatroom .cr-topbar .cr-topbar-content .cr-topbar-right > div {
+      display: inline-block;
+      margin: 0;
+      padding: 0; }
+      .chatroom .cr-topbar .cr-topbar-content .cr-topbar-right > div > a {
+        margin: 0; }
+      .chatroom .cr-topbar .cr-topbar-content .cr-topbar-right > div.privacy.red {
+        background-color: red; }
+      .chatroom .cr-topbar .cr-topbar-content .cr-topbar-right > div.privacy.yellow {
+        background-color: yellow; }
+      .chatroom .cr-topbar .cr-topbar-content .cr-topbar-right > div.privacy.green {
+        background-color: green; }
+      .chatroom .cr-topbar .cr-topbar-content .cr-topbar-right > div.privacy a {
+        line-height: 50px;
+        padding-left: 20px;
+        padding-right: 20px;
+        color: white;
+        display: block; }
 .chatroom .cr-bottom {
   height: calc(100vh - 75px); }
   .chatroom .cr-bottom .cr-filler {
@@ -6895,6 +6912,14 @@ th.hide-for-touch {
       .chatroom .cr-bottom .cr-chat .cr-chat-form button {
         width: 20%;
         float: right; }
+
+#askToToggle {
+  width: 400px; }
+  #askToToggle h4 {
+    text-align: center;
+    margin-bottom: 20px; }
+  #askToToggle a {
+    display: block; }
 
 body {
   overflow: hidden; }
