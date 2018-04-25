@@ -1,4 +1,6 @@
 //user type
+
+//0 and 1 for coach and student, 2 for guest, 3 for AMA host
 var type = localStorage.getItem("queueType");
 var chatroomNumber = localStorage.getItem("chatroomNumber");
 
