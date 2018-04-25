@@ -12,7 +12,6 @@ function queueCoach() {
 }
 
 function enterChatroom() {
-	//socket.emit('request_chatrooms');
 	var chatroomNumber = prompt("Enter a chatroom number");
 
 	// Join chatroom
@@ -21,7 +20,16 @@ function enterChatroom() {
 	window.location.assign("chatroom.html");
 }
 
-socket.on('chatroom_list', function(msg)
+function createAMA() {
+	localStorage.setItem("queueType","3");
+	window.location.assign("chatroom.html");
+}
+
+function amaList() {
+	socket.emit('request_amas');
+}
+
+socket.on('ama_list', function(msg)
 {
 	alert(msg);
 });

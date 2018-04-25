@@ -10,6 +10,7 @@ var log = "";
 var partner = "";
 var public_room = false;
 var roomid = "";
+var isAMARoom = false;
 
 //send queue type
 if (type == 2) {
@@ -46,13 +47,27 @@ socket.on('match_found', function(msg)
 	writeReview = true;
 });
 
+socket.on('ama_created', function(msg)
+{
+	//get roomid and partnerid, set variables
+	roomid = msg.chatroomNumber;
+	public_room = true;
+	writeReview = true;
+	isAMARoom = true;
+	toColor("green", "Public: " + roomid);
+});
+
 socket.on('rejoin_chat', function(msg)
 {
 	// Fill chat box with previously sent messages
 	let chatArea = document.getElementById("chatArea");
 	chatArea.textContent = msg.log;
-	public_room = msg.public;
+	public_room = msg.publicRoom;
 	roomid = msg.chatroomNumber;
+	if (msg.user2 == null) {
+		isAMARoom = true;
+	}
+
 	if (public_room) { //if public
 		toColor("green", "Public: " + roomid);
 	}
@@ -68,6 +83,12 @@ socket.on('end_chat', function(msg)
 	chatArea.textContent += "CHAT ENDED\n";
 	//simulate end chat click
 	$('#endChat').foundation('reveal', 'open');
+});
+
+socket.on('end_chat_guest', function(msg)
+{
+	alert("This chatroom has been made private. Returning you to the queue");
+	window.location.assign("queue.html");
 });
 
 socket.on('invalid_chatroom', function(msg)

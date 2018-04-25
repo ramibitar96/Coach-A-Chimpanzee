@@ -13,14 +13,15 @@ let chatroomUsers = {}; // A dictionary mapping chatrooms to the users in them
 let chatrooms = {};     // A dictionary mapping a chatroom's number to the chatroom's chat log
 
 let publicChatrooms = [];
+let amaRooms = [];
 
 let chatroomCount = 0;
 
 class Chatroom {
-    constructor(user1, user2, chatroomNumber) {
+    constructor(user1, user2, isPublic, chatroomNumber) {
         this.user1 = user1;
         this.user2 = user2;
-        this.public = false;
+        this.publicRoom = isPublic;
         this.chatroomNumber = chatroomNumber;
         this.log = "";
     }
@@ -46,7 +47,7 @@ module.exports = function(io)
             userChatrooms[msg] = chatroomCount;
             userChatrooms[partnerName] = chatroomCount;
             chatroomUsers[chatroomCount] = [msg, partnerName];
-            room = new Chatroom(msg, partnerName, chatroomCount);
+            room = new Chatroom(msg, partnerName, false, chatroomCount);
             chatrooms[chatroomCount] = room;
 
             console.log(room);
@@ -69,16 +70,16 @@ module.exports = function(io)
             partnerSocket.emit('match_found', partnerObj);
         });
 
-       socket.on('request_chatrooms', function(msg)
+       socket.on('request_amas', function(msg)
         {
-            var chatroomList = "";
-            for (var i = 0; i < publicChatrooms.length; i++) {
+            var amaList = "";
+            for (var i = 0; i < amaRooms.length; i++) {
                 if (i != 0)
-                    chatroomList += "\n";
-                chatroomList += (publicChatrooms[i] + ": " + chatrooms[publicChatrooms[i]].user1 + " & " + chatrooms[publicChatrooms[i]].user2);
+                    amaList += "\n";
+                amaList += (amaRooms[i] + ": " + chatrooms[amaRooms[i]].user1);
             }
 
-            socket.emit('chatroom_list', chatroomList);
+            socket.emit('ama_list', amaList);
         });
 
         // Check the session token to find out what user this is
@@ -121,7 +122,7 @@ module.exports = function(io)
         {
             console.log(authResult.username + ": " + msg);
 
-            if (getPartner(username) == null) {
+            if (getPartner(username) == null && chatrooms[userChatrooms[username]].user2 != null) {
                 // TODO: check if chatroom allows users other than student/coach to chat
                 return;
             }
@@ -169,16 +170,38 @@ module.exports = function(io)
                 return;
             }
 
-            if (msg.type == 2) {
+            if (msg == null && userChatrooms[username] != undefined) {
+                chatroomUsers[userChatrooms[username]].push(username);
+                userSockets[username].emit('rejoin_chat', chatrooms[userChatrooms[username]]);
+                return;
+            } else if (msg.type == 2) {
                 console.log("Chatroom number: " + msg.chatroomNumber);
                 let userSocket = userSockets[username];
-                if (chatroomUsers[msg.chatroomNumber] == undefined || chatrooms[msg.chatroomNumber].public == false) {
+                if (chatroomUsers[msg.chatroomNumber] == undefined || chatrooms[msg.chatroomNumber].publicRoom == false) {
                     userSocket.emit('invalid_chatroom');
                     return;
                 }
                 userChatrooms[username] = msg.chatroomNumber;
                 chatroomUsers[msg.chatroomNumber].push(username);
                 userSocket.emit('rejoin_chat', chatrooms[userChatrooms[username]]);
+                return;
+            } else if (msg == 3) {
+                if (userChatrooms[username] != undefined) {
+                    chatroomUsers[userChatrooms[username]].push(username);
+                    userSockets[username].emit('rejoin_chat', chatrooms[userChatrooms[username]]);
+                    return;
+                }
+
+                // Create AMA room
+                userChatrooms[username] = chatroomCount;
+                chatroomUsers[chatroomCount] = [username];
+                room = new Chatroom(username, null, true, chatroomCount);
+                chatrooms[chatroomCount] = room;
+                amaRooms.push(chatroomCount);
+                console.log(room);
+
+                userSockets[username].emit('ama_created', chatrooms[chatroomCount]);
+                chatroomCount++;
                 return;
             }
 
@@ -241,12 +264,19 @@ module.exports = function(io)
 
             // Toggle chatroom privacy settings if requested
             if (data == true) {
-                chatrooms[userChatrooms[username]].public = !chatrooms[userChatrooms[username]].public;
-                if (!chatrooms[userChatrooms[username]].public) {
+                chatrooms[userChatrooms[username]].publicRoom = !chatrooms[userChatrooms[username]].publicRoom;
+                if (chatrooms[userChatrooms[username]].publicRoom) {
                     publicChatrooms.push(userChatrooms[username]);
                 } else {
                     var index = publicChatrooms.indexOf(userChatrooms[username]);
                     publicChatrooms.splice(index, 1);
+                    var chatroomNumber = userChatrooms[username];
+                    for (var i = 0; i < chatroomUsers[chatroomNumber].length; i++) {
+                        if (chatroomUsers[chatroomNumber][i] != username && chatroomUsers[chatroomNumber][i] != partnerName) {
+                            userSockets[chatroomUsers[chatroomNumber][i]].emit('end_chat_guest');
+                        }
+                    }
+                    chatroomUsers[chatroomNumber] = [username, partnerName];
                 }
             }
 
@@ -257,7 +287,7 @@ module.exports = function(io)
 			//whiteboard
 			socket.on('drawing', function(data)
 			{
-            if (getPartner(username) == null) {
+            if (getPartner(username) == null && chatrooms[userChatrooms[username]].user2 != null) {
                 // TODO: check if chatroom allows users other than student/coach to draw
                 return;
             }
