@@ -2,6 +2,15 @@
 const request = require('request-promise-native');
 
 const API_KEY = "RGAPI-f11b77d1-a7c9-4e32-88b9-2f874d1fd29c";
+const REQUEST_OPTIONS = 
+{
+    headers:
+    {
+        'X-Riot-Token': API_KEY
+    },
+
+    json: true
+};
 
 /**
  * Returns the summoner data of the given user
@@ -12,17 +21,7 @@ async function get_summoner_data(username)
 {
     // TODO: Cache the result in the database
     let url = "https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/" + username;
-    let options =
-    {
-        headers:
-        {
-            'X-Riot-Token': API_KEY
-        },
-
-        json: true
-    };
-
-    let results = await request.get(url, options);
+    let results = await request.get(url, REQUEST_OPTIONS);
 
     // TODO: Handle errors
     return results;
@@ -41,17 +40,7 @@ async function get_rank(username)
 
     // Query Riot's servers
     let url = "https://na1.api.riotgames.com/lol/league/v3/positions/by-summoner/" + summoner_data.id;
-    let options =
-    {
-        headers:
-        {
-            'X-Riot-Token': API_KEY
-        },
-
-        json: true
-    };
-
-    let results = await request.get(url, options);
+    let results = await request.get(url, REQUEST_OPTIONS);
 
     // Search for and return their solo queue rank
     for (let i = 0; i < results.length; i++)
@@ -64,10 +53,36 @@ async function get_rank(username)
     return "UNRANKED";
 }
 
+/**
+ * Returns the same output as /lol/spectator/v3/active-games/by-summoner/{summonerId}
+ * Returns null if there's an error.
+ * @param {*} username 
+ */
+async function get_match_data(username)
+{
+    // Get the summoner id first, as usual
+
+    let summoner_data = await get_summoner_data(username);
+
+    // Query Riot's servers
+    let url = "https://na1.api.riotgames.com/lol/spectator/v3/active-games/by-summoner/" + summoner_data.id;
+    let result = null;
+
+    try
+    {
+        result = await request.get(url, REQUEST_OPTIONS);
+        return result;
+    }
+    catch (e)
+    {
+        return null;
+    }
+}
 
 // Exports
 module.exports=
 {
     get_summoner_data,
-    get_rank
+    get_rank,
+    get_match_data
 }
