@@ -89,7 +89,7 @@ socket.on('end_chat', function(msg)
 
 socket.on('end_chat_guest', function(msg)
 {
-	alert("This chatroom has been made private. Returning you to the queue");
+	alert("This chatroom has been made private. Returning you to the main page");
 	window.location.assign("queue.html");
 });
 
@@ -155,10 +155,14 @@ function sendMessage()
 }
 
 function openModal() {
-	if (writeReview && type != 2) {
+	if (writeReview && type != 2 && !isAMARoom) {
 		socket.emit("end_chat", "end_chat");
 		$('#endChat').foundation('reveal', 'open');
 	} 
+	else if (isAMARoom) {
+		//TODO
+		window.location.assign("queue.html");
+	}
 	else { window.location.assign("queue.html"); }
 }
 
