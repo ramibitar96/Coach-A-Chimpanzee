@@ -58,9 +58,9 @@ socket.on('match_found', function(msg)
 			url: "http://localhost:3000/get_student_match",
 			success: function(data) {
 				//if error code
-				if (data["error_code"] == 7) {
-					//student is not in game, end match
-					//TODO
+				if (data["error_code"] == 9 || data["error_code"] == 10 || data["error_code"] == 11) {
+					socket.emit("end_chat", "end_chat");
+					$('#endChat').foundation('reveal', 'open');
 				}
 				else {
 					// Put it in the chatbox
@@ -213,7 +213,6 @@ function openModal() {
 		$('#endChat').foundation('reveal', 'open');
 	} 
 	else if (isAMARoom) {
-		//TODO
 		socket.emit("end_ama");
 		window.location.assign("queue.html");
 	}

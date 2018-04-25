@@ -116,12 +116,51 @@
         width: 20%;
         float: right; }
 
-#askToToggle {
+#spectateStudent ul {
+  margin: 0 auto;
+  width: 480px; }
+  #spectateStudent ul li {
+    width: 240px;
+    border-top: 2px solid lightgrey; }
+    #spectateStudent ul li.active {
+      border-top: 2px solid black; }
+    #spectateStudent ul li a {
+      text-align: center;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      padding-left: 20px;
+      padding-right: 20px;
+      background-color: transparent; }
+      #spectateStudent ul li a:focus {
+        outline: none; }
+#spectateStudent #windows p {
+  margin-bottom: 10px; }
+#spectateStudent #windows .spectateImage {
+  height: 220px;
+  background: url(../img/spectate_message.gif); }
+#spectateStudent #mac p {
+  margin-bottom: 10px; }
+#spectateStudent #mac textarea {
+  resize: none;
+  height: 200px; }
+  #spectateStudent #mac textarea:focus {
+    border: none; }
+
+#spectateStudent {
+  width: 550px !important; }
+
+#askToToggle,
+#inGameCheck,
+#spectateStudent {
   width: 400px; }
-  #askToToggle h4 {
+  #askToToggle h4,
+  #inGameCheck h4,
+  #spectateStudent h4 {
     text-align: center;
     margin-bottom: 20px; }
-  #askToToggle a {
+  #askToToggle a,
+  #inGameCheck a,
+  #spectateStudent a {
     display: block; }
 
 /*# sourceMappingURL=chat.css.map */
