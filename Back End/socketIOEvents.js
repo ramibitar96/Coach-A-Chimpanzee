@@ -288,6 +288,17 @@ module.exports = function(io)
             }
         });
 
+        socket.on('match_over', function(data)
+        {
+            let partnerName = getPartner(username);
+            if (partnerName == undefined) {
+                console.log("ERROR: no match for this user");
+                return;
+            }
+            let partnerSocket = userSockets[partnerName];
+            partnerSocket.emit('match_over');
+        });
+
         socket.on('ask_to_toggle', function(data)
         {
             let partnerName = getPartner(username);
