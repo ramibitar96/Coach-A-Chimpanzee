@@ -4,9 +4,11 @@ const cookieParser = require('cookie-parser');
 const dbUtils = require('./dbUtils.js');
 const auth = require('./authenticationUtils.js');
 const matchmaking = require('./matchmaking.js');
+const riotUtils = require('./riotUtils.js');
 const ErrorCodeEnum = require('./errorCodes.js');
 const fs = require('fs');
 const path = require('path');
+
 module.exports = function(app)
 {
 	// Tell expressjs that we want to allow cookies from mutliple origins
@@ -48,7 +50,6 @@ module.exports = function(app)
         let errorCode = await auth.registerUser(req.body.username, req.body.password, req.body.email, req.body.summoner_id);
         res.send({error_code: errorCode});
 	});
-
 
 	// Handles log in requests
 	app.post('/login', async function(req, res)
@@ -263,6 +264,30 @@ module.exports = function(app)
         };
 
         res.send(results);
+    });
+
+    /**
+     * Replies with { "inGame":true  } if the current user is in game.
+     * Replies with { "inGame":false } if the current user is invalid or not in game. 
+     */
+    app.get('/isInGame', async function(req, res)
+    {
+        // Return false if not a valid user
+        let token = req.cookies.session_token;
+        let authResults = await auth.checkToken(token);
+
+        if (authResults.error_code != ErrorCodeEnum.SUCCESS)
+        {
+            res.send({inGame: false});
+            return;
+        }
+
+        // Ask Riot if they're in a game
+        let username = authResults.username;
+        let match_data = await riotUtils.get_match_data(username);
+
+        let inGame = match_data !== null;
+        res.send({inGame: inGame});
     });
 
     // Returns a webpage displaying the username of the currently-logged-in user.

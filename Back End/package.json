@@ -23,7 +23,12 @@
     "express": "^4.16.3",
     "formidable": "^1.2.1",
     "jsonwebtoken": "^8.2.1",
+<<<<<<< HEAD
     "npm": "^5.8.0",
+=======
+    "request": "^2.85.0",
+    "request-promise-native": "^1.0.5",
+>>>>>>> 384529e3e6cd19671de1bdf75bbe9ce9c11e39ac
     "socket.io": "^2.1.0",
     "sql-strip-comments": "0.0.23",
     "sqlite": "^2.9.1"

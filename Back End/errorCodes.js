@@ -9,7 +9,8 @@ const ErrorCodeEnum =
     TOKEN_EXPIRED: 5,
     TOKEN_INVALID: 6,
     USERNAME_DOESNT_EXIST: 7,
-    BAD_QUERY_STRING: 8
+    BAD_QUERY_STRING: 8,
+    STUDENT_NOT_IN_GAME: 9
 };
 
 module.exports = ErrorCodeEnum;
