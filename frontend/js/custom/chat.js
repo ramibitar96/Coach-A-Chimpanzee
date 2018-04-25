@@ -2,7 +2,7 @@
 
 //0 and 1 for coach and student, 2 for guest, 3 for AMA host
 var type = localStorage.getItem("queueType");
-var chatroomNumber = localStorage.getItem("chatroomNumber");
+var chatroomNumber = parseInt(localStorage.getItem("chatroomNumber"), 10);
 
 var socket = io.connect('http://localhost:3000');
 
@@ -64,6 +64,10 @@ socket.on('rejoin_chat', function(msg)
 	// Fill chat box with previously sent messages
 	let chatArea = document.getElementById("chatArea");
 	chatArea.textContent = msg.log;
+	for (var i = 0; i < msg.drawLog.length; i++) {
+		onDrawingEvent(msg.drawLog[i]);
+	}
+
 	public_room = msg.publicRoom;
 	roomid = msg.chatroomNumber;
 	if (msg.user2 == null) {
@@ -161,6 +165,7 @@ function openModal() {
 	} 
 	else if (isAMARoom) {
 		//TODO
+		socket.emit("end_ama");
 		window.location.assign("queue.html");
 	}
 	else { window.location.assign("queue.html"); }

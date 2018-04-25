@@ -24,6 +24,7 @@ class Chatroom {
         this.publicRoom = isPublic;
         this.chatroomNumber = chatroomNumber;
         this.log = "";
+        this.drawLog = [];
     }
 }
 
@@ -72,6 +73,7 @@ module.exports = function(io)
 
        socket.on('request_amas', function(msg)
         {
+            console.log("Number of AMA rooms: " + amaRooms.length);
             var amaList = "";
             for (var i = 0; i < amaRooms.length; i++) {
                 if (i != 0)
@@ -111,7 +113,9 @@ module.exports = function(io)
             delete socketUsers[socket.id];
             if (userChatrooms[username] != undefined && chatroomUsers[userChatrooms[username]] != undefined) {
                 var index = chatroomUsers[userChatrooms[username]].indexOf(username);
-                chatroomUsers[userChatrooms[username]].splice(index, 1);
+                if (index != -1) {
+                    chatroomUsers[userChatrooms[username]].splice(index, 1);
+                }
             }
 
             console.log("User " + username + " disconnected.");
@@ -124,10 +128,12 @@ module.exports = function(io)
 
             if (getPartner(username) == null && chatrooms[userChatrooms[username]].user2 != null) {
                 // TODO: check if chatroom allows users other than student/coach to chat
+                console.log("ERROR: no partner found");
                 return;
             }
 
             let partnerList = chatroomUsers[userChatrooms[username]];
+            console.log("Partner list: " + partnerList);
             if (partnerList == undefined) {
                 return;
             }
@@ -234,6 +240,45 @@ module.exports = function(io)
 
             // TODO: Send chat log to database, delete all applicable chatroom dictionary entries
             let chatroomNumber = userChatrooms[username];
+            var index = publicChatrooms.indexOf(chatroomNumber);
+            if (index != -1) {
+                publicChatrooms.splice(index, 1);
+            }
+            index = amaRooms.indexOf(chatroomNumber);
+            if (index != -1) {
+                amaRooms.splice(index, 1);
+            }
+
+            delete userChatrooms[username];
+            if (chatroomUsers[chatroomNumber] != undefined) {
+                delete chatroomUsers[chatroomNumber];
+            }
+            if (chatrooms[chatroomNumber] != undefined) {
+                delete chatrooms[chatroomNumber];
+            }
+        });
+
+        socket.on('end_ama', function(msg)
+        {
+            if (chatrooms[userChatrooms[username]].user1 != username) {
+                return;
+            }
+
+            let userSocket = userSockets[username];
+
+            delete userSockets[username];
+            delete socketUsers[userSocket];
+
+            // TODO: Send chat log to database, delete all applicable chatroom dictionary entries
+            let chatroomNumber = userChatrooms[username];
+            var index = amaRooms.indexOf(chatroomNumber);
+            console.log("Chatroom number (end): " + chatroomNumber);
+            console.log("Index (end): " + index);
+            console.log("AMA rooms: " + amaRooms);
+            if (index != -1) {
+                amaRooms.splice(index, 1);
+            }
+
             delete userChatrooms[username];
             if (chatroomUsers[chatroomNumber] != undefined) {
                 delete chatroomUsers[chatroomNumber];
@@ -302,6 +347,9 @@ module.exports = function(io)
                     chatroomSocketList.push(userSockets[partnerList[i]]);
                 }
             }
+
+            // Store drawing data in chatroom
+            chatrooms[userChatrooms[username]].drawLog.push(data);
 
             for (var i = 0; i < chatroomSocketList.length; i++) {
                 chatroomSocketList[i].emit('drawing', data);
