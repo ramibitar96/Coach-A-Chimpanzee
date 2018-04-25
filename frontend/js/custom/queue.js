@@ -1,5 +1,6 @@
 // Testing
 var socket = io.connect('http://localhost:3000');
+var user = getCookie("session_token");
 
 //load initial ama list
 refreshList();
@@ -37,8 +38,28 @@ socket.on('ama_list', function(msg)
 });
 
 function queueStudent() {
-	localStorage.setItem("queueType","0");
-	window.location.assign("chatroom.html");
+	//debug users are test and test2
+	if (user != "test" && user != "test2") {
+		//check if in game
+		$.ajax({
+			type: "GET",
+			url: "http://localhost:3000/isInGame",
+			success: function(data) {
+				//if true redirect
+				if (data["inGame"]) {
+					localStorage.setItem("queueType","0");
+					window.location.assign("chatroom.html");	
+				}
+				else { //if false no redirect
+					alert("You are not in a game");
+				}
+			}
+		});
+	}
+	else {
+		localStorage.setItem("queueType","0");
+		window.location.assign("chatroom.html");
+	}
 }
 
 function queueCoach() {
@@ -85,4 +106,4 @@ function getCookie(cname) {
 	}
 	return "";
 }
-$(".user").text(getCookie("session_token"));
+$(".user").text(user);

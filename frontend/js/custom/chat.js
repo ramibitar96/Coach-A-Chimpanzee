@@ -1,8 +1,17 @@
 //user type
 
-//0 and 1 for coach and student, 2 for guest, 3 for AMA host
+//0 student
+//1 coach
+//2 guest
+//3 ama
 var type = localStorage.getItem("queueType");
 var chatroomNumber = parseInt(localStorage.getItem("chatroomNumber"), 10);
+var me = getCookie("session_token").toUpperCase();
+
+var debug = false;
+if (me === "TEST" || me === "TEST2") {
+	var debug = true;
+}
 
 var socket = io.connect('http://localhost:3000');
 
@@ -43,10 +52,50 @@ socket.on('match_found', function(msg)
 	roomid = msg.roomid;
 	partner = msg.partner;
 
-	// Put it in the chatbox
-	let chatArea = document.getElementById("chatArea");
-	chatArea.textContent = "MATCH FOUND\n";
-	writeReview = true;
+	if (type == 1 && !debug) { //if coach, get the student spectate link
+		$.ajax({
+			type: "GET",
+			url: "http://localhost:3000/get_student_match",
+			success: function(data) {
+				//if error code
+				if (data["error_code"] == 7) {
+					//student is not in game, end match
+					//TODO
+				}
+				else {
+					// Put it in the chatbox
+					let chatArea = document.getElementById("chatArea");
+					chatArea.textContent = "MATCH FOUND\n";
+					writeReview = true;
+
+					var json = JSON.parse(data);
+
+					//neccessary vars
+					var key = json["observers"]["encryptionKey"];
+					var platformId = json["platformId"];	
+					var summonerId = "";		
+
+					var p = json["participants"];
+					jQuery.each(p, function() {
+						if (this["summonerName"].toUpperCase() === me) {
+							summonerId = this["summonerId"];
+						}
+					});
+					
+					serveFile(key, platformId, summonerId);
+				}
+			}
+		});	
+	}
+	else {
+		// Put it in the chatbox
+		let chatArea = document.getElementById("chatArea");
+		chatArea.textContent = "MATCH FOUND\n";
+		writeReview = true;
+
+		//sample
+		serveFile("z82Ui/V0YGXOlT+RA7VbZtO3YNpUn91P", "NA1", "19134540");
+	}
 });
 
 socket.on('ama_created', function(msg)
@@ -74,13 +123,13 @@ socket.on('rejoin_chat', function(msg)
 		isAMARoom = true;
 	}
 
-	if (public_room) { //if public
-		toColor("green", "Public: " + roomid);
-	}
-	else {
-		toColor("red", "Private");
-	}
-	writeReview = true;
+if (public_room) { //if public
+	toColor("green", "Public: " + roomid);
+}
+else {
+	toColor("red", "Private");
+}
+writeReview = true;
 });
 
 socket.on('end_chat', function(msg)
@@ -148,14 +197,14 @@ function sendMessage()
 		return;
 	}
 
-	if (writeReview) {
-		socket.send(msg);
-	}
-	inputText.value = "";
+if (writeReview) {
+	socket.send(msg);
+}
+inputText.value = "";
 
-	// Make it appear in the chat area
-	chatArea.textContent += "Me: " + msg + "\n";
-	log += "Me: " + msg + "\n";
+// Make it appear in the chat area
+chatArea.textContent += "Me: " + msg + "\n";
+log += "Me: " + msg + "\n";
 }
 
 function openModal() {
@@ -211,7 +260,7 @@ function submitReview() {
 				}
 			}
 	});
-	}
+}
 
 /* https://socket.io/demos/whiteboard/ */
 
@@ -227,7 +276,7 @@ function drawLine(x0, y0, x1, y1, color, emit){
 	context.lineWidth = 2;
 	context.stroke();
 	context.closePath();
-	
+
 	if(!emit) { return; }
 
 	//whiteboard is a square, ignore topbar
@@ -324,7 +373,7 @@ function toColor(color, text) {
 	$(".privacy").removeClass("yellow");
 	$(".privacy").removeClass("red");
 	$(".privacy").addClass(color);
-	
+
 	//change text
 	$(".privacy").children().text(text)
 }
@@ -375,3 +424,18 @@ socket.on('toggle_privacy', function(msg) {
 		toColor("red", "Private");
 	}
 });
+
+function getCookie(cname) {
+	var name = cname + "=";
+	var ca = document.cookie.split(';');
+	for(var i = 0; i < ca.length; i++) {
+		var c = ca[i];
+		while (c.charAt(0) == ' ') {
+			c = c.substring(1);
+		}
+		if (c.indexOf(name) == 0) {
+			return c.substring(name.length, c.length);
+		}
+	}
+	return "";
+}
