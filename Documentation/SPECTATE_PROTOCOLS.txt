@@ -1,0 +1,12 @@
+If you are logged in as a coach and you currently have a partner, you can send a GET request to 
+localhost:3000/get_student_match
+
+The server will authenticate your session token, checking to see if you're indeed a coach and
+that you indeed have a partner.  If either of these things aren't true, it will respond with an
+error code.  Otherwise, continue.
+
+The server will then look up your parter's name and query riot's API.  It will then return a
+JSON object directly from RIOT's API telling you everything you need to know about your student's
+game.
+
+https://developer.riotgames.com/spectating-games.html
