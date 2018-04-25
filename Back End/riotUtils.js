@@ -55,6 +55,7 @@ async function get_rank(username)
 
 /**
  * Returns the same output as /lol/spectator/v3/active-games/by-summoner/{summonerId}
+ * Returns null if there's an error.
  * @param {*} username 
  */
 async function get_match_data(username)
@@ -64,8 +65,18 @@ async function get_match_data(username)
     let summoner_data = await get_summoner_data(username);
 
     // Query Riot's servers
-    let url = "/lol/spectator/v3/active-games/by-summoner/" + summoner_data.id;
-    return await request.get(url, REQUEST_OPTIONS);
+    let url = "https://na1.api.riotgames.com/lol/spectator/v3/active-games/by-summoner/" + summoner_data.id;
+    let result = null;
+
+    try
+    {
+        result = await request.get(url, REQUEST_OPTIONS);
+        return result;
+    }
+    catch (e)
+    {
+        return null;
+    }
 }
 
 // Exports

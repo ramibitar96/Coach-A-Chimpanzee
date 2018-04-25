@@ -286,7 +286,7 @@ module.exports = function(app)
         let username = authResults.username;
         let match_data = await riotUtils.get_match_data(username);
 
-        let inGame = match_data.statusCode !== 404;
+        let inGame = match_data !== null;
         res.send({inGame: inGame});
     });
 
