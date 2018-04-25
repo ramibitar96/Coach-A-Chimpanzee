@@ -116,6 +116,11 @@ function sendMessage()
 	// Send the message
 	let msg = inputText.value;
 
+	//guests cannot send messages
+	if (type == 2) {
+		return;
+	}
+
 	if (writeReview) {
 		socket.send(msg);
 	}
@@ -176,10 +181,12 @@ function submitReview() {
 	});
 	}
 
-	/* taken from socket.io whiteboard example website */
 /* https://socket.io/demos/whiteboard/ */
 
 function drawLine(x0, y0, x1, y1, color, emit){
+	if (type == 2) { //cannot draw as guest
+		return;
+	}
 
 	context.beginPath();
 	context.moveTo(x0, y0);
