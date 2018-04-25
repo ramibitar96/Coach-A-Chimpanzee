@@ -35,13 +35,12 @@
       padding-top: 0;
       padding-bottom: 0; }
     .qmain .qright .qtable #tbody td {
+      padding: 0;
       padding-left: 10px;
       font-size: 14px;
       color: black;
-      line-height: 20px;
-      text-align: center;
-      height: 20px;
-      padding: 0; }
+      line-height: 40px;
+      height: 20px; }
     .qmain .qright .qjoin, .qmain .qright .qtable {
       margin: 0 auto; }
     .qmain .qright .qjoin > div {

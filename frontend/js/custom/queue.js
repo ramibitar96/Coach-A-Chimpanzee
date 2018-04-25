@@ -16,6 +16,15 @@ socket.on('ama_list', function(msg)
 	var list = msg.split("\n");
 
 	for (var i = 0; i < list.length; i++) {
+		if (list == "" || list == null) {
+			var text = "<tr>" +
+				"<td>No AMAs</td>" +
+				"<td></td>" +
+				"<td></td></tr>";
+
+			$("#tbody").append(text);
+			break;
+		}
 		var list_data = list[i].split(": ");
 
 		var text = "<tr>" +
