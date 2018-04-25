@@ -52,6 +52,11 @@ socket.on('match_found', function(msg)
 	roomid = msg.roomid;
 	partner = msg.partner;
 
+	// Put it in the chatbox
+	let chatArea = document.getElementById("chatArea");
+	chatArea.textContent = "MATCH FOUND\n";
+	writeReview = true;
+
 	if (type == 1 && !debug) { //if coach, get the student spectate link
 		$.ajax({
 			type: "GET",
@@ -63,11 +68,6 @@ socket.on('match_found', function(msg)
 					$('#endChat').foundation('reveal', 'open');
 				}
 				else {
-					// Put it in the chatbox
-					let chatArea = document.getElementById("chatArea");
-					chatArea.textContent = "MATCH FOUND\n";
-					writeReview = true;
-
 					var json = JSON.parse(data);
 
 					//neccessary vars
@@ -80,21 +80,20 @@ socket.on('match_found', function(msg)
 						if (this["summonerName"].toUpperCase() === me) {
 							summonerId = this["summonerId"];
 						}
-					});
-					
+					});					
 					serveFile(key, platformId, summonerId);
+					$('#spectateStudent').foundation('reveal', 'open');
 				}
 			}
 		});	
 	}
+	else if (type == 0 && !debug) { //if student, open up modal
+		$('#inGameCheck').foundation('reveal', 'open');
+	}
 	else {
-		// Put it in the chatbox
-		let chatArea = document.getElementById("chatArea");
-		chatArea.textContent = "MATCH FOUND\n";
-		writeReview = true;
-
 		//sample
 		serveFile("z82Ui/V0YGXOlT+RA7VbZtO3YNpUn91P", "NA1", "19134540");
+		$('#spectateStudent').foundation('reveal', 'open');
 	}
 });
 
@@ -423,6 +422,27 @@ socket.on('toggle_privacy', function(msg) {
 		toColor("red", "Private");
 	}
 });
+
+function gameOver() {
+	$.ajax({
+		type: "GET",
+		url: "http://localhost:3000/isInGame",
+		success: function(data) {
+			//if false, close modal and emit match_over
+			if (!data["inGame"]) {
+				socket.emit("match_over","");	
+				$('#inGameCheck').foundation('reveal', 'close');
+			}
+			else {
+				alert("You are still in a game!");
+			}
+		}
+	});
+}
+
+socket.on('match_over', function(msg) {
+	$('#spectateStudent').foundation('reveal', 'close');
+}
 
 function getCookie(cname) {
 	var name = cname + "=";
