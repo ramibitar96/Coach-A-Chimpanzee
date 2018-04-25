@@ -1,13 +1,31 @@
 //user type
+
+//0 and 1 for coach and student, 2 for guest, 3 for AMA host
 var type = localStorage.getItem("queueType");
+var chatroomNumber = localStorage.getItem("chatroomNumber");
 
 var socket = io.connect('http://localhost:3000');
 
 var writeReview = false;
 var log = "";
 
+var partner = "";
+var public_room = false;
+var roomid = "";
+var isAMARoom = false;
+
 //send queue type
-socket.emit("queueType", type);
+if (type == 2) {
+	let msgObj =
+    {
+        type: type,
+        chatroomNumber: chatroomNumber
+    };
+
+    socket.emit("queueType", msgObj);
+} else {
+	socket.emit("queueType", type);
+}
 
 socket.on('message_received', function(msg)
 {
@@ -21,9 +39,43 @@ socket.on('message_received', function(msg)
 
 socket.on('match_found', function(msg)
 {
+	//get roomid and partnerid
+	roomid = msg.roomid;
+	partner = msg.partner;
+
 	// Put it in the chatbox
 	let chatArea = document.getElementById("chatArea");
 	chatArea.textContent = "MATCH FOUND\n";
+	writeReview = true;
+});
+
+socket.on('ama_created', function(msg)
+{
+	//get roomid and partnerid, set variables
+	roomid = msg.chatroomNumber;
+	public_room = true;
+	writeReview = true;
+	isAMARoom = true;
+	toColor("green", "Public: " + roomid);
+});
+
+socket.on('rejoin_chat', function(msg)
+{
+	// Fill chat box with previously sent messages
+	let chatArea = document.getElementById("chatArea");
+	chatArea.textContent = msg.log;
+	public_room = msg.publicRoom;
+	roomid = msg.chatroomNumber;
+	if (msg.user2 == null) {
+		isAMARoom = true;
+	}
+
+	if (public_room) { //if public
+		toColor("green", "Public: " + roomid);
+	}
+	else {
+		toColor("red", "Private");
+	}
 	writeReview = true;
 });
 
@@ -33,6 +85,19 @@ socket.on('end_chat', function(msg)
 	chatArea.textContent += "CHAT ENDED\n";
 	//simulate end chat click
 	$('#endChat').foundation('reveal', 'open');
+});
+
+socket.on('end_chat_guest', function(msg)
+{
+	alert("This chatroom has been made private. Returning you to the main page");
+	window.location.assign("queue.html");
+});
+
+socket.on('invalid_chatroom', function(msg)
+{
+	// Alert user, then return them to the queue page
+	alert("Error: invalid chatroom specified");
+	window.location.assign("queue.html");
 });
 
 //whiteboard stuff
@@ -59,7 +124,6 @@ socket.on('drawing', onDrawingEvent);
 window.addEventListener('resize', onResize, false);
 onResize();
 
-
 function keypressHandle(e)
 {
 	// keycode 13 is 'enter'
@@ -75,6 +139,11 @@ function sendMessage()
 	// Send the message
 	let msg = inputText.value;
 
+	//guests cannot send messages
+	if (type == 2 && !isAMARoom) {
+		return;
+	}
+
 	if (writeReview) {
 		socket.send(msg);
 	}
@@ -86,10 +155,14 @@ function sendMessage()
 }
 
 function openModal() {
-	if (writeReview) {
+	if (writeReview && type != 2 && !isAMARoom) {
 		socket.emit("end_chat", "end_chat");
 		$('#endChat').foundation('reveal', 'open');
 	} 
+	else if (isAMARoom) {
+		//TODO
+		window.location.assign("queue.html");
+	}
 	else { window.location.assign("queue.html"); }
 }
 
@@ -135,10 +208,12 @@ function submitReview() {
 	});
 	}
 
-	/* taken from socket.io whiteboard example website */
 /* https://socket.io/demos/whiteboard/ */
 
 function drawLine(x0, y0, x1, y1, color, emit){
+	if (type == 2 && !isAMARoom) { //cannot draw as guest
+		return;
+	}
 
 	context.beginPath();
 	context.moveTo(x0, y0);
@@ -207,33 +282,91 @@ function throttle(callback, delay) {
 			callback.apply(null, arguments);
 		}
 	};
+}
+
+function onDrawingEvent(data){
+	//whiteboard is a square, ignore topbar
+	var h = canvas.height - 75;
+	var w = h;
+
+	//multiply by canvas height and then adjust for the topbar
+	var y0 = (data.y0 * h) + 75;
+	var y1 = (data.y1 * h) + 75;
+
+	//multiply by canvas width
+	var x0 = (data.x0 * w);
+	var x1 = (data.x1 * w);
+
+	//if map is not on edge of screen
+	var filler = $(".cr-filler").width();
+	if (filler != 0) {
+		x0 = x0 + filler;
+		x1 = x1 + filler;
 	}
 
-	function onDrawingEvent(data){
-		//whiteboard is a square, ignore topbar
-		var h = canvas.height - 75;
-		var w = h;
+	drawLine(x0, y0, x1, y1, data.color, false);
+}
 
-		//multiply by canvas height and then adjust for the topbar
-		var y0 = (data.y0 * h) + 75;
-		var y1 = (data.y1 * h) + 75;
+// make the canvas fill its parent
+function onResize() {
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
+}
 
-		//multiply by canvas width
-		var x0 = (data.x0 * w);
-		var x1 = (data.x1 * w);
+function toColor(color, text) {
+	//switch color to red
+	$(".privacy").removeClass("green");
+	$(".privacy").removeClass("yellow");
+	$(".privacy").removeClass("red");
+	$(".privacy").addClass(color);
+	
+	//change text
+	$(".privacy").children().text(text)
+}
 
-		//if map is not on edge of screen
-		var filler = $(".cr-filler").width();
-		if (filler != 0) {
-			x0 = x0 + filler;
-			x1 = x1 + filler;
-		}
+function askToggle() {
+	if (public_room) {
+		socket.emit("toggle_privacy", true);
+		toColor("red", "Private");
 
-		drawLine(x0, y0, x1, y1, data.color, false);
+		public_room = false;
+	}
+	else {
+		toColor("yellow", "Waiting...");
+		socket.emit("ask_to_toggle", "");
+	}
+}
+
+//respond to privacy question
+socket.on('ask_to_toggle', function(msg)
+{
+	$('#askToToggle').foundation('reveal', 'open');
+});
+
+function respondToggle(bool) {
+	$('#askToToggle').foundation('reveal', 'close');
+
+	if (bool) { //if true, turn room to public
+		toColor("green", "Public: " + roomid);
+		public_room = true;
+
+		socket.emit("toggle_privacy", true);
+	} 
+	else { //emit false
+		socket.emit("toggle_privacy", false);
+		public_room = false;
+	}
+}
+
+socket.on('toggle_privacy', function(msg) {
+	if (msg) { //swap
+		public_room = !public_room
 	}
 
-	// make the canvas fill its parent
-	function onResize() {
-		canvas.width = window.innerWidth;
-		canvas.height = window.innerHeight;
+	if (public_room) { //if public
+		toColor("green", "Public: " + roomid);
 	}
+	else {
+		toColor("red", "Private");
+	}
+});

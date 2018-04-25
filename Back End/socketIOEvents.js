@@ -8,6 +8,24 @@ const {User} = require('./matchmaking.js');
 
 let userSockets = {};   // A dictionary mapping usernames to their sockets
 let socketUsers = {};   // A dictionary mapping sockets to their usernames
+let userChatrooms = {}; // A dictionary mapping usernames to their chatrooms
+let chatroomUsers = {}; // A dictionary mapping chatrooms to the users in them
+let chatrooms = {};     // A dictionary mapping a chatroom's number to the chatroom's chat log
+
+let publicChatrooms = [];
+let amaRooms = [];
+
+let chatroomCount = 0;
+
+class Chatroom {
+    constructor(user1, user2, isPublic, chatroomNumber) {
+        this.user1 = user1;
+        this.user2 = user2;
+        this.publicRoom = isPublic;
+        this.chatroomNumber = chatroomNumber;
+        this.log = "";
+    }
+}
 
 module.exports = function(io)
 {
@@ -24,9 +42,44 @@ module.exports = function(io)
 
             console.log("Username: " + msg);
             console.log("Partner name: " + partnerName);
+            console.log("Chatroom: " + chatroomCount);
 
-            userSocket.emit('match_found', msg);
-            partnerSocket.emit('match_found', partnerName);
+            userChatrooms[msg] = chatroomCount;
+            userChatrooms[partnerName] = chatroomCount;
+            chatroomUsers[chatroomCount] = [msg, partnerName];
+            room = new Chatroom(msg, partnerName, false, chatroomCount);
+            chatrooms[chatroomCount] = room;
+
+            console.log(room);
+
+            let userObj =
+            {
+                partner: msg,
+                roomid: chatroomCount
+            };
+
+            let partnerObj =
+            {
+                partner: partnerName,
+                roomid: chatroomCount
+            };
+
+            chatroomCount++;
+
+            userSocket.emit('match_found', userObj);
+            partnerSocket.emit('match_found', partnerObj);
+        });
+
+       socket.on('request_amas', function(msg)
+        {
+            var amaList = "";
+            for (var i = 0; i < amaRooms.length; i++) {
+                if (i != 0)
+                    amaList += "\n";
+                amaList += (amaRooms[i] + ": " + chatrooms[amaRooms[i]].user1);
+            }
+
+            socket.emit('ama_list', amaList);
         });
 
         // Check the session token to find out what user this is
@@ -56,22 +109,37 @@ module.exports = function(io)
             let username = socketUsers[socket.id];
             delete userSockets[username];
             delete socketUsers[socket.id];
+            if (userChatrooms[username] != undefined && chatroomUsers[userChatrooms[username]] != undefined) {
+                var index = chatroomUsers[userChatrooms[username]].indexOf(username);
+                chatroomUsers[userChatrooms[username]].splice(index, 1);
+            }
 
             console.log("User " + username + " disconnected.");
         });
 
-        // When a user sends a message, forward it to their partner.
+        // When a user sends a message, forward it all users in the same chatroom
         socket.on('message', function(msg)
         {
             console.log(authResult.username + ": " + msg);
 
-            let partnerName = getPartner(username);
-            if (partnerName == undefined) {
-                console.log("ERROR: no match for this user");
+            if (getPartner(username) == null && chatrooms[userChatrooms[username]].user2 != null) {
+                // TODO: check if chatroom allows users other than student/coach to chat
                 return;
             }
-            let partnerSocket = userSockets[partnerName];
-            console.log("Partner: " + partnerName);
+
+            let partnerList = chatroomUsers[userChatrooms[username]];
+            if (partnerList == undefined) {
+                return;
+            }
+            var chatroomSocketList = [];
+            for (var i = 0; i < partnerList.length; i++) {
+                if (partnerList[i] != username) {
+                    chatroomSocketList.push(userSockets[partnerList[i]]);
+                }
+            }
+
+            // Add chat message to log
+            chatrooms[userChatrooms[username]].log += (username + ": " + msg + "\n");
 
             let msgObj =
             {
@@ -79,20 +147,61 @@ module.exports = function(io)
                 contents: msg
             };
 
-            partnerSocket.emit('message_received', msgObj);
+            for (var i = 0; i < chatroomSocketList.length; i++) {
+                chatroomSocketList[i].emit('message_received', msgObj);
+            }
         });
 
         // When a user enters the queue
         socket.on('queueType', async function(msg)
         {
-            // 0 = student, 1 = coach
+            // 0 = student, 1 = coach, 2 = guest
             console.log(authResult.username + ": " + " QUEUE TYPE: " + msg);
 
             if (getPartner(username) != null) {
                 console.log("Returning user to existing chatroom");
+                let userSocket = userSockets[username];
+                console.log("userChatrooms: " + userChatrooms[username]);
+                chatroomUsers[userChatrooms[username]].push(username);
+                userSocket.emit('rejoin_chat', chatrooms[userChatrooms[username]]);
                 return;
             } else if (matchmaking.isInQueue(username)) {
                 console.log("User is already in queue; returning to empty chatroom");
+                return;
+            }
+
+            if (msg == null && userChatrooms[username] != undefined) {
+                chatroomUsers[userChatrooms[username]].push(username);
+                userSockets[username].emit('rejoin_chat', chatrooms[userChatrooms[username]]);
+                return;
+            } else if (msg.type == 2) {
+                console.log("Chatroom number: " + msg.chatroomNumber);
+                let userSocket = userSockets[username];
+                if (chatroomUsers[msg.chatroomNumber] == undefined || chatrooms[msg.chatroomNumber].publicRoom == false) {
+                    userSocket.emit('invalid_chatroom');
+                    return;
+                }
+                userChatrooms[username] = msg.chatroomNumber;
+                chatroomUsers[msg.chatroomNumber].push(username);
+                userSocket.emit('rejoin_chat', chatrooms[userChatrooms[username]]);
+                return;
+            } else if (msg == 3) {
+                if (userChatrooms[username] != undefined) {
+                    chatroomUsers[userChatrooms[username]].push(username);
+                    userSockets[username].emit('rejoin_chat', chatrooms[userChatrooms[username]]);
+                    return;
+                }
+
+                // Create AMA room
+                userChatrooms[username] = chatroomCount;
+                chatroomUsers[chatroomCount] = [username];
+                room = new Chatroom(username, null, true, chatroomCount);
+                chatrooms[chatroomCount] = room;
+                amaRooms.push(chatroomCount);
+                console.log(room);
+
+                userSockets[username].emit('ama_created', chatrooms[chatroomCount]);
+                chatroomCount++;
                 return;
             }
 
@@ -122,12 +231,83 @@ module.exports = function(io)
             delete socketUsers[userSocket];
             delete socketUsers[partnerSocket];
             matchmaking.removeMatchedPair(username);
+
+            // TODO: Send chat log to database, delete all applicable chatroom dictionary entries
+            let chatroomNumber = userChatrooms[username];
+            delete userChatrooms[username];
+            if (chatroomUsers[chatroomNumber] != undefined) {
+                delete chatroomUsers[chatroomNumber];
+            }
+            if (chatrooms[chatroomNumber] != undefined) {
+                delete chatrooms[chatroomNumber];
+            }
+        });
+
+        socket.on('ask_to_toggle', function(data)
+        {
+            let partnerName = getPartner(username);
+            if (partnerName == undefined) {
+                console.log("ERROR: no match for this user");
+                return;
+            }
+            let partnerSocket = userSockets[partnerName];
+            partnerSocket.emit('ask_to_toggle');
+        });
+
+        socket.on('toggle_privacy', function(data)
+        {
+            let partnerName = getPartner(username);
+            if (partnerName == undefined) {
+                console.log("ERROR: no match for this user");
+                return;
+            }
+
+            // Toggle chatroom privacy settings if requested
+            if (data == true) {
+                chatrooms[userChatrooms[username]].publicRoom = !chatrooms[userChatrooms[username]].publicRoom;
+                if (chatrooms[userChatrooms[username]].publicRoom) {
+                    publicChatrooms.push(userChatrooms[username]);
+                } else {
+                    var index = publicChatrooms.indexOf(userChatrooms[username]);
+                    publicChatrooms.splice(index, 1);
+                    var chatroomNumber = userChatrooms[username];
+                    for (var i = 0; i < chatroomUsers[chatroomNumber].length; i++) {
+                        if (chatroomUsers[chatroomNumber][i] != username && chatroomUsers[chatroomNumber][i] != partnerName) {
+                            userSockets[chatroomUsers[chatroomNumber][i]].emit('end_chat_guest');
+                        }
+                    }
+                    chatroomUsers[chatroomNumber] = [username, partnerName];
+                }
+            }
+
+            let partnerSocket = userSockets[partnerName];
+            partnerSocket.emit('toggle_privacy', data);
         });
 
 			//whiteboard
 			socket.on('drawing', function(data)
 			{
-            let partnerName = getPartner(username);
+            if (getPartner(username) == null && chatrooms[userChatrooms[username]].user2 != null) {
+                // TODO: check if chatroom allows users other than student/coach to draw
+                return;
+            }
+
+            let partnerList = chatroomUsers[userChatrooms[username]];
+            if (partnerList == undefined) {
+                return;
+            }
+            var chatroomSocketList = [];
+            for (var i = 0; i < partnerList.length; i++) {
+                if (partnerList[i] != username) {
+                    chatroomSocketList.push(userSockets[partnerList[i]]);
+                }
+            }
+
+            for (var i = 0; i < chatroomSocketList.length; i++) {
+                chatroomSocketList[i].emit('drawing', data);
+            }
+
+            /*let partnerName = getPartner(username);
             if (partnerName == undefined) {
                 console.log("ERROR: no match for this user");
                 return;
@@ -135,7 +315,7 @@ module.exports = function(io)
             let partnerSocket = userSockets[partnerName];
             console.log("Partner: " + partnerName);
 
-				partnerSocket.emit('drawing', data);
+				partnerSocket.emit('drawing', data);*/
 			});
     });
 }

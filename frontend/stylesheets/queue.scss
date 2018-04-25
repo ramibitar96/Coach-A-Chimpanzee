@@ -1,6 +1,112 @@
-.qmain {
+.main {
 	background-image: url("../img/queue-bg.jpg");
 	background-size: cover;
+	display: block;
+	position: relative;
+	height: 100%;
+}
+
+.qmain {
+	overflow: auto;
+	margin: 0 auto;
+	padding-top: 180px;
+
+	.qleft, .qright {
+		padding-top: 20px;
+		padding-bottom: 20px;
+
+		.qintro {
+			padding-bottom: 20px;
+			text-align: center;
+
+			h4 {
+				color: white;
+			}
+		}
+	}
+
+	.qleft {	
+		border-right: 1px solid white;
+
+		.qoptions {
+			.qbutton {
+				padding-bottom: 10px;
+				text-align: center;
+				
+				a {
+					width: 200px;
+					border-radius: 15px;
+				}
+			}
+		}
+	}
+
+	.qright {
+		border-left: 1px solid white;
+
+		.qtable {
+			#tbody {
+				a {
+					//background-color: transparent;
+					font-size: 14px;
+					color: black;
+					line-height: 40px;
+					margin: 0;
+					padding-top: 0;
+					padding-bottom:0;
+				}
+
+				td {
+					padding-left: 10px;
+					font-size: 14px;
+					color: black;	
+					line-height: 20px;
+					text-align: center;
+					height: 20px;
+					padding: 0;
+				}
+			}
+		}
+
+		.qjoin, .qtable {
+			margin: 0 auto;
+		}
+
+		.qjoin {
+			& > div {
+				display: inline-block;
+
+				&.right {
+					margin-right: 10px;
+				}
+			}
+
+			input, a {
+				height: 40px;
+				line-height: 40px;
+			}
+
+			a {
+				padding-top: 0;
+				padding-bottom: 0;
+			}
+
+			#refresh {
+				display: block;
+				width: 40px;
+				text-align: center;
+				line-height: 40px;
+				color: white;
+				font-size: 30px;
+				font-weight: 800;
+
+				&:hover {
+					transform: rotate(180deg);
+					transition-duration: 1s;
+				}
+			}
+		}
+	}
 }
 
 .user {

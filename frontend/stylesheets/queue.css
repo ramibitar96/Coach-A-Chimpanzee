@@ -1,5 +1,74 @@
-.qmain {
+.main {
   background-image: url("../img/queue-bg.jpg");
-  background-size: cover; }
+  background-size: cover;
+  display: block;
+  position: relative;
+  height: 100%; }
+
+.qmain {
+  overflow: auto;
+  margin: 0 auto;
+  padding-top: 180px; }
+  .qmain .qleft, .qmain .qright {
+    padding-top: 20px;
+    padding-bottom: 20px; }
+    .qmain .qleft .qintro, .qmain .qright .qintro {
+      padding-bottom: 20px;
+      text-align: center; }
+      .qmain .qleft .qintro h4, .qmain .qright .qintro h4 {
+        color: white; }
+  .qmain .qleft {
+    border-right: 1px solid white; }
+    .qmain .qleft .qoptions .qbutton {
+      padding-bottom: 10px;
+      text-align: center; }
+      .qmain .qleft .qoptions .qbutton a {
+        width: 200px;
+        border-radius: 15px; }
+  .qmain .qright {
+    border-left: 1px solid white; }
+    .qmain .qright .qtable #tbody a {
+      font-size: 14px;
+      color: black;
+      line-height: 40px;
+      margin: 0;
+      padding-top: 0;
+      padding-bottom: 0; }
+    .qmain .qright .qtable #tbody td {
+      padding-left: 10px;
+      font-size: 14px;
+      color: black;
+      line-height: 20px;
+      text-align: center;
+      height: 20px;
+      padding: 0; }
+    .qmain .qright .qjoin, .qmain .qright .qtable {
+      margin: 0 auto; }
+    .qmain .qright .qjoin > div {
+      display: inline-block; }
+      .qmain .qright .qjoin > div.right {
+        margin-right: 10px; }
+    .qmain .qright .qjoin input, .qmain .qright .qjoin a {
+      height: 40px;
+      line-height: 40px; }
+    .qmain .qright .qjoin a {
+      padding-top: 0;
+      padding-bottom: 0; }
+    .qmain .qright .qjoin #refresh {
+      display: block;
+      width: 40px;
+      text-align: center;
+      line-height: 40px;
+      color: white;
+      font-size: 30px;
+      font-weight: 800; }
+      .qmain .qright .qjoin #refresh:hover {
+        transform: rotate(180deg);
+        transition-duration: 1s; }
+
+.user {
+  font-size: 16px;
+  color: white;
+  margin-right: 10px; }
 
 /*# sourceMappingURL=queue.css.map */
