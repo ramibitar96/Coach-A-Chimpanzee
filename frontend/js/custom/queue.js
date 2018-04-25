@@ -1,6 +1,32 @@
 // Testing
 var socket = io.connect('http://localhost:3000');
 
+//load initial ama list
+refreshList();
+
+function refreshList() {
+	socket.emit('request_amas');
+}
+
+socket.on('ama_list', function(msg)
+{
+	//clear and load new results
+	$("#tbody").empty();
+
+	var list = msg.split("\n");
+
+	for (var i = 0; i < list.length; i++) {
+		var list_data = list[i].split(": ");
+
+		var text = "<tr>" +
+			"<td>" + list_data[1] + "</td>" +
+			"<td></td>" +
+			"<td><a class='button' onclick='enterChatroom(" + list_data[0] + ")'>Join</td></tr>";
+
+		$("#tbody").append(text);
+	}
+});
+
 function queueStudent() {
 	localStorage.setItem("queueType","0");
 	window.location.assign("chatroom.html");
@@ -12,11 +38,22 @@ function queueCoach() {
 }
 
 function enterChatroom() {
-	var chatroomNumber = prompt("Enter a chatroom number");
+	var id = $("#joinRoom").val();
+
+	if (id == "" || id == null) {
+		return;
+	}
 
 	// Join chatroom
 	localStorage.setItem("queueType","2");
-	localStorage.setItem("chatroomNumber", chatroomNumber);
+	localStorage.setItem("chatroomNumber", id);
+	window.location.assign("chatroom.html");
+}
+
+function enterChatroom(id) {
+	// Join chatroom
+	localStorage.setItem("queueType","2");
+	localStorage.setItem("chatroomNumber", id);
 	window.location.assign("chatroom.html");
 }
 
@@ -24,15 +61,6 @@ function createAMA() {
 	localStorage.setItem("queueType","3");
 	window.location.assign("chatroom.html");
 }
-
-function amaList() {
-	socket.emit('request_amas');
-}
-
-socket.on('ama_list', function(msg)
-{
-	alert(msg);
-});
 
 function getCookie(cname) {
 	var name = cname + "=";
