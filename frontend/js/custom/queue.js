@@ -12,13 +12,13 @@ function queueCoach() {
 }
 
 function enterChatroom() {
-	socket.emit('request_chatrooms');
-	//var chatroomNumber = prompt("Enter a chatroom number");
+	//socket.emit('request_chatrooms');
+	var chatroomNumber = prompt("Enter a chatroom number");
 
 	// Join chatroom
-	/*localStorage.setItem("queueType","2");
+	localStorage.setItem("queueType","2");
 	localStorage.setItem("chatroomNumber", chatroomNumber);
-	window.location.assign("chatroom.html");*/
+	window.location.assign("chatroom.html");
 }
 
 socket.on('chatroom_list', function(msg)

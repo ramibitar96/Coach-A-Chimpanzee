@@ -20,7 +20,7 @@ class Chatroom {
     constructor(user1, user2, chatroomNumber) {
         this.user1 = user1;
         this.user2 = user2;
-        this.public = true; // FIXME: Revert to false
+        this.public = false;
         this.chatroomNumber = chatroomNumber;
         this.log = "";
     }
@@ -62,8 +62,6 @@ module.exports = function(io)
                 partner: partnerName,
                 roomid: chatroomCount
             };
-
-            publicChatrooms.push(chatroomCount); // FIXME: Remove this when privacy settings toggling is implemented
 
             chatroomCount++;
 
@@ -159,27 +157,28 @@ module.exports = function(io)
             // 0 = student, 1 = coach, 2 = guest
             console.log(authResult.username + ": " + " QUEUE TYPE: " + msg);
 
-            if (msg.type == 2) {
-                console.log("Chatroom number: " + msg.chatroomNumber);
-                if (chatroomUsers[msg.chatroomNumber] == undefined || chatrooms[msg.chatroomNumber].public == false) {
-                    let userSocket = userSockets[username];
-                    userSocket.emit('invalid_chatroom');
-                    return;
-                }
-                userChatrooms[username] = msg.chatroomNumber;
-                chatroomUsers[msg.chatroomNumber].push(username);
-                return;
-            }
-
             if (getPartner(username) != null) {
                 console.log("Returning user to existing chatroom");
                 let userSocket = userSockets[username];
                 console.log("userChatrooms: " + userChatrooms[username]);
                 chatroomUsers[userChatrooms[username]].push(username);
-                userSocket.emit('rejoin_chat', chatrooms[userChatrooms[username]].log);
+                userSocket.emit('rejoin_chat', chatrooms[userChatrooms[username]]);
                 return;
             } else if (matchmaking.isInQueue(username)) {
                 console.log("User is already in queue; returning to empty chatroom");
+                return;
+            }
+
+            if (msg.type == 2) {
+                console.log("Chatroom number: " + msg.chatroomNumber);
+                let userSocket = userSockets[username];
+                if (chatroomUsers[msg.chatroomNumber] == undefined || chatrooms[msg.chatroomNumber].public == false) {
+                    userSocket.emit('invalid_chatroom');
+                    return;
+                }
+                userChatrooms[username] = msg.chatroomNumber;
+                chatroomUsers[msg.chatroomNumber].push(username);
+                userSocket.emit('rejoin_chat', chatrooms[userChatrooms[username]]);
                 return;
             }
 

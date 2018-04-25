@@ -50,7 +50,15 @@ socket.on('rejoin_chat', function(msg)
 {
 	// Fill chat box with previously sent messages
 	let chatArea = document.getElementById("chatArea");
-	chatArea.textContent = msg;
+	chatArea.textContent = msg.log;
+	public_room = msg.public;
+	roomid = msg.chatroomNumber;
+	if (public_room) { //if public
+		toColor("green", "Public: " + roomid);
+	}
+	else {
+		toColor("red", "Private");
+	}
 	writeReview = true;
 });
 
