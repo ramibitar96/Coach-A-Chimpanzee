@@ -144,6 +144,16 @@ function findPartner(username) {
 	return null;
 }
 
+function isUserCoach(username) {
+	for (var i = 0; i < matchedUsers.length; i++) {
+		if (matchedUsers[i].coach == username) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 function removeMatchedPair(username) {
 	for (var i = 0; i < matchedUsers.length; i++) {
 		var student = matchedUsers[i].student;
@@ -174,6 +184,7 @@ module.exports = {
 	addStudent,
 	addCoach,
 	findPartner,
+	isUserCoach,
 	removeMatchedPair,
 	isInQueue,
 	User
