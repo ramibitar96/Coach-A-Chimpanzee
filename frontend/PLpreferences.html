@@ -56,12 +56,19 @@
 										<form id="savePreferences">
 											<div id="General" class="tabcontent large-12 medium-12 large-centered medium-centered columns">
 												<h3>Edit your general information</h3>
-												<div class="container">
-													<label><b>Twitch TV Stream</b></label>
-													<input id="twitch" type="text" placeholder="http://www.twitch.tv/USERNAME" name="twitchLink">
-
-   													<button type="submit">Save Changes</button>
+												<form id = "twitch">
+													<div class="container">
+														<label><b>Twitch TV Stream</b></label>
+														<input id="twitch" type="text" placeholder="http://www.twitch.tv/USERNAME" name="twitchLink">
+														<button type="submit">Save Changes</button>
 													</div>
+												</form>
+
+													<form ref='upload_replay' id='replay_file' action='http://localhost:3000/add_replay' method='post' encType="multipart/form-data">
+														<label for = "replay_file">Choose Replay File:</label>
+														<input id="replay" type= "file" name = "replay_file" accept= ".rofl"/>
+														<button type="submit">Upload Replay</button>
+   													</form>   
 												</div>
 
 												<div id="Student" class="tabcontent large-12 medium-12 large-centered medium-centered columns">
