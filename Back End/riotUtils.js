@@ -72,5 +72,6 @@ async function get_match_data(username)
 module.exports=
 {
     get_summoner_data,
-    get_rank
+    get_rank,
+    get_match_data
 }
