@@ -293,7 +293,7 @@ module.exports = function(app)
     /**
      * See SPECTATE_PROTOCOLS.txt
      */
-    app.get('get_student_match', async function(req, res)
+    app.get('/get_student_match', async function(req, res)
     {
         // Error if not logged in
         let token = req.cookies.session_token;
@@ -338,7 +338,7 @@ module.exports = function(app)
         res.send(match_data);
     });
 
-    app.get('get_match', async function(req, res)
+    app.get('/get_match', async function(req, res)
     {
         // Just punt it off to Riot's API
         let results = await riotUtils.get_match(req.query.gameid);
