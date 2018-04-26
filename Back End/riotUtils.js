@@ -58,7 +58,7 @@ async function get_rank(username)
  * Returns null if there's an error.
  * @param {*} username 
  */
-async function get_match_data(username)
+async function get_spectate_data(username)
 {
     // Get the summoner id first, as usual
 
@@ -79,10 +79,26 @@ async function get_match_data(username)
     }
 }
 
+async function get_match(game_id)
+{
+    // Literally just pass it on to Riot's servers.
+    // Return null if there's an error
+    try
+    {
+        let url = "https://na1.api.riotgames.com/lol/match/v3/matches/" + game_id;
+        return await request.get(url, REQUEST_OPTIONS);
+    }
+    catch (e)
+    {
+        return null;
+    }
+}
+
 // Exports
 module.exports=
 {
     get_summoner_data,
     get_rank,
-    get_match_data
+    get_spectate_data,
+    get_match
 }
