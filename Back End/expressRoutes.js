@@ -290,6 +290,54 @@ module.exports = function(app)
         res.send({inGame: inGame});
     });
 
+    /**
+     * See SPECTATE_PROTOCOLS.txt
+     */
+    app.get('get_student_match', async function(req, res)
+    {
+        // Error if not logged in
+        let token = req.cookies.session_token;
+        let authResults = await auth.checkToken(token);
+
+        if (authResults.error_code != 0)
+        {
+            res.send({error_code: authResults.error_code});
+            return;
+        }
+
+        let username = authResults.username;
+
+        // Error if user is not a coach
+        if (!matchmaking.isUserCoach(username))
+        {
+            res.send({error_code: ErrorCodeEnum.USER_NOT_A_COACH});
+            return;
+        }
+
+        // Look up the student's username
+        let student = matchmaking.findPartner(username);
+
+        // Error if no partner
+        if (student === null)
+        {
+            res.send({error_code: ErrorCodeEnum.USER_HAS_NO_PARTNER});
+            return;
+        }
+
+        // Ask Riot for the spectate data
+        let match_data = await riotUtils.get_match_data(student);
+
+        // Error if not in a game
+        if (match_data === null)
+        {
+            res.send({error_code: ErrorCodeEnum.STUDENT_NOT_IN_GAME});
+            return;
+        }
+
+        // Send the spectate data.
+        res.send(match_data);
+    });
+
     // Returns a webpage displaying the username of the currently-logged-in user.
     app.get('/whats_my_username', async function(req, res)
     {

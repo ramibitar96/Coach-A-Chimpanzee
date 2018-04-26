@@ -13,11 +13,10 @@ function parseData(json) {
 
 	var error = json["error_code"]
 
-	//set name
-	$("#SummonerName").val(json_user["summoner_name"]);
+	//set name //$("#SummonerName").val(json_user["summoner_name"]);
 
 	//set rank
-	$("#rank").val(json_user["current_rank"]);
+	//$("#rank").val(json_user["current_rank"]);
 
 	//twitch link 
 	$("#twitch").val(json_user["twitch_name"]);
@@ -59,15 +58,15 @@ function parseData(json) {
 
 $('#savePreferences').on('submit', function() {
 
-	var name = document.getElementById("SummonerName").value;
-	var rank = document.getElementById("rank").value;
+	//var name = document.getElementById("SummonerName").value;
+	//var rank = document.getElementById("rank").value;
 	var twitch = document.getElementById("twitch").value;
 
 	var user =
 		'"user": {' +
-		'"twitch_name":"' + twitch + '",' +
-		'"summoner_name":"' + name + '",' +
-		'"current_rank":' + rank +
+		'"twitch_name":"' + twitch + '"' +
+		//'"summoner_name":"' + name + '",' +
+		//'"current_rank":' + rank +
 		'},';
 
 
@@ -104,7 +103,6 @@ $('#savePreferences').on('submit', function() {
 	var rank_C = document.getElementById("maxStudentRank").value;
 	if (rank_C == "") rank_C = 3;
 
-
 	var coach = 
 		'"coach": {' +
 		'"view_replay":' + replay + ',' +
@@ -113,7 +111,7 @@ $('#savePreferences').on('submit', function() {
 		'}';
 
 	var body = '{' + user + student + coach + '}';
-	alert(body);
+	//alert(body);
 
 	$.ajax({
 			type: "POST",

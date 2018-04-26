@@ -20,18 +20,19 @@ function search_profile(user) {
 			type: "GET",
 			url: "http://localhost:3000/get_profile?user=" + user,
 			success: function(data) {
-				parseData(data);
+				parseData(data, user);
 			}
 	});
 }
 
-function parseData(json) {
+function parseData(json, user) {
 	var json_user = json["user"];
 
 	//set name
-	$(".summoner_name").text(json_user["summoner_name"]);
+	$(".summoner_name").text(user);
 
 	var rank = json_user["current_rank"];
+	/*
 	var rank_text = "Unranked";
 	if (rank == 0)			rank_text = "Bronze";
 	else if (rank == 1)	rank_text = "Silver";
@@ -40,8 +41,9 @@ function parseData(json) {
 	else if (rank == 4)	rank_text = "Diamond";
 	else if (rank == 5)	rank_text = "Master";
 	else if (rank == 6)	rank_text = "Challenger";
+	*/
 
-	$(".summoner_rank").text(rank_text);
+	$(".summoner_rank").text(rank);
 
 	//twitch link 
 	var twitch = json_user["twitch_name"];

@@ -37,7 +37,12 @@
 
 						<!-- disconnect and public switch -->
 						<div class="cr-topbar-right">
-							<a class="button" href="#" onclick="openModal()">End Chat</a>
+							<div class="privacy red"> 
+								<a href="#" onclick="askToggle()">Private</a>
+							</div>
+							<div>
+								<a class="button" href="#" onclick="openModal()">End Chat</a>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -119,6 +124,51 @@
 				</div>
 			</form>
 		</div>
+
+		<!-- toggle privacy modal -->
+		<div id="askToToggle" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" data-options="close_on_background_click:false; close_on_esc: false;">
+			<div class="row">
+				<h4>Switch to Public Room?</h2>
+			</div>
+			<div class="row">
+				<a class="button" id="togglePublic" href="#" onclick="respondToggle(true)">Yes</a>
+				<a class="button" id="togglePrivate" href="#" onclick="respondToggle(false)">No</a>
+			</div>
+		</div>
+
+		<!-- get spectate game information -->
+		<div id="spectateStudent" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" data-options="close_on_background_click:false; close_on_esc: false;">
+			<div class="row">
+				<h4>Spectate Game</h2>
+			</div>
+			<ul class="tabs" data-tab>
+				<li class="tab-title active"><a href="#mac">Mac</a></li>
+				<li class="tab-title"><a href="#windows" onclick="serveWindows()">Windows</a></li>
+			</ul>
+			<div class="tabs-content">
+				<div class="content active" id="mac">
+					<p>Run <em>Terminal</em> and then paste</p>
+					<textarea id="serveMac" readonly>test</textarea>
+				</div>
+				<div class="content" id="windows">
+					<p>
+						A file should begin downloading in a moment. If not, click 
+						<a id="download" href="../img/minimap.jpg" download>download</a>
+					</p>
+					<div class="spectateImage"></div>
+				</div>
+			</div>	
+		</div>
+		
+		<!-- While in game -->
+		<div id="inGameCheck" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" data-options="close_on_background_click:false; close_on_esc: false;">
+			<div class="row">
+				<h4>When your game is completed...</h2>
+			</div>
+			<div class="row">
+				<a class="button" id="togglePrivate" href="#" onclick="gameOver()">Continue</a>
+			</div>
+		</div>
 	</body>
 	<script src="js/vendor/jquery.js"></script>
 	<script src="js/foundation.min.js"></script>
@@ -126,6 +176,7 @@
 	<script src="js/custom/check.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="js/custom/chat.js"></script>
+	<script src="js/custom/spectate.js"></script>
 	<script>
 		$(document).foundation();
 	</script> 
@@ -143,7 +194,6 @@
 			var w = $(".cr-bottom").width() - $(".cr-dynamic").width() - (2*$(".cr-filler").width());
 			$(".cr-chat").width(w - 3);
 		}
-
 	</script>
 </html>
 
