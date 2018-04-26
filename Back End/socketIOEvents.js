@@ -25,6 +25,7 @@ class Chatroom {
         this.chatroomNumber = chatroomNumber;
         this.log = "";
         this.drawLog = [];
+        this.gameData = null;
     }
 }
 
@@ -297,6 +298,7 @@ module.exports = function(io)
             }
             let partnerSocket = userSockets[partnerName];
 				console.log("passing game_data to partner");
+            chatrooms[userChatrooms[username]].gameData = data;
             partnerSocket.emit('game_data', data);
         });
 

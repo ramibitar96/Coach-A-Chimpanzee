@@ -143,6 +143,11 @@ socket.on('rejoin_chat', function(msg)
 
 	public_room = msg.publicRoom;
 	roomid = msg.chatroomNumber;
+	if (debug) {
+		testParse();
+	} else {
+		parseGame(msg.gameData);
+	}
 	if (msg.user2 == null) {
 		isAMARoom = true;
 	}
