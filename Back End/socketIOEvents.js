@@ -287,6 +287,18 @@ module.exports = function(io)
                 delete chatrooms[chatroomNumber];
             }
         });
+        
+		  socket.on('game_data', function(data)
+        {
+            let partnerName = getPartner(username);
+            if (partnerName == undefined) {
+                console.log("ERROR: no match for this user");
+                return;
+            }
+            let partnerSocket = userSockets[partnerName];
+				console.log("passing game_data to partner");
+            partnerSocket.emit('game_data', data);
+        });
 
         socket.on('match_over', function(data)
         {
@@ -296,7 +308,8 @@ module.exports = function(io)
                 return;
             }
             let partnerSocket = userSockets[partnerName];
-            partnerSocket.emit('match_over');
+				console.log("emitting match_over to partner");
+            partnerSocket.emit('match_over', data);
         });
 
         socket.on('ask_to_toggle', function(data)

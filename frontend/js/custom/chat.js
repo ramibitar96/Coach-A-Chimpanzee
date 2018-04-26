@@ -22,6 +22,7 @@ var partner = "";
 var public_room = false;
 var roomid = "";
 var isAMARoom = false;
+var gameId;
 
 //send queue type
 if (type == 2) {
@@ -75,6 +76,8 @@ socket.on('match_found', function(msg)
 					var platformId = json["platformId"];	
 					var summonerId = "";		
 
+					gameId = json["gameId"];
+
 					var p = json["participants"];
 					jQuery.each(p, function() {
 						if (this["summonerName"].toUpperCase() === me) {
@@ -91,9 +94,15 @@ socket.on('match_found', function(msg)
 		$('#inGameCheck').foundation('reveal', 'open');
 	}
 	else {
-		//sample
-		serveFile("z82Ui/V0YGXOlT+RA7VbZtO3YNpUn91P", "NA1", "19134540");
-		$('#spectateStudent').foundation('reveal', 'open');
+		if (type == 0) {
+			$('#inGameCheck').foundation('reveal', 'open');
+		}
+		else {
+			//sample
+			gameId = "2770683953";
+			serveFile("z82Ui/V0YGXOlT+RA7VbZtO3YNpUn91P", "NA1", "19134540");
+			$('#spectateStudent').foundation('reveal', 'open');
+		}
 	}
 });
 
@@ -424,6 +433,12 @@ socket.on('toggle_privacy', function(msg) {
 });
 
 function gameOver() {
+	if (debug) {
+		socket.emit("match_over","");	
+		$('#inGameCheck').foundation('reveal', 'close');	
+		return;
+	}
+
 	$.ajax({
 		type: "GET",
 		url: "http://localhost:3000/isInGame",
@@ -441,8 +456,21 @@ function gameOver() {
 }
 
 socket.on('match_over', function(msg) {
-	$('#spectateStudent').foundation('reveal', 'close');
-}
+	$.ajax({
+		type: "GET",
+		url: "http://localhost:3000/get_match?gameid=" + gameId,
+		success: function(data) {
+			var json = JSON.stringify(data);
+			socket.emit("game_data", json);
+			parseGame(json);
+			$('#spectateStudent').foundation('reveal', 'close');
+		}
+	});
+});
+
+socket.on("game_data", function(msg) {
+	parseGame(msg);
+});
 
 function getCookie(cname) {
 	var name = cname + "=";
