@@ -1,7 +1,5 @@
 function parseGame(data) {
 	var json = JSON.parse(data);
-	alert(json["gameId"]);
-	//alert("data received");
 }
 
 function testParse() {
@@ -193,7 +191,8 @@ function displayGeneral(banArray, tArray) {
 	var ban_img = node("div", "ban-img");
 	for (var i = 0; i < banArray.length; i++) {
 		var img = node("img", "");
-		img.src = "../img/minimap-icon.png";	
+		var id = banArray[i];
+		img.src = "../img/champion/" + id + ".png";	
 
 		ban_img.appendChild(img);
 	}
@@ -228,6 +227,11 @@ function createEntry(text, w) {
 function display(array) {
 	for (var i = 1; i <= 10; i++) {
 		var player = array[i];
+
+		var topbar_id = "cimg" + player.participantId;
+		var a = document.getElementById(topbar_id);
+		a.style.backgroundImage = "url('../img/champion/" + player.championId + ".png')";
+
 		var pid = "champion" + player.participantId;
 		var d = document.getElementById(pid);
 

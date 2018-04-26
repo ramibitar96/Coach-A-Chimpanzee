@@ -25,6 +25,10 @@
     float: left;
     padding-left: 5px;
     margin: 0; }
+    .chatroom .cr-topbar .cr-topbar-content .cr-topbar-left .cr-topbar-general > a {
+      background-image: url(../img/info.jpeg); }
+    .chatroom .cr-topbar .cr-topbar-content .cr-topbar-left .cr-topbar-whiteboard > a {
+      background-image: url(../img/minimap-icon.png); }
     .chatroom .cr-topbar .cr-topbar-content .cr-topbar-left .cr-topbar-btn {
       display: inline-block;
       height: 65px;
@@ -33,7 +37,9 @@
       .chatroom .cr-topbar .cr-topbar-content .cr-topbar-left .cr-topbar-btn > a {
         display: block;
         height: 63px;
-        padding: 1px; }
+        padding: 1px;
+        background-size: contain;
+        background-repeat: no-repeat; }
         .chatroom .cr-topbar .cr-topbar-content .cr-topbar-left .cr-topbar-btn > a.blue {
           border: 1px solid blue; }
         .chatroom .cr-topbar .cr-topbar-content .cr-topbar-left .cr-topbar-btn > a.red {
