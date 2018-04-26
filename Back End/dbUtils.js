@@ -172,11 +172,10 @@ async function setUserPrefs(username, prefsData)
 			user_id,
 			view_replay,
 			twitch_name,
-			current_rank,
 			min_coach_rank,
 			max_coachee_rank
 		)
-		VALUES (?, ?, ?, ?, ?, ?);
+		VALUES (?, ?, ?, ?, ?);
 	`;
 
 	let miscPrefsPromise = db.run
@@ -185,7 +184,6 @@ async function setUserPrefs(username, prefsData)
 		uid,
 		prefsData.coach.view_replay,
 		prefsData.user.twitch_name,
-		prefsData.user.current_rank,
 		prefsData.student.min_coach_rank,
 		prefsData.coach.max_coachee_rank
 	);
