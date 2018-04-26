@@ -272,9 +272,9 @@ function submitReview() {
 /* https://socket.io/demos/whiteboard/ */
 
 function drawLine(x0, y0, x1, y1, color, emit){
-	if (type == 2 && !isAMARoom) { //cannot draw as guest
+	/*if (type == 2 && !isAMARoom) { //cannot draw as guest
 		return;
-	}
+	}*/
 
 	context.beginPath();
 	context.moveTo(x0, y0);
