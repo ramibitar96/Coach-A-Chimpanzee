@@ -1,5 +1,20 @@
 function parseGame(data) {
 	var json = JSON.parse(data);
+
+	//participant data
+	var pArray = getParticipants(json["participantIdentities"]);
+
+	//team data, [1] is 100, [2] is 200
+	var tArray = getTeams(json["teams"]);
+	
+	//bans
+	var banArray = getBans(json["teams"]);
+
+	//fill player stats
+	pArray = getStats(pArray, json["participants"]);
+
+	display(pArray);
+	displayGeneral(banArray, tArray);
 }
 
 function testParse() {
