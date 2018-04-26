@@ -156,7 +156,7 @@ module.exports = function(app)
             fs.unlink(tempPath, function()
             {
                 if(err) throw err;
-                console.error("only .rolf files are allowed");
+                console.error("only .rofl files are allowed");
             });
         }
 
