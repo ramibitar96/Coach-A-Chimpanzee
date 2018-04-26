@@ -9,7 +9,6 @@ function testParse() {
 
 
 	var json = JSON.parse(example);
-	alert(json["gameId"]);
 
 	//participant data
 	var pArray = getParticipants(json["participantIdentities"]);
@@ -23,14 +22,8 @@ function testParse() {
 	//fill player stats
 	pArray = getStats(pArray, json["participants"]);
 
-	/*
-	alert(pArray[1].summonerName);
-	alert(tArray[1].win);
-	alert(banArray[1]);
-	alert(pArray[1].damageDealt.trueDamageDealt);
-	*/
-
 	display(pArray);
+	displayGeneral(banArray, tArray);
 }
 
 function getParticipants(json) {
@@ -168,7 +161,7 @@ function getStats(array, json) {
 		player.damageDealt = dmgDealt;
 
 		var dmgTaken = player.damageTaken;
-		dmgTaken.magicDamageTaken = stats["magicDamageTaken"];
+		dmgTaken.magicDamageTaken = stats["magicalDamageTaken"];
 		dmgTaken.physicalDamageTaken = stats["physicalDamageTaken"];
 		dmgTaken.trueDamageTaken = stats["trueDamageTaken"];
 		player.damageTaken = dmgTaken;
@@ -193,15 +186,237 @@ function getStats(array, json) {
 	return array;
 }
 
-function display(array) {
+function displayGeneral(banArray, tArray) {
+	//ban info
+	var ban_info = document.getElementById("ban-info");
 
+	var ban_img = node("div", "ban-img");
+	for (var i = 0; i < banArray.length; i++) {
+		var img = node("img", "");
+		img.src = "../img/minimap-icon.png";	
+
+		ban_img.appendChild(img);
+	}
+	ban_info.appendChild(ban_img);
+
+	//team info
+	var blueTable = document.getElementById("blueTeam");
+	var blueArray = tArray[1];
+
+	blueTable.appendChild(createEntry(blueArray.win, "11%"));
+	blueTable.appendChild(createEntry(blueArray.baronKills, "23%"));
+	blueTable.appendChild(createEntry(blueArray.dragonKills, "23%"));
+	blueTable.appendChild(createEntry(blueArray.riftHeraldKills, "23%"));
+	
+	var redTable = document.getElementById("redTeam");
+	var redArray = tArray[2];
+
+	redTable.appendChild(createEntry(redArray.win, "11%"));
+	redTable.appendChild(createEntry(redArray.baronKills, "23%"));
+	redTable.appendChild(createEntry(redArray.dragonKills, "23%"));
+	redTable.appendChild(createEntry(redArray.riftHeraldKills, "23%"));
 }
 
+function createEntry(text, w) {
+	var t = document.createTextNode(text);
+	var td = document.createElement("td");
+	td.width = w;
+	td.appendChild(t);
+	return td;
+}
 
+function display(array) {
+	for (var i = 1; i <= 10; i++) {
+		var player = array[i];
+		var pid = "champion" + player.participantId;
+		var d = document.getElementById(pid);
 
+		//get basic info
+		var basic = createBasicInfo(player);
+		d.appendChild(basic);
 
+		var items = createItemInfo(player.items);
+		d.appendChild(items);
 
+		var charts = createCharts(i);
+		d.appendChild(charts);
+		createDamageTakenChart(player.damageTaken, i);
+		createDamageDealtChart(player.damageDealt, i);
 
+		var wards = createWardInfo(player.wards);
+		var timeline = createTimelineInfo(player.timeline);
+		var other = node("div", "other-info");
+		other.appendChild(wards);
+		other.appendChild(timeline);
+		d.appendChild(other);
+		
+	}
+}
+
+function createTimelineInfo(timeline) {
+	//main div
+	var div = node("div", "timeline-info right");
+
+	var title = node("div", "timeline-title");
+	title = appendText(title, "Laning Stats (Average)");
+	div.appendChild(title);
+
+	//gold delta
+	var gold = node("div", "gold-delta");
+	
+	var gold0 = node("div", "0-10");
+	gold0 = appendText(gold0, "0-10 min: " + timeline.goldDifference.first);
+	gold.appendChild(gold0);
+	
+	var gold1 = node("div", "10-20");
+	gold1 = appendText(gold1, "10-20 min: " + timeline.goldDifference.second);
+	gold.appendChild(gold1);
+
+	div.appendChild(gold);
+	
+	//cs delta
+	var cs = node("div", "cs-delta");
+	
+	var cs0 = node("div", "0-10");
+	cs0 = appendText(cs0, "0-10 min: " + timeline.csDifference.first);
+	cs.appendChild(cs0);
+	
+	var cs1 = node("div", "10-20");
+	cs1 = appendText(cs1, "10-20 min: " + timeline.csDifference.second);
+	cs.appendChild(cs1);
+
+	div.appendChild(cs);
+
+	return div;
+}
+
+function createWardInfo(wards) {
+	//main div
+	var div = node("div", "ward-info left");
+
+	var title = node("div", "ward-title");
+	title = appendText(title, "Warding");
+	div.appendChild(title);
+	
+	var placed = node("div", "wards-placed");
+	placed = appendText(placed, "Wards Placed: " + wards.wardsPlaced);
+	div.appendChild(placed);
+
+	var bought = node("div", "wards-bought");
+	bought = appendText(bought, "Wards Bought: " + wards.wardsBought);
+	div.appendChild(bought);
+
+	var score = node("div", "vision-score");
+	score = appendText(score, "Vision Score: " + wards.visionScore);
+	div.appendChild(score);
+
+	return div;
+}
+
+function createCharts(i) {
+	//main div
+	var chart_div = node("div", "dmg-info");
+	var dmg_taken = node("canvas", "");
+	var dmg_given = node("canvas", "");
+	dmg_taken.id = "dmgTaken" + i;
+	dmg_given.id = "dmgDealt" + i;
+
+	var chart_cont = node("div", "chart-container left");
+	var chart_cont2 = node("div", "chart-container right");
+	chart_cont.appendChild(dmg_taken);
+	chart_cont2.appendChild(dmg_given);
+	chart_div.appendChild(chart_cont);
+	chart_div.appendChild(chart_cont2);
+
+	return chart_div;
+}
+
+function createBasicInfo(player) {
+	var kda = player.kills + "/" + player.deaths + "/" + player.assists;
+
+	//main div
+	var basic_div = node("div", "basic-info");	
+
+	//children div
+	var kda_div = node("div", "kda");	
+	var cs_div = node("div", "cs");	
+	var gold_div = node("div", "gold");	
+	var lane_div = node("div", "lane");
+
+	//add text nodes to divs	
+	kda_div = appendText(kda_div, kda);
+	cs_div = appendText(cs_div, player.cs);
+	gold_div = appendText(gold_div, player.gold);	
+	lane_div = appendText(lane_div, player.lane);
+
+	basic_div.appendChild(kda_div);
+	basic_div.appendChild(cs_div);
+	basic_div.appendChild(gold_div);
+	basic_div.appendChild(lane_div);
+
+	return basic_div;
+}
+
+function createItemInfo(items) {
+	var link = "http://ddragon.leagueoflegends.com/cdn/8.8.2/img/item/";
+
+	//main div
+	var item_info = node("div", "item-info");
+
+	jQuery.each(items, function() {
+		var item_div = node("div", "item-img");	
+		var img_div = node("img", "");
+		img_div.src = link + this + ".png";
+		item_div.appendChild(img_div);
+		item_info.appendChild(item_div);
+	});
+
+	return item_info;
+}
+
+function appendText(div, text) {
+	var p = node("p", "");
+	p.appendChild(document.createTextNode(text));
+
+	div.appendChild(p);
+	return div;
+}
+
+function node(n, c) {
+	var node = document.createElement(n);
+	node.className = c;
+	return node;
+}
+
+function createDamageTakenChart(dmg, i) {
+	var ctx = document.getElementById("dmgTaken" + i).getContext("2d");
+	var chart = new Chart(ctx, {
+		type: 'horizontalBar',
+		data: {
+			labels: ["Magic", "Physical", "True"],
+			datasets: [{
+					label: "Damage Taken",
+					data: [ dmg.magicDamageTaken, dmg.physicalDamageTaken, dmg.trueDamageTaken ],
+					backgroundColor: [ "blue", "red", "black" ]
+			}]
+		}
+	});
+}
+
+function createDamageDealtChart(dmg, i) {
+	var ctx = document.getElementById("dmgDealt" + i).getContext("2d");
+	var chart = new Chart(ctx, {
+		type: 'horizontalBar',
+		data: {
+			labels: ["Magic", "Physical", "True"],
+			datasets: [{
+					label: "Damage Dealt",
+					data: [ dmg.magicDamageDealt, dmg.physicalDamageDealt, dmg.trueDamageDealt ],
+					backgroundColor: [ "blue", "red", "black" ]
+			}]
+		}
+	});
+}
 
 
 
