@@ -22,26 +22,27 @@
 					<div class="cr-topbar-content large-10 large-push-1">
 						<!-- options (stats, skills, items, map) -->
 						<ul class="cr-topbar-left tabs" data-tab>
-							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a href="#champion1"></a></li>
-							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a href="#champion2"></a></li>
-							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a href="#champion3"></a></li>
-							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a href="#champion4"></a></li>
-							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a href="#champion5"></a></li>
-							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a href="#champion6"></a></li>
-							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a href="#champion7"></a></li>
-							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a href="#champion8"></a></li>
-							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a href="#champion9"></a></li>
-							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a href="#champion10"></a></li>
+							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a class="blue" href="#champion1"></a></li>
+							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a class="blue" href="#champion2"></a></li>
+							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a class="blue" href="#champion3"></a></li>
+							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a class="blue" href="#champion4"></a></li>
+							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a class="blue" href="#champion5"></a></li>
+							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a class="red" href="#champion6"></a></li>
+							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a class="red" href="#champion7"></a></li>
+							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a class="red" href="#champion8"></a></li>
+							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a class="red" href="#champion9"></a></li>
+							<li class="tab-title cr-topbar-btn cr-topbar-champion"><a class="red" href="#champion10"></a></li>
+							<li class="tab-title cr-topbar-btn cr-topbar-general"><a href="#general"></a></li>
 							<li class="tab-title cr-topbar-btn cr-topbar-whiteboard active"><a href="#whiteboard"></a></li>
 						</ul>
 
 						<!-- disconnect and public switch -->
 						<div class="cr-topbar-right">
-							<div class="privacy red"> 
-								<a href="#" onclick="askToggle()">Private</a>
-							</div>
 							<div>
 								<a class="button" href="#" onclick="openModal()">End Chat</a>
+							</div>
+							<div class="privacy red"> 
+								<a href="#" onclick="askToggle()">Private</a>
 							</div>
 						</div>
 					</div>
@@ -51,9 +52,6 @@
 					<div class="large-only large-1 cr-filler"></div>
 					<!-- dynamic area TABS -->
 					<div class="cr-dynamic tabs-content">
-						<div class="content active cr-dynamic-whiteboard" id="whiteboard">
-							<canvas class="whiteboard"></canvas>	
-						</div>
 						<div class="content cr-dynamic-champion" id="champion1"></div>
 						<div class="content cr-dynamic-champion" id="champion2"></div>
 						<div class="content cr-dynamic-champion" id="champion3"></div>
@@ -64,6 +62,37 @@
 						<div class="content cr-dynamic-champion" id="champion8"></div>
 						<div class="content cr-dynamic-champion" id="champion9"></div>
 						<div class="content cr-dynamic-champion" id="champion10"></div>
+						<div class="content cr-dynamic-general" id="general">
+							<div class="ban-info" id="ban-info">
+								<h4>Bans</h4>
+							</div>
+							<div class="team-info">
+								<h4>Teams</h4>
+								<table>
+									<thead>
+										<tr>
+											<th width="20%">Team</th>
+											<th width="11%">Win</th>
+											<th width="23%">Baron Kills</th>
+											<th width="23%">Dragon Kills</th>
+											<th width="23%">Rift Herald Kills</th>
+										</tr>
+									</thead>
+									<tbody id="team-body">
+										<tr id="blueTeam">
+											<td>Blue</td>
+										</tr>
+										<tr id="redTeam">
+											<td>Red</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						
+						</div>
+						<div class="content active cr-dynamic-whiteboard" id="whiteboard">
+							<canvas class="whiteboard"></canvas>	
+						</div>
 					</div>
 
 					<!-- chat area -->
@@ -178,6 +207,8 @@
 	<script src="js/custom/chat.js"></script>
 	<script src="js/custom/spectate.js"></script>
 	<script src="js/custom/parseGameData.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
 	<script>
 		$(document).foundation();
 	</script> 

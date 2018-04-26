@@ -29,20 +29,30 @@
       display: inline-block;
       height: 65px;
       width: 65px;
-      margin-top: 5px;
-      border: 1px solid white; }
+      margin-top: 5px; }
       .chatroom .cr-topbar .cr-topbar-content .cr-topbar-left .cr-topbar-btn > a {
         display: block;
         height: 63px;
         padding: 1px; }
+        .chatroom .cr-topbar .cr-topbar-content .cr-topbar-left .cr-topbar-btn > a.blue {
+          border: 1px solid blue; }
+        .chatroom .cr-topbar .cr-topbar-content .cr-topbar-left .cr-topbar-btn > a.red {
+          border: 1px solid red; }
         .chatroom .cr-topbar .cr-topbar-content .cr-topbar-left .cr-topbar-btn > a:focus {
           outline: none; }
   .chatroom .cr-topbar .cr-topbar-content .cr-topbar-right {
     float: right;
-    height: 75px;
-    border: 1px solid white; }
+    height: 75px; }
+    .chatroom .cr-topbar .cr-topbar-content .cr-topbar-right .button {
+      line-height: 33px;
+      padding-left: 10px;
+      padding-right: 10px;
+      padding-top: 0;
+      padding-bottom: 0;
+      width: 100px;
+      border-bottom: 1px solid black;
+      border-top: 5px solid black; }
     .chatroom .cr-topbar .cr-topbar-content .cr-topbar-right > div {
-      display: inline-block;
       margin: 0;
       padding: 0; }
       .chatroom .cr-topbar .cr-topbar-content .cr-topbar-right > div > a {
@@ -54,7 +64,10 @@
       .chatroom .cr-topbar .cr-topbar-content .cr-topbar-right > div.privacy.green {
         background-color: green; }
       .chatroom .cr-topbar .cr-topbar-content .cr-topbar-right > div.privacy a {
-        line-height: 50px;
+        border-top: 1px solid black;
+        border-bottom: 5px solid black;
+        width: 100px;
+        line-height: 30px;
         padding-left: 20px;
         padding-right: 20px;
         color: white;
@@ -72,10 +85,60 @@
     display: inline-block;
     margin-right: 1px; }
     .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion,
-    .chatroom .cr-bottom .cr-dynamic .cr-dynamic-whiteboard {
+    .chatroom .cr-bottom .cr-dynamic .cr-dynamic-whiteboard,
+    .chatroom .cr-bottom .cr-dynamic .cr-dynamic-general {
       height: 100%; }
+    .chatroom .cr-bottom .cr-dynamic .cr-dynamic-general {
+      background-color: blue; }
+      .chatroom .cr-bottom .cr-dynamic .cr-dynamic-general .ban-info {
+        margin-left: 10px;
+        margin-right: 10px; }
+        .chatroom .cr-bottom .cr-dynamic .cr-dynamic-general .ban-info .ban-img img {
+          display: inline-block;
+          height: 40px;
+          margin-right: 5px; }
+      .chatroom .cr-bottom .cr-dynamic .cr-dynamic-general .team-info {
+        margin-left: 10px;
+        margin-right: 10px; }
     .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion {
+      position: relative;
       background-color: pink; }
+      .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion .item-info,
+      .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion .basic-info,
+      .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion .dmg-info,
+      .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion .other-info {
+        margin-left: 10px;
+        margin-right: 10px; }
+      .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion .dmg-info .chart-container {
+        display: inline-block;
+        width: 48%; }
+      .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion .item-info .item-img {
+        display: inline-block;
+        padding-right: 5px; }
+        .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion .item-info .item-img img {
+          width: 40px;
+          height: 40px; }
+      .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion .other-info > div {
+        display: inline-block;
+        width: 50%; }
+      .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion .basic-info > div {
+        background-size: 45px;
+        background-repeat: no-repeat;
+        display: inline-block;
+        padding-left: 30px;
+        margin-right: 30px; }
+        .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion .basic-info > div.kda {
+          background-image: url(../img/score-icon.png); }
+        .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion .basic-info > div.cs {
+          background-image: url(../img/cs-icon.png); }
+        .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion .basic-info > div.gold {
+          background-image: url(../img/gold-icon.png); }
+        .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion .basic-info > div.lane {
+          padding-left: 0;
+          font-weight: 800; }
+        .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion .basic-info > div p {
+          font-size: 30px;
+          line-height: 30px; }
     .chatroom .cr-bottom .cr-dynamic .cr-dynamic-whiteboard {
       background-image: url("../img/minimap.jpg");
       background-size: contain;
@@ -84,7 +147,6 @@
         position: absolute;
         height: 100%;
         width: 100%;
-        border: 1px solid white;
         top: 0;
         bottom: 0;
         left: 0;
