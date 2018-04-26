@@ -39,12 +39,18 @@ if (type == 2) {
 
 socket.on('message_received', function(msg)
 {
+	//TODO
 	document.getElementById('alert').play();
-	var msg = msg.sender + ": " + msg.contents + "\n";
-	// Put it in the chatbox
+
+	var line = msg.contents;
+	var parse = parseEmotes(line, true);
+	var response = msg.sender + ": " + parse + "\n";
+
 	let chatArea = document.getElementById("chatArea");
-	chatArea.textContent += msg;
-	log += msg;
+	if (response != "") {
+		chatArea.textContent += response;
+	}
+	log += msg.sender + ": " + msg.contents + "\n";
 });
 
 socket.on('match_found', function(msg)
@@ -120,7 +126,17 @@ socket.on('rejoin_chat', function(msg)
 {
 	// Fill chat box with previously sent messages
 	let chatArea = document.getElementById("chatArea");
-	chatArea.textContent = msg.log;
+	var parse = msg.log;
+	parse = parse.split("\n");
+	for (var i = 0; i < parse.length; i++) {
+		var contents = parse[i].substring(parse[i].indexOf(":")+1);
+		var line = parseEmotes(contents, false);	
+		if (line == "") {
+			continue;
+		}
+		var message = parse[i].substring(0, parse[i].indexOf(":")) + ":" + line + "\n";
+		chatArea.textContent += message;
+	}
 	for (var i = 0; i < msg.drawLog.length; i++) {
 		onDrawingEvent(msg.drawLog[i]);
 	}
@@ -205,14 +221,49 @@ function sendMessage()
 		return;
 	}
 
-if (writeReview) {
-	socket.send(msg);
-}
-inputText.value = "";
+	if (writeReview) {
+		socket.send(msg);
+	}
+	inputText.value = "";
 
-// Make it appear in the chat area
-chatArea.textContent += "Me: " + msg + "\n";
-log += "Me: " + msg + "\n";
+	//TODO
+	var original = "Me: " + msg + "\n";
+	var parse = parseEmotes(msg, true);
+	
+	if (parse != "") {
+		chatArea.textContent += "Me: " + parse + "\n";
+	}
+	log += original;
+}
+
+function parseEmotes(line, show) {
+	var response = line;
+	var myRegexp = /:([^ ]+):/g;
+	match = myRegexp.exec(line);
+	while (match != null) {
+		//display emote
+		if (show) {
+			displayEmote(match[0].substring(1, match[0].length-1));
+		}
+		response = response.replace(match[0], "");
+		match = myRegexp.exec(line);
+	}
+	response = response.replace(/  +/g, ' ');
+	if (response == " ") {
+		response = "";
+	}
+	return response;
+}
+
+function displayEmote(champion) {
+	var emote = document.getElementById("emote");
+	emote.style.backgroundImage = "url('../img/championName/" + champion.toLowerCase() + ".png')";
+	
+	emote.className = "fadeIn";
+	setTimeout(
+		function() {
+			emote.className = "fadeOut";
+	}, 5000);
 }
 
 function openModal() {
@@ -267,9 +318,9 @@ function submitReview() {
 				}
 			}
 	});
-}
+	}
 
-/* https://socket.io/demos/whiteboard/ */
+	/* https://socket.io/demos/whiteboard/ */
 
 function drawLine(x0, y0, x1, y1, color, emit){
 	if (type == 2 && !isAMARoom) { //cannot draw as guest
@@ -343,146 +394,146 @@ function throttle(callback, delay) {
 			callback.apply(null, arguments);
 		}
 	};
-}
-
-function onDrawingEvent(data){
-	//whiteboard is a square, ignore topbar
-	var h = canvas.height - 75;
-	var w = h;
-
-	//multiply by canvas height and then adjust for the topbar
-	var y0 = (data.y0 * h) + 75;
-	var y1 = (data.y1 * h) + 75;
-
-	//multiply by canvas width
-	var x0 = (data.x0 * w);
-	var x1 = (data.x1 * w);
-
-	//if map is not on edge of screen
-	var filler = $(".cr-filler").width();
-	if (filler != 0) {
-		x0 = x0 + filler;
-		x1 = x1 + filler;
 	}
 
-	drawLine(x0, y0, x1, y1, data.color, false);
-}
+	function onDrawingEvent(data){
+		//whiteboard is a square, ignore topbar
+		var h = canvas.height - 75;
+		var w = h;
 
-// make the canvas fill its parent
-function onResize() {
-	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
-}
+		//multiply by canvas height and then adjust for the topbar
+		var y0 = (data.y0 * h) + 75;
+		var y1 = (data.y1 * h) + 75;
 
-function toColor(color, text) {
-	//switch color to red
-	$(".privacy").removeClass("green");
-	$(".privacy").removeClass("yellow");
-	$(".privacy").removeClass("red");
-	$(".privacy").addClass(color);
+		//multiply by canvas width
+		var x0 = (data.x0 * w);
+		var x1 = (data.x1 * w);
 
-	//change text
-	$(".privacy").children().text(text)
-}
+		//if map is not on edge of screen
+		var filler = $(".cr-filler").width();
+		if (filler != 0) {
+			x0 = x0 + filler;
+			x1 = x1 + filler;
+		}
 
-function askToggle() {
-	if (public_room) {
-		socket.emit("toggle_privacy", true);
-		toColor("red", "Private");
-
-		public_room = false;
-	}
-	else {
-		toColor("yellow", "Waiting...");
-		socket.emit("ask_to_toggle", "");
-	}
-}
-
-//respond to privacy question
-socket.on('ask_to_toggle', function(msg)
-{
-	$('#askToToggle').foundation('reveal', 'open');
-});
-
-function respondToggle(bool) {
-	$('#askToToggle').foundation('reveal', 'close');
-
-	if (bool) { //if true, turn room to public
-		toColor("green", "Public: " + roomid);
-		public_room = true;
-
-		socket.emit("toggle_privacy", true);
-	} 
-	else { //emit false
-		socket.emit("toggle_privacy", false);
-		public_room = false;
-	}
-}
-
-socket.on('toggle_privacy', function(msg) {
-	if (msg) { //swap
-		public_room = !public_room
+		drawLine(x0, y0, x1, y1, data.color, false);
 	}
 
-	if (public_room) { //if public
-		toColor("green", "Public: " + roomid);
-	}
-	else {
-		toColor("red", "Private");
-	}
-});
-
-function gameOver() {
-	if (debug) {
-		socket.emit("match_over","");	
-		$('#inGameCheck').foundation('reveal', 'close');	
-		return;
+	// make the canvas fill its parent
+	function onResize() {
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
 	}
 
-	$.ajax({
-		type: "GET",
-		url: "http://localhost:3000/isInGame",
-		success: function(data) {
-			//if false, close modal and emit match_over
-			if (!data["inGame"]) {
-				socket.emit("match_over","");	
-				$('#inGameCheck').foundation('reveal', 'close');
+	function toColor(color, text) {
+		//switch color to red
+		$(".privacy").removeClass("green");
+		$(".privacy").removeClass("yellow");
+		$(".privacy").removeClass("red");
+		$(".privacy").addClass(color);
+
+		//change text
+		$(".privacy").children().text(text)
+	}
+
+	function askToggle() {
+		if (public_room) {
+			socket.emit("toggle_privacy", true);
+			toColor("red", "Private");
+
+			public_room = false;
+		}
+		else {
+			toColor("yellow", "Waiting...");
+			socket.emit("ask_to_toggle", "");
+		}
+		}
+
+		//respond to privacy question
+		socket.on('ask_to_toggle', function(msg)
+		{
+			$('#askToToggle').foundation('reveal', 'open');
+		});
+
+		function respondToggle(bool) {
+			$('#askToToggle').foundation('reveal', 'close');
+
+			if (bool) { //if true, turn room to public
+				toColor("green", "Public: " + roomid);
+				public_room = true;
+
+				socket.emit("toggle_privacy", true);
+			} 
+			else { //emit false
+				socket.emit("toggle_privacy", false);
+				public_room = false;
 			}
-			else {
-				alert("You are still in a game!");
 			}
-		}
-	});
-}
 
-socket.on('match_over', function(msg) {
-	$.ajax({
-		type: "GET",
-		url: "http://localhost:3000/get_match?gameid=" + gameId,
-		success: function(data) {
-			var json = JSON.stringify(data);
-			socket.emit("game_data", json);
-			parseGame(json);
-			$('#spectateStudent').foundation('reveal', 'close');
-		}
-	});
-});
+			socket.on('toggle_privacy', function(msg) {
+				if (msg) { //swap
+					public_room = !public_room
+				}
 
-socket.on("game_data", function(msg) {
-	parseGame(msg);
-});
+				if (public_room) { //if public
+					toColor("green", "Public: " + roomid);
+				}
+				else {
+					toColor("red", "Private");
+				}
+			});
 
-function getCookie(cname) {
-	var name = cname + "=";
-	var ca = document.cookie.split(';');
-	for(var i = 0; i < ca.length; i++) {
-		var c = ca[i];
-		while (c.charAt(0) == ' ') {
-			c = c.substring(1);
-		}
-		if (c.indexOf(name) == 0) {
-			return c.substring(name.length, c.length);
-		}
-	}
-	return "";
-}
+			function gameOver() {
+				if (debug) {
+					socket.emit("match_over","");	
+					$('#inGameCheck').foundation('reveal', 'close');	
+					return;
+				}
+
+				$.ajax({
+						type: "GET",
+						url: "http://localhost:3000/isInGame",
+						success: function(data) {
+							//if false, close modal and emit match_over
+							if (!data["inGame"]) {
+								socket.emit("match_over","");	
+								$('#inGameCheck').foundation('reveal', 'close');
+							}
+							else {
+								alert("You are still in a game!");
+							}
+						}
+				});
+				}
+
+				socket.on('match_over', function(msg) {
+					$.ajax({
+							type: "GET",
+							url: "http://localhost:3000/get_match?gameid=" + gameId,
+							success: function(data) {
+								var json = JSON.stringify(data);
+								socket.emit("game_data", json);
+								parseGame(json);
+								$('#spectateStudent').foundation('reveal', 'close');
+							}
+					});
+				});
+
+				socket.on("game_data", function(msg) {
+					parseGame(msg);
+				});
+
+				function getCookie(cname) {
+					var name = cname + "=";
+					var ca = document.cookie.split(';');
+					for(var i = 0; i < ca.length; i++) {
+						var c = ca[i];
+						while (c.charAt(0) == ' ') {
+							c = c.substring(1);
+						}
+						if (c.indexOf(name) == 0) {
+							return c.substring(name.length, c.length);
+						}
+					}
+					return "";
+				}
