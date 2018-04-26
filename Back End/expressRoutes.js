@@ -338,6 +338,13 @@ module.exports = function(app)
         res.send(match_data);
     });
 
+    app.get('get_match', async function(req, res)
+    {
+        // Just punt it off to Riot's API
+        let results = await riotUtils.get_match(req.query.gameid);
+        res.send(results);
+    });
+
     // Returns a webpage displaying the username of the currently-logged-in user.
     app.get('/whats_my_username', async function(req, res)
     {
