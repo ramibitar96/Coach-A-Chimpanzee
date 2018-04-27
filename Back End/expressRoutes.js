@@ -123,7 +123,18 @@ module.exports = function(app)
 		let results = await dbUtils.getPfp(authResults.username);
 		res.send(results);
 	});
-
+  app.get('/get_replays',async function(req,res) 
+	{
+		let token = req.cookies.session_token;
+		let authResults = await auth.checkToken(token);
+		if(authResults.error_code != 0)
+		{
+			res.send({error_code: authResults.error_code});
+		}
+		//get all replays
+		let results = await dbUtils.getReplays(authResults.username);
+		res.send(results);
+	});
 	app.post('/set_pfp', async function(req, res)
     {
         let token = req.cookies.session_token;
@@ -157,7 +168,6 @@ module.exports = function(app)
 
 	app.post('/add_replay', async function(req, res)
     {
-			  console.log("lmaozedong");
         let token = req.cookies.session_token;
         let authResults = await auth.checkToken(token);
 
@@ -168,30 +178,20 @@ module.exports = function(app)
             return;
         }
         //upload to server
-        var tempPath = req.files.file.path;
-        var targetPath = path.resolve('./replays/001.rofl');
-			  var fname = req.files.file.name.toLowerCase();
-				console.log(fname);
-				if(fname == '.rofl' || fname == '.pdf') 
-        {
-						console.log("hi")
-            fs.rename(tempPath, targetPath, function(err) 
-            {
-                if (err) throw err;
-                console.log("upload completed");
-            });
-        } 
-        else
-        {
-            fs.unlink(tempPath, function()
-            {
-                if(err) throw err;
-                console.error("only .rofl files are allowed");
-            });
-        }
-
-        let results = await dbUtils.setProfileImg(authResults.username,req.body);
-        res.send(results);
+			  var form = new formidable.IncomingForm();
+			  //parse the incoming form with the profile picture
+				form.parse(req, function(err, fields, files) {
+					var op = files.replay_file.path;
+					var name = files.replay_file.name;
+					var np = './replays/'+authResults.username + 
+						name.substring(name.lastIndexOf(".")-2);
+					//write the pfp to the server
+					fs.rename(op,np, function(err) {
+						if(err) throw err;
+					});
+					let results = dbUtils.uploadReplayFile(authResults.username,np);
+					res.send(results);
+				});
     });
 
 	// Sets the user preferences of the currently logged-in user.
