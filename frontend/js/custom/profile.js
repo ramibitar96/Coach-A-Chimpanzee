@@ -7,9 +7,9 @@ $.ajax({
 });
 
 function parseIdata(json) {
-	alert(json.stringify);
 	var json_image = json["img"];
-	document["profileImage"].src = json_image;
+	var img = document.getElementById("profileImage");
+	img.src = json_image;
 } 
 
 var u;
