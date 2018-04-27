@@ -29,7 +29,7 @@ class Chatroom {
     }
 }
 
-module.exports = function(io)
+function init(io)
 {
     // Called whenever a client connects to socket.io
     // Associates the socket with the user
@@ -399,4 +399,9 @@ function getPartner(username)
 {
     // TODO: test
     return matchmaking.findPartner(username);
+}
+
+module.exports = 
+{
+    init
 }
