@@ -370,6 +370,75 @@ async function get_previous_partner(username)
 	return previousPartners[username];
 }
 
+/**
+ * Creates an entry in the database for a chat session
+ * chatroom is of type "Chatroom" from socketIOEvents.js
+ */
+async function save_chat_session(chatroom)
+{
+	// Stringify the json data that we can't natively store in the DB
+	let drawLog_str = JSON.stringify(chatroom.drawLog);
+	let gameData_str = JSON.stringify(chatroom.gameData);
+
+	// Put it in the database
+	let query =
+	`
+		INSERT INTO chat_session
+		(
+			user1,
+			user2,
+			creation_time,
+			log,
+			draw_log,
+			game_data
+		)
+		VALUES (?, ?, ?, ?, ?, ?);
+	`;
+
+	db.run
+	(
+		chatroom.user1,
+		chatroom.user2,
+		new Date(),
+		chatroom.log,
+		drawLog_str,
+		gameData_str
+	);
+}
+
+/**
+ * Gets all recent chat sessions, sorted by their date/time.
+ * Returns them as an array of json objects in the following form:
+ * {
+ * 		user1:    <string>
+ * 		user2: 	  <string>
+ * 		log:	  <string>	// The whole chat log all in one giant string LMAO
+ * 		draw_log:  <array of something, idk what>
+ * 		game_data: <probably a JSON object from RIOT's API.>
+ * }
+ */
+async function get_chat_sessions()
+{
+	// Get them from the database
+	let query =
+	`
+		SELECT user1, user2, log, draw_log, game_data
+		FROM chat_session
+		ORDER BY datetime(creation_time) DESC;
+	`;
+	let rows = await dbUtils.all(query);
+
+	// Go through them and parse those two JSON objects
+	for (let i = 0; i < rows.length; i++)
+	{
+		rows[i].draw_log = JSON.parse(rows[i].draw_log);
+		rows[i].game_data = JSON.parse(rows[i].game_data);
+	}
+
+	// Return that shit
+	return rows;
+}
+
 // Executes the SQL script specified by filePath.
 // Returns a Promise<sqlite.Statement> when it's done.
 // filePath's type is string.  db's type is sqlite.Database
@@ -393,5 +462,7 @@ module.exports =
 	getUID,
 	set_previous_partners,
 	get_previous_partner,
+	save_chat_session,
+	get_chat_sessions,
     db
 }

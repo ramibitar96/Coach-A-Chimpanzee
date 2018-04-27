@@ -284,7 +284,7 @@ module.exports = function(app)
 
         // Ask Riot if they're in a game
         let username = authResults.username;
-        let match_data = await riotUtils.get_match_data(username);
+        let match_data = await riotUtils.get_spectate_data(username);
 
         let inGame = match_data !== null;
         res.send({inGame: inGame});
@@ -343,6 +343,18 @@ module.exports = function(app)
         // Just punt it off to Riot's API
         let results = await riotUtils.get_match(req.query.gameid);
         res.send(results);
+    });
+
+    app.get('/get_history', async function(req, res)
+    {
+        try
+        {
+            res.send(await dbUtils.get_chat_sessions());
+        }
+        catch (e)
+        {
+            res.send(null);
+        }
     });
 
     // Returns a webpage displaying the username of the currently-logged-in user.

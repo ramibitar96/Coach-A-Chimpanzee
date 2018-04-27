@@ -30,6 +30,16 @@ CREATE TABLE IF NOT EXISTS coach_reviews
 	FOREIGN KEY(coach_user_id) REFERENCES user(user_id)
 );
 
+CREATE TABLE IF NOT EXISTS chat_session
+(
+	user1 varchar,
+	user2 varchar,
+	creation_time datetime,
+	log varchar,
+	draw_log varchar,	-- A JSON array converted to a string
+	game_data varchar	-- A JSON object converted to a string
+);
+
 -- Every so often, this table will need to be updated using the above table.
 CREATE TABLE IF NOT EXISTS cached_rating_total
 (

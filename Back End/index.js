@@ -14,7 +14,7 @@ var io = socketIO(server);                      // Tell socket.io that we want i
 expressRoutes(app);                         // Configure all the URL handlers in the express.js app
 app.use(express.static("../frontend"));		// Tell expressjs that we want to serve all static files(.html, images, etc) from this folder.
 
-socketIOEvents(io);                         // Configure all the event handlers for socket.io
+socketIOEvents.init(io);                    // Configure all the event handlers for socket.io
 
 // Start the server
 startServer();
