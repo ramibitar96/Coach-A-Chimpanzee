@@ -376,10 +376,6 @@ async function get_previous_partner(username)
  */
 async function save_chat_session(chatroom)
 {
-	// Get user ids
-	let uid_1 = await getUID(chatroom.user1);
-	let uid_2 = await getUID(chatroom.user2);
-
 	// Stringify the json data that we can't natively store in the DB
 	let drawLog_str = JSON.stringify(chatroom.drawLog);
 	let gameData_str = JSON.stringify(chatroom.gameData);
@@ -389,8 +385,8 @@ async function save_chat_session(chatroom)
 	`
 		INSERT INTO chat_session
 		(
-			user1_id,
-			user2_id,
+			user1,
+			user2,
 			creation_time,
 			log,
 			draw_log,
@@ -401,8 +397,8 @@ async function save_chat_session(chatroom)
 
 	db.run
 	(
-		uid_1,
-		uid_2,
+		chatroom.user1,
+		chatroom.user2,
 		new Date(),
 		chatroom.log,
 		drawLog_str,
@@ -422,7 +418,6 @@ async function save_chat_session(chatroom)
  */
 async function get_recent_chat_sessions()
 {
-	
 }
 
 // Executes the SQL script specified by filePath.
