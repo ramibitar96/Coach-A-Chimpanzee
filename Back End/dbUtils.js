@@ -109,18 +109,16 @@ async function getUserPrefs(username)
 	return output;
 }
 //allows user to set profile image
-async function setProfileImg(username,data)
+async function setProfileImg(username,url)
 {
 	//get user id
 	let uidQuery = `Select rowid FROM user WHERE user_name=?;`;
 	let uidResults = await db.run(uidQuery,username);
 	let uid = uidResults.rowid;
-	
+	console.log(username);
 	//update the user's profile picture
-	let imgLink = data.imgURL;
-	var n = imgLink.lastIndexOf(".");
-	let imgLocalUrl = uid + imgLink.substring(n);
-	let updateQuery = "UPDATE user SET profile_img = ? WHERE user_id = ?";
+	let imgLocalUrl = url; 
+	let updateQuery = "UPDATE user SET profile_img = ? WHERE user_name = ?";
 	let updatePromise = db.run
 		(
 		 updateQuery,
@@ -457,6 +455,7 @@ module.exports =
 	initializeDatabase,
 	getUserPrefs,
 	setUserPrefs,
+	setProfileImg,
 	add_review,
 	get_reviews,
 	getUID,
