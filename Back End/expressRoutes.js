@@ -8,7 +8,9 @@ const riotUtils = require('./riotUtils.js');
 const ErrorCodeEnum = require('./errorCodes.js');
 const fs = require('fs');
 const path = require('path');
-
+const formidable = require('formidable'),
+	http = require('http'),
+	util = require('util');
 module.exports = function(app)
 {
 	// Tell expressjs that we want to allow cookies from mutliple origins
@@ -107,25 +109,61 @@ module.exports = function(app)
         // Retrieve the user prefs and send them.
         let results = await dbUtils.getUserPrefs(authResults.username);
         res.send(results);
-    });
-    
+	});
+
+	app.get('/get_pfp', async function(req,res)
+	{
+		let token = req.cookies.session_token;
+		let authResults = await auth.checkToken(token);
+		if(authResults.error_code != 0)
+		{
+			res.send({error_code: authResults.error_code});
+		}
+		//get the pfp and send it back
+		let results = await dbUtils.getProfileImg(authResults.username);
+		res.send(results);
+	});
+  app.get('/get_replays',async function(req,res) 
+	{
+		let token = req.cookies.session_token;
+		let authResults = await auth.checkToken(token);
+		if(authResults.error_code != 0)
+		{
+			res.send({error_code: authResults.error_code});
+		}
+		//get all replays
+		let results = await dbUtils.getReplays(authResults.username);
+		res.send(results);
+	});
 	app.post('/set_pfp', async function(req, res)
     {
         let token = req.cookies.session_token;
         let authResults = await auth.checkToken(token);
 
-    
-        //send error code
+        //send error code	
         if (authResults.error_code != 0)
         {
             res.send({error_code: authResults.error_code});
             return;
         }
+				//create formidable parser
+			  var form = new formidable.IncomingForm();
+			  //parse the incoming form with the profile picture
+				form.parse(req, function(err, fields, files) {
+					var op = files.profile_pic.path;
+					var name = files.profile_pic.name;
+					var np = './imgs/'+authResults.username + 
+						name.substring(name.lastIndexOf("."));
+					//write the pfp to the server
+					fs.rename(op,np, function(err) {
+						if(err) throw err;
+					});
+					console.log(np);
+					let results = dbUtils.setProfileImg(authResults.username,np);
+					res.send(results);
+				});
 
         //uploadImagetoServer
-
-        let results = await dbUtils.setProfileImg(authResults.username,req.body);
-        res.send(results);
     });
 
 	app.post('/add_replay', async function(req, res)
@@ -140,28 +178,37 @@ module.exports = function(app)
             return;
         }
         //upload to server
-        var tempPath = req.files.file.path;
-        var targetPath = path.resolve('./replays/001.rofl');
+			  var form = new formidable.IncomingForm();
+			  //parse the incoming form with the profile picture
+				form.parse(req, function(err, fields, files) {
+					var op = files.replay_file.path;
+					var name = files.replay_file.name;
+					var np = './replays/'+authResults.username + 
+						name.substring(name.lastIndexOf(".")-2);
+					//write the pfp to the server
+					fs.rename(op,np, function(err) {
+						if(err) throw err;
+					});
+					let results = dbUtils.uploadReplayFile(authResults.username,np);
+					res.send(results);
+				});
+    });
 
-        if(path.etxname(req.files.file.name).toLowerCase() === '.rofl')
+    app.post('/delete_replay', async function(req, res)
+    {
+        // Figure out what user it is.
+        let token = req.cookies.session_token;
+        let authResults = await auth.checkToken(token);
+
+        //send error code	
+        if (authResults.error_code != 0)
         {
-            fs.rename(tempPath, targetPath, function(err) 
-            {
-                if (err) throw err;
-                console.log("upload completed");
-            });
-        } 
-        else
-        {
-            fs.unlink(tempPath, function()
-            {
-                if(err) throw err;
-                console.error("only .rolf files are allowed");
-            });
+            res.send({error_code: authResults.error_code});
+            return;
         }
 
-        let results = await dbUtils.setProfileImg(authResults.username,req.body);
-        res.send(results);
+        // Call dbUtils
+        dbUtils.deleteReplays(authResults.username);
     });
 
 	// Sets the user preferences of the currently logged-in user.
@@ -267,7 +314,7 @@ module.exports = function(app)
     });
 
     /**
-     * Replies with { "inGame":true  } if the current user is in game.
+     * Replies with { "inGame":true  } if the current user is in game (or has a replay uploaded)
      * Replies with { "inGame":false } if the current user is invalid or not in game. 
      */
     app.get('/isInGame', async function(req, res)
@@ -281,10 +328,18 @@ module.exports = function(app)
             res.send({inGame: false});
             return;
         }
+        let username = authResults.username;
+
+        // Return true if they have a replay file uploaded
+        let replays = await dbUtils.getReplays(username);
+        if (replays !== null)
+        {
+            res.send({inGame: true});
+            return;
+        }
 
         // Ask Riot if they're in a game
-        let username = authResults.username;
-        let match_data = await riotUtils.get_match_data(username);
+        let match_data = await riotUtils.get_spectate_data(username);
 
         let inGame = match_data !== null;
         res.send({inGame: inGame});
@@ -353,6 +408,7 @@ module.exports = function(app)
         }
         catch (e)
         {
+            console.log(e);
             res.send(null);
         }
     });

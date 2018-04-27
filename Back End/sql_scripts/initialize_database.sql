@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS chat_session
 	creation_time datetime,
 	log varchar,
 	draw_log varchar,	-- A JSON array converted to a string
-	game_data varchar,	-- A JSON object converted to a string
+	game_data varchar	-- A JSON object converted to a string
 );
 
 -- Every so often, this table will need to be updated using the above table.

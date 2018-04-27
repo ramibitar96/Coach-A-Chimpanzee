@@ -108,19 +108,40 @@ async function getUserPrefs(username)
 
 	return output;
 }
+//retrieve pfp
+async function getProfileImg(username)
+{
+  let getQuery = "select profile_img from user where user_name = ?";
+	let getPromise = db.run
+	  (
+			getQuery,
+			username
+		);
+	getImg = await getPromise;
+	img = "./imgs/default.png";
+  if(getImg != undefined) {
+		if(getImg.profile_img != null) {
+			img = profile_img;
+		}
+	}
+	let output = 
+		{
+			error_code: ErrorCodeEnum.SUCCESS,
+			img: img
+		};
+	return output;
+}
 //allows user to set profile image
-async function setProfileImg(username,data)
+async function setProfileImg(username,url)
 {
 	//get user id
 	let uidQuery = `Select rowid FROM user WHERE user_name=?;`;
 	let uidResults = await db.run(uidQuery,username);
 	let uid = uidResults.rowid;
-	
+	console.log(username);
 	//update the user's profile picture
-	let imgLink = data.imgURL;
-	var n = imgLink.lastIndexOf(".");
-	let imgLocalUrl = uid + imgLink.substring(n);
-	let updateQuery = "UPDATE user SET profile_img = ? WHERE user_id = ?";
+	let imgLocalUrl = url; 
+	let updateQuery = "UPDATE user SET profile_img = ? WHERE user_name = ?";
 	let updatePromise = db.run
 		(
 		 updateQuery,
@@ -131,23 +152,22 @@ async function setProfileImg(username,data)
 	return {error_code: ErrorCodeEnum.SUCCESS};
 }
 
-async function uploadReplayFile(username, data)
+async function uploadReplayFile(username, url)
 {
 	//get id
-	let uidQuery = `Select rowid FROM user WHERE user_name=?;`;
-	let uidResults = await db.run(uidQuery,username);
+	let uidQuery = "SELECT rowid FROM user WHERE user_name = ?;";
+	let uidResults = await db.get(uidQuery, username);
 	let uid = uidResults.rowid;
-
+	console.log(uid);
 	//add replay file
-	let replayLink = data.replayLink;
-	var n = replayLink.lastIndexOf(".");
-	let replayLocalUrl = uid + replayLink.substring(n);
+	let replayLink = url;
 	let addQuery = "INSERT INTO replays (" +
 		"replay_owner_id, replay_url)" +
-		"VALUES (?, ?);";
-	let addQueryPromise = db.run(addQuery, uid, replayLocalUrl);
-
+		"VALUES (?,?);";
+	console.log(uid);
+	let addQueryPromise = await db.run(addQuery, uid, replayLink);
 	await addQueryPromise;
+	console.log(addQueryPromise);
 
 	return {error_code: ErrorCodeEnum.SUCCESS};
 }
@@ -353,6 +373,38 @@ async function get_reviews(coach_username)
 	return results;
 }
 
+// get replays for the specified username
+// If there are none, returns null.
+async function getReplays(username) 
+{
+  	let uid = await getUID(username);
+	console.log(uid);
+	getReplaysQuery = "select replay_url from replays where replay_owner_id=?";
+	getResults = await db.all(getReplaysQuery, uid);
+
+	// If there are no replays for this user, return null
+	if (getResults === undefined)
+		return null;
+
+	// Put the results in a different form.
+	results = [];
+	for(let row of getResults)
+	{
+		let resObj = {url:row.replay_url};
+		results.push(resObj);
+	}
+	console.log(results);
+	return results;
+};
+
+// Deletes all replays by the given user
+async function deleteReplays(username)
+{
+	let uid = await getUID(username);
+	let query = "DELETE FROM replays WHERE replay_owner_id = ?;"
+	await db.run(query, uid);
+}
+
 // Records the pervious partners of a newly matched pair
 // TODO: Save this in the database instead of in memory
 let previousPartners = {};
@@ -426,7 +478,7 @@ async function get_chat_sessions()
 		FROM chat_session
 		ORDER BY datetime(creation_time) DESC;
 	`;
-	let rows = await dbUtils.all(query);
+	let rows = await db.all(query);
 
 	// Go through them and parse those two JSON objects
 	for (let i = 0; i < rows.length; i++)
@@ -457,8 +509,13 @@ module.exports =
 	initializeDatabase,
 	getUserPrefs,
 	setUserPrefs,
+	setProfileImg,
+	getProfileImg,
+	uploadReplayFile,
+	deleteReplays,
 	add_review,
 	get_reviews,
+	getReplays,
 	getUID,
 	set_previous_partners,
 	get_previous_partner,

@@ -1,3 +1,17 @@
+$.ajax({
+		type: "GET",
+		url: "http://localhost:3000/get_pfp",
+		success: function(data) {
+			parseIdata(data);
+		}
+});
+
+function parseIdata(json) {
+	alert(json.stringify);
+	var json_image = json["img"];
+	document["profileImage"].src = json_image;
+} 
+
 var u;
 var name = "session_token=";
 var ca = document.cookie.split(';');
