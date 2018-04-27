@@ -130,6 +130,7 @@ module.exports = function(app)
 
 	app.post('/add_replay', async function(req, res)
     {
+			  console.log("lmaozedong");
         let token = req.cookies.session_token;
         let authResults = await auth.checkToken(token);
 
@@ -142,9 +143,11 @@ module.exports = function(app)
         //upload to server
         var tempPath = req.files.file.path;
         var targetPath = path.resolve('./replays/001.rofl');
-
-        if(path.etxname(req.files.file.name).toLowerCase() === '.rofl')
+			  var fname = req.files.file.name.toLowerCase();
+				console.log(fname);
+				if(fname == '.rofl' || fname == '.pdf') 
         {
+						console.log("hi")
             fs.rename(tempPath, targetPath, function(err) 
             {
                 if (err) throw err;
