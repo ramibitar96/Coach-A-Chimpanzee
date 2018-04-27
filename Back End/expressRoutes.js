@@ -8,7 +8,9 @@ const riotUtils = require('./riotUtils.js');
 const ErrorCodeEnum = require('./errorCodes.js');
 const fs = require('fs');
 const path = require('path');
-
+const formidable = require('formidable'),
+	http = require('http'),
+	util = require('util');
 module.exports = function(app)
 {
 	// Tell expressjs that we want to allow cookies from mutliple origins
@@ -114,18 +116,30 @@ module.exports = function(app)
         let token = req.cookies.session_token;
         let authResults = await auth.checkToken(token);
 
-    
-        //send error code
+        //send error code	
         if (authResults.error_code != 0)
         {
             res.send({error_code: authResults.error_code});
             return;
         }
+				//create formidable parser
+			  var form = new formidable.IncomingForm();
+			  //parse the incoming form with the profile picture
+				form.parse(req, function(err, fields, files) {
+					var op = files.profile_pic.path;
+					var name = files.profile_pic.name;
+					var np = './imgs/'+authResults.username + 
+						name.substring(name.lastIndexOf("."));
+					//write the pfp to the server
+					fs.rename(op,np, function(err) {
+						if(err) throw err;
+					});
+					console.log(np);
+					let results = dbUtils.setProfileImg(authResults.username,np);
+					res.send(results);
+				});
 
         //uploadImagetoServer
-
-        let results = await dbUtils.setProfileImg(authResults.username,req.body);
-        res.send(results);
     });
 
 	app.post('/add_replay', async function(req, res)
