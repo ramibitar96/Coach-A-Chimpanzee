@@ -29,7 +29,7 @@ class Chatroom {
     }
 }
 
-module.exports = function(io)
+function init(io)
 {
     // Called whenever a client connects to socket.io
     // Associates the socket with the user
@@ -239,7 +239,7 @@ module.exports = function(io)
             delete socketUsers[partnerSocket];
             matchmaking.removeMatchedPair(username);
 
-            // TODO: Send chat log to database, delete all applicable chatroom dictionary entries
+            // Get the chatroom
             let chatroomNumber = userChatrooms[username];
             var index = publicChatrooms.indexOf(chatroomNumber);
             if (index != -1) {
@@ -250,6 +250,11 @@ module.exports = function(io)
                 amaRooms.splice(index, 1);
             }
 
+            // Send chat log to database
+            let chatroom = chatrooms[chatroomNumber];
+            dbUtils.save_chat_session(chatroom);
+
+            // delete all applicable chatroom dictionary entries
             delete userChatrooms[username];
             if (chatroomUsers[chatroomNumber] != undefined) {
                 delete chatroomUsers[chatroomNumber];
@@ -270,7 +275,7 @@ module.exports = function(io)
             delete userSockets[username];
             delete socketUsers[userSocket];
 
-            // TODO: Send chat log to database, delete all applicable chatroom dictionary entries
+            // Get teh chatroom
             let chatroomNumber = userChatrooms[username];
             var index = amaRooms.indexOf(chatroomNumber);
             console.log("Chatroom number (end): " + chatroomNumber);
@@ -280,6 +285,11 @@ module.exports = function(io)
                 amaRooms.splice(index, 1);
             }
 
+            // Send chat log to database
+            let chatroom = chatrooms[chatroomNumber];
+            dbUtils.save_chat_session(chatroom);
+
+            // delete all applicable chatroom dictionary entries
             delete userChatrooms[username];
             if (chatroomUsers[chatroomNumber] != undefined) {
                 delete chatroomUsers[chatroomNumber];
@@ -399,4 +409,9 @@ function getPartner(username)
 {
     // TODO: test
     return matchmaking.findPartner(username);
+}
+
+module.exports = 
+{
+    init
 }
