@@ -424,7 +424,7 @@ async function get_chat_sessions()
 		FROM chat_session
 		ORDER BY datetime(creation_time) DESC;
 	`;
-	let rows = await dbUtils.all(query);
+	let rows = await db.all(query);
 
 	// Go through them and parse those two JSON objects
 	for (let i = 0; i < rows.length; i++)
