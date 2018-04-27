@@ -56,32 +56,17 @@
 										<form id="savePreferences">
 											<div id="General" class="tabcontent large-12 medium-12 large-centered medium-centered columns">
 												<h3>Edit your general information</h3>
-												<div class="container">
-													<!--
-													<label><b>Summoner Name:</b></label>
-													<input id="SummonerName" type="text" placeholder="Summoner Name" name="SummName">
 
-													<label><b>Your Current Elo:</b></label>
-													<select name="rank" id="rank">
-														<option value="0"> Bronze</option>
-														<option value="1"> Silver</option>
-														<option value="2"> Gold</option>
-														<option value="3"> Platinum</option>
-														<option value="4"> Diamond</option>
-														<option value="5"> Master</option>
-														<option value="6"> Challenger</option>
-													</select>
-													-->
-													<label><b>Twitch TV Stream</b></label>
-													<input id="twitch" type="text" placeholder="http://www.twitch.tv/USERNAME" name="twitchLink">
-													<label for = "replay_file">Choose Replay File:</label>
-													<input id="replay" type= "file" name = "replay_file" accept= ".rofl"/>
+
+														<label><b>Twitch TV Stream</b></label>
+														<input id="twitch" type="text" placeholder="http://www.twitch.tv/USERNAME" name="twitchLink">
 														<button type="submit">Save Changes</button>
-													</div>
-												</div>
+			
 
-												<div id="Student" class="tabcontent large-12 medium-12 large-centered medium-centered columns">
 
+											</div>
+
+											<div id="Student" class="tabcontent large-12 medium-12 large-centered medium-centered columns">
 													<h3>Edit your preferences as a Student</h3>
 													<div class="container">
 														<fieldset>
@@ -125,60 +110,60 @@
 														</select>
 														<button type="submit">Save Changes</button>
 													</div>
-												</div>
-
-
-												<div id="Coach" class="tabcontent large-12 medium-12 large-centered medium-centered columns">
-													<h3>Edit your preferences as a Coach</h3>
-													<div>
-														<label for="yes_no_radio">Coach a replay file</label>
-														<input type="radio" name="yes_no" id="yes_no_yes">Yes</input>
-													<input type="radio" name="yes_no" id="yes_no_no">No</input>
 											</div>
-											<fieldset>
-												<legend>Choose your Expertise (Note: If you choose the Everything option don't pick others)</legend>
 
-												<input type="checkbox" id="EverythingC" name="expertise" value="EverythingC">
-												<label for = "EverythingC">Everything!</label><br>
 
-												<input type="checkbox" id="LastHittingC" name="expertise" value="LastHittingC">
-												<label for = "LastHittingC">Last Hitting</label><br>
+											<div id="Coach" class="tabcontent large-12 medium-12 large-centered medium-centered columns">
+												<h3>Edit your preferences as a Coach</h3>
+												<div>
+													<label for="yes_no_radio">Coach a replay file</label>
+													<input type="radio" name="yes_no" id="yes_no_yes">Yes</input>
+													<input type="radio" name="yes_no" id="yes_no_no">No</input>
+												</div>
+												
+												<fieldset>
+													<legend>Choose your Expertise (Note: If you choose the Everything option don't pick others)</legend>
 
-												<input type="checkbox" id="MacroC" name="expertise" value="MacroC">
-												<label for = "MacroC">Macro</label><br>
+													<input type="checkbox" id="EverythingC" name="expertise" value="EverythingC">
+													<label for = "EverythingC">Everything!</label><br>
 
-												<input type="checkbox" id="MapAwarenessC" name="expertise" value="MapC">
-												<label for = "MapAwarenessC">Map Awareness</label><br>
+													<input type="checkbox" id="LastHittingC" name="expertise" value="LastHittingC">
+													<label for = "LastHittingC">Last Hitting</label><br>
 
-												<input type="checkbox" id="SkillshotsC" name="expertise" value="SkillshotsC">
-												<label for = "SkillshotsC">Skillshots (Offense/Defence)</label><br>
+													<input type="checkbox" id="MacroC" name="expertise" value="MacroC">
+													<label for = "MacroC">Macro</label><br>
 
-												<input type="checkbox" id="FreezingC" name="expertise" value="FreezingC">
-												<label for = "FreezingC">Freezing Waves</label><br>
+													<input type="checkbox" id="MapAwarenessC" name="expertise" value="MapC">
+													<label for = "MapAwarenessC">Map Awareness</label><br>
 
-												<input type="checkbox" id="MatchupsC" name="expertise" value="MatchupsC">
-												<label for = "MatchupsC">Matchups</label><br>
+													<input type="checkbox" id="SkillshotsC" name="expertise" value="SkillshotsC">
+													<label for = "SkillshotsC">Skillshots (Offense/Defence)</label><br>
 
-												<input type="checkbox" id="SetUpC" name="expertise" value="SetUpC">
-												<label for = "SetUpC">Set-up</label><br>
-											</fieldset>
+													<input type="checkbox" id="FreezingC" name="expertise" value="FreezingC">
+													<label for = "FreezingC">Freezing Waves</label><br>
 
-											<p>Select the highest elo student you would be willing to coach</p>
-											<select name="minRankC" id="maxStudentRank">
-												<option value="0" selected = "selected"> No Preference</option>
-												<option value="1"> Bronze</option>
-												<option value="2"> Silver</option>
-												<option value="3"> Gold</option>
-												<option value="4"> Platinum</option>
-												<option value="5"> Diamond</option>
-												<option value="6"> Master</option>
-												<option value="7"> Challenger</option>
-											</select>
-											<button type="submit">Save Changes</button>
-										</div>
-									</form>
+													<input type="checkbox" id="MatchupsC" name="expertise" value="MatchupsC">
+													<label for = "MatchupsC">Matchups</label><br>
+
+													<input type="checkbox" id="SetUpC" name="expertise" value="SetUpC">
+													<label for = "SetUpC">Set-up</label><br>
+												</fieldset>
+
+												<p>Select the highest elo student you would be willing to coach</p>
+												<select name="minRankC" id="maxStudentRank">
+													<option value="0" selected = "selected"> No Preference</option>
+													<option value="1"> Bronze</option>
+													<option value="2"> Silver</option>
+													<option value="3"> Gold</option>
+													<option value="4"> Platinum</option>
+													<option value="5"> Diamond</option>
+													<option value="6"> Master</option>
+													<option value="7"> Challenger</option>
+												</select>
+												<button type="submit">Save Changes</button>
+											</div>
+										</form>
 									</div>
-							</div>
 							<script>
 								function OpenPrefForm(evt, PrefPage) {
 									var i, tabcontent, tablinks;
