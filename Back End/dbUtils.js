@@ -462,6 +462,7 @@ module.exports =
 	getUID,
 	set_previous_partners,
 	get_previous_partner,
+	save_chat_session,
 	get_chat_sessions,
     db
 }
