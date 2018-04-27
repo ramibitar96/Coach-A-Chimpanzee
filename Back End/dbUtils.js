@@ -412,12 +412,29 @@ async function save_chat_session(chatroom)
  * {
  * 		user1:    <string>
  * 		user2: 	  <string>
- * 		drawLog:  <array of something, idk what>
- * 		gameData: <probably a JSON object from RIOT's API.>
+ * 		draw_log:  <array of something, idk what>
+ * 		game_data: <probably a JSON object from RIOT's API.>
  * }
  */
-async function get_recent_chat_sessions()
+async function get_chat_sessions()
 {
+	// Get them from the database
+	let query =
+	`
+		SELECT * FROM chat_session
+		ORDER BY datetime(creation_time) DESC;
+	`;
+	let rows = await dbUtils.all(query);
+
+	// Go through them and parse those two JSON objects
+	for (let i = 0; i < rows.length; i++)
+	{
+		rows[i].draw_log = JSON.parse(rows[i].draw_log);
+		rows[i].game_data = JSON.parse(rows[i].game_data);
+	}
+
+	// Return that shit
+	return rows;
 }
 
 // Executes the SQL script specified by filePath.
