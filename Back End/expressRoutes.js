@@ -328,17 +328,9 @@ module.exports = function(app)
             res.send({inGame: false});
             return;
         }
-        let username = authResults.username;
-
-        // Return true if they have a replay file uploaded
-        let replays = await dbUtils.getReplays(username);
-        if (replays !== null)
-        {
-            res.send({inGame: true});
-            return;
-        }
-
+        
         // Ask Riot if they're in a game
+        let username = authResults.username;
         let match_data = await riotUtils.get_spectate_data(username);
 
         let inGame = match_data !== null;
