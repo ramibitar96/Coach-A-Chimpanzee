@@ -7,6 +7,7 @@ $.ajax({
 });
 
 function parseIdata(json) {
+	alert(json.stringify);
 	var json_image = json["img"];
 	document["profileImage"].src = json_image;
 } 
