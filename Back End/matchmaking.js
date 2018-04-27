@@ -71,6 +71,19 @@ function calculateQuotient(student, coach) {
 
 	var skillWeight = 10 / numWeaknesses;
 	var quotient = 0;
+
+	// Account for 'everything' option
+	if (student.weaknesses[0] == true) {
+		for (var i = 1; i < student.weaknesses.length; i++) {
+			student.weaknesses[i] = true;
+		}
+	}
+	if (coach.strengths[0] == true) {
+		for (var i = 1; i < coach.strengths.length; i++) {
+			coach.strengths[i] = true;
+		}
+	}
+
 	for (var i = 0; i < coach.strengths.length; i++) {
 		if (student.weaknesses[i] == true && coach.strengths[i] == true) {
 			quotient += skillWeight;
