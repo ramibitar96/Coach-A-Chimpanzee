@@ -373,22 +373,28 @@ async function get_reviews(coach_username)
 	return results;
 }
 
-//get replays for the specified username
+// get replays for the specified username
+// If there are none, returns null.
 async function getReplays(username) 
 {
-  let uid = await getUID(username);
+  	let uid = await getUID(username);
 	console.log(uid);
 	getReplaysQuery = "select replay_url from replays where replay_owner_id=?";
 	getResults = await db.all(getReplaysQuery, uid);
-	if(getResults != undefined) {
-		results = [];
-		for(let row of getResults) {
-			let resObj = {url:row.replay_url};
-			results.push(resObj);
-		}
-		console.log(results);
-		return results;
-	};
+
+	// If there are no replays for this user, return null
+	if (getResults === undefined)
+		return null;
+
+	// Put the results in a different form.
+	results = [];
+	for(let row of getResults)
+	{
+		let resObj = {url:row.replay_url};
+		results.push(resObj);
+	}
+	console.log(results);
+	return results;
 };
 
 // Records the pervious partners of a newly matched pair
