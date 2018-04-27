@@ -207,7 +207,8 @@ module.exports = function(app)
             return;
         }
 
-        // TODO: Call dbUtils
+        // Call dbUtils
+        dbUtils.deleteReplays(authResults.username);
     });
 
 	// Sets the user preferences of the currently logged-in user.
