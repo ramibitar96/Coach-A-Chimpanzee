@@ -373,7 +373,8 @@ async function get_reviews(coach_username)
 	return results;
 }
 
-//get replays for the specified username
+// get replays for the specified username
+// If there are none, returns null.
 async function getReplays(username) 
 {
   	let uid = await getUID(username);
