@@ -25,6 +25,7 @@ class Chatroom {
         this.chatroomNumber = chatroomNumber;
         this.log = "";
         this.drawLog = [];
+        this.gameData = null;
     }
 }
 
@@ -126,7 +127,7 @@ module.exports = function(io)
         {
             console.log(authResult.username + ": " + msg);
 
-            if (getPartner(username) == null && chatrooms[userChatrooms[username]].user2 != null) {
+            if (getPartner(username) == null && chatrooms[userChatrooms[username]] != undefined && chatrooms[userChatrooms[username]].user2 != null) {
                 // TODO: check if chatroom allows users other than student/coach to chat
                 console.log("ERROR: no partner found");
                 return;
@@ -297,6 +298,7 @@ module.exports = function(io)
             }
             let partnerSocket = userSockets[partnerName];
 				console.log("passing game_data to partner");
+            chatrooms[userChatrooms[username]].gameData = data;
             partnerSocket.emit('game_data', data);
         });
 
@@ -356,7 +358,7 @@ module.exports = function(io)
 			//whiteboard
 			socket.on('drawing', function(data)
 			{
-            if (getPartner(username) == null && chatrooms[userChatrooms[username]].user2 != null) {
+            if (getPartner(username) == null && chatrooms[userChatrooms[username]] != undefined && chatrooms[userChatrooms[username]].user2 != null) {
                 // TODO: check if chatroom allows users other than student/coach to draw
                 return;
             }
