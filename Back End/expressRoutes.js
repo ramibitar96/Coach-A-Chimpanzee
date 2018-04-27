@@ -109,8 +109,21 @@ module.exports = function(app)
         // Retrieve the user prefs and send them.
         let results = await dbUtils.getUserPrefs(authResults.username);
         res.send(results);
-    });
-    
+	});
+
+	app.get('/get_pfp', async function(req,res)
+	{
+		let token = req.cookies.session_token;
+		let authResults = await auth.checkToken(token);
+		if(authResults.error_code != 0)
+		{
+			res.send({error_code: authResults.error_code});
+		}
+		//get the pfp and send it back
+		let results = await dbUtils.getPfp(authResults.username);
+		res.send(results);
+	});
+
 	app.post('/set_pfp', async function(req, res)
     {
         let token = req.cookies.session_token;

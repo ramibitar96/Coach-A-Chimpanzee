@@ -108,6 +108,29 @@ async function getUserPrefs(username)
 
 	return output;
 }
+//retrieve pfp
+async function getProfileImg(username)
+{
+  let getQuery = "select profile_img from user where user_name = ?";
+	let getPromise = db.run
+	  (
+			getQuery,
+			username
+		);
+	getImg = await getPromise;
+	img = "./imgs/default.png";
+  if(getImg != undefined) {
+		if(getImg.profile_img != null) {
+			img = profile_img;
+		}
+	}
+	let output = 
+		{
+			error_code: ErrorCodeEnum.SUCCESS,
+			img: img
+		};
+	return output;
+}
 //allows user to set profile image
 async function setProfileImg(username,url)
 {
