@@ -112,7 +112,7 @@ async function getUserPrefs(username)
 async function getProfileImg(username)
 {
   let getQuery = "select profile_img from user where user_name = ?";
-	let getPromise = db.run
+	let getPromise = db.get
 	  (
 			getQuery,
 			username
@@ -121,7 +121,7 @@ async function getProfileImg(username)
 	img = "./imgs/default.png";
   if(getImg != undefined) {
 		if(getImg.profile_img != null) {
-			img = profile_img;
+			img = getImg.profile_img.split("../frontend/")[1];
 		}
 	}
 	let output = 
@@ -129,6 +129,7 @@ async function getProfileImg(username)
 			error_code: ErrorCodeEnum.SUCCESS,
 			img: img
 		};
+	console.log(JSON.stringify(output));
 	return output;
 }
 //allows user to set profile image
@@ -397,6 +398,14 @@ async function getReplays(username)
 	return results;
 };
 
+// Deletes all replays by the given user
+async function deleteReplays(username)
+{
+	let uid = await getUID(username);
+	let query = "DELETE FROM replays WHERE replay_owner_id = ?;"
+	await db.run(query, uid);
+}
+
 // Records the pervious partners of a newly matched pair
 // TODO: Save this in the database instead of in memory
 let previousPartners = {};
@@ -504,6 +513,7 @@ module.exports =
 	setProfileImg,
 	getProfileImg,
 	uploadReplayFile,
+	deleteReplays,
 	add_review,
 	get_reviews,
 	getReplays,

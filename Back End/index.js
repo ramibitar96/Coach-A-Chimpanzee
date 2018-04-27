@@ -1,7 +1,7 @@
 // Imports
 const express = require('express');
 const socketIO = require('socket.io');          // Socket.io, the framework we use for the chat functionality
-
+global.__basedir = __dirname;
 const expressRoutes = require('./expressRoutes.js');
 const socketIOEvents = require('./socketIOEvents.js');
 const dbUtils = require('./dbUtils.js');
