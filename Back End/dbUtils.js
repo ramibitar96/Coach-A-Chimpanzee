@@ -448,8 +448,9 @@ async function save_chat_session(chatroom)
 		VALUES (?, ?, ?, ?, ?, ?);
 	`;
 
-	db.run
+	await db.run
 	(
+		query,
 		chatroom.user1,
 		chatroom.user2,
 		new Date(),
@@ -473,12 +474,13 @@ async function save_chat_session(chatroom)
 async function get_chat_sessions()
 {
 	// Get them from the database
-	let query =
+	/*let query =
 	`
 		SELECT user1, user2, log, draw_log, game_data
 		FROM chat_session
 		ORDER BY datetime(creation_time) DESC;
-	`;
+	`;*/
+	let query = "SELECT * FROM chat_session";
 	let rows = await db.all(query);
 
 	// Go through them and parse those two JSON objects
