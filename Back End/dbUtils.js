@@ -412,6 +412,7 @@ async function save_chat_session(chatroom)
  * {
  * 		user1:    <string>
  * 		user2: 	  <string>
+ * 		log:	  <string>	// The whole chat log all in one giant string LMAO
  * 		draw_log:  <array of something, idk what>
  * 		game_data: <probably a JSON object from RIOT's API.>
  * }
@@ -421,7 +422,8 @@ async function get_chat_sessions()
 	// Get them from the database
 	let query =
 	`
-		SELECT * FROM chat_session
+		SELECT user1, user2, log, draw_log, game_data
+		FROM chat_session
 		ORDER BY datetime(creation_time) DESC;
 	`;
 	let rows = await dbUtils.all(query);
