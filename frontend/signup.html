@@ -55,7 +55,7 @@
 			<form class="signup-form" data-abide>
 				<div class="name-field large-10 medium-10 push-1">
 					<label>Username <small>required</small>
-						<input type="text" name="username" required pattern="[a-zA-Z]+">
+						<input type="text" name="username" required pattern="[a-zA-Z0-9]+">
 					</label>
 					<small class="error">Name is required and must be a string.</small>
 				</div>
@@ -67,13 +67,13 @@
 				</div>
 				<div class="password-field large-10 medium-10 push-1">
 					<label>Password <small>required</small>
-						<input type="password" name="password" id="password" required pattern="[a-zA-Z]+">
+						<input type="password" name="password" id="password" required pattern="^[a-zA-Z0-9].{3,9}">
 					</label>
 					<small class="error">Your password must match the requirements</small>
 				</div>
 				<div class="password-confirmation-field large-10 medium-10 push-1">
 					<label>Confirm Password <small>required</small>
-						<input type="password" required pattern="[a-zA-Z]+" data-equalto="password">
+						<input type="password" name="password2" required pattern="^[a-zA-Z0-9].{3,9}" data-equalto="password">
 					</label>
 					<small class="error">The password did not match</small>
 				</div>	

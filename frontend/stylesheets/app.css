@@ -6621,6 +6621,11 @@ th.hide-for-touch {
       opacity: 1; }
     .top-bar .login-text:after {
       top: 25px !important; }
+  .top-bar .profile-search {
+    padding-right: 70px; }
+    .top-bar .profile-search .columns {
+      padding-left: 0 !important;
+      padding-right: 0 !important; }
   .top-bar .SignIn {
     width: 200px !important;
     padding-left: 10px;
@@ -6760,9 +6765,77 @@ th.hide-for-touch {
     .signup-container button:hover {
       background-color: #5e5e5e; }
 
-.qmain {
+.main {
   background-image: url("../img/queue-bg.jpg");
-  background-size: cover; }
+  background-size: cover;
+  display: block;
+  position: relative;
+  height: 100%; }
+
+.qmain {
+  overflow: auto;
+  margin: 0 auto;
+  padding-top: 180px; }
+  .qmain .qleft, .qmain .qright {
+    padding-top: 20px;
+    padding-bottom: 20px; }
+    .qmain .qleft .qintro, .qmain .qright .qintro {
+      padding-bottom: 20px;
+      text-align: center; }
+      .qmain .qleft .qintro h4, .qmain .qright .qintro h4 {
+        color: white; }
+  .qmain .qleft {
+    border-right: 1px solid white; }
+    .qmain .qleft .qoptions .qbutton {
+      padding-bottom: 10px;
+      text-align: center; }
+      .qmain .qleft .qoptions .qbutton a {
+        width: 200px;
+        border-radius: 15px; }
+  .qmain .qright {
+    border-left: 1px solid white; }
+    .qmain .qright .qtable #tbody a {
+      font-size: 14px;
+      color: black;
+      line-height: 40px;
+      margin: 0;
+      padding-top: 0;
+      padding-bottom: 0; }
+    .qmain .qright .qtable #tbody td {
+      padding: 0;
+      padding-left: 10px;
+      font-size: 14px;
+      color: black;
+      line-height: 40px;
+      height: 20px; }
+    .qmain .qright .qjoin, .qmain .qright .qtable {
+      margin: 0 auto; }
+    .qmain .qright .qjoin > div {
+      display: inline-block; }
+      .qmain .qright .qjoin > div.right {
+        margin-right: 10px; }
+    .qmain .qright .qjoin input, .qmain .qright .qjoin a {
+      height: 40px;
+      line-height: 40px; }
+    .qmain .qright .qjoin a {
+      padding-top: 0;
+      padding-bottom: 0; }
+    .qmain .qright .qjoin #refresh {
+      display: block;
+      width: 40px;
+      text-align: center;
+      line-height: 40px;
+      color: white;
+      font-size: 30px;
+      font-weight: 800; }
+      .qmain .qright .qjoin #refresh:hover {
+        transform: rotate(180deg);
+        transition-duration: 1s; }
+
+.user {
+  font-size: 16px;
+  color: white;
+  margin-right: 10px; }
 
 .profile-main {
   padding-top: 100px; }
@@ -6802,6 +6875,260 @@ th.hide-for-touch {
     transition: all .3s ease-in-out; }
     .star-rating label:hover, .star-rating label:hover ~ label {
       color: #f2b600; }
+
+.chatroom .cr-topbar {
+  z-index: 10;
+  position: relative;
+  height: 75px;
+  background-color: black; }
+  .chatroom .cr-topbar .cr-topbar-content .cr-topbar-left {
+    float: left;
+    padding-left: 5px;
+    margin: 0; }
+    .chatroom .cr-topbar .cr-topbar-content .cr-topbar-left .cr-topbar-general > a {
+      background-image: url(../img/info.jpeg); }
+    .chatroom .cr-topbar .cr-topbar-content .cr-topbar-left .cr-topbar-whiteboard > a {
+      background-image: url(../img/minimap-icon.png); }
+    .chatroom .cr-topbar .cr-topbar-content .cr-topbar-left .cr-topbar-btn {
+      display: inline-block;
+      height: 65px;
+      width: 65px;
+      margin-top: 5px; }
+      .chatroom .cr-topbar .cr-topbar-content .cr-topbar-left .cr-topbar-btn > a {
+        display: block;
+        height: 63px;
+        padding: 1px;
+        background-size: contain;
+        background-repeat: no-repeat; }
+        .chatroom .cr-topbar .cr-topbar-content .cr-topbar-left .cr-topbar-btn > a.blue {
+          border: 1px solid blue; }
+        .chatroom .cr-topbar .cr-topbar-content .cr-topbar-left .cr-topbar-btn > a.red {
+          border: 1px solid red; }
+        .chatroom .cr-topbar .cr-topbar-content .cr-topbar-left .cr-topbar-btn > a:focus {
+          outline: none; }
+  .chatroom .cr-topbar .cr-topbar-content .cr-topbar-right {
+    float: right;
+    height: 75px; }
+    .chatroom .cr-topbar .cr-topbar-content .cr-topbar-right .button {
+      line-height: 33px;
+      padding-left: 10px;
+      padding-right: 10px;
+      padding-top: 0;
+      padding-bottom: 0;
+      width: 100px;
+      border-bottom: 1px solid black;
+      border-top: 5px solid black; }
+    .chatroom .cr-topbar .cr-topbar-content .cr-topbar-right > div {
+      margin: 0;
+      padding: 0; }
+      .chatroom .cr-topbar .cr-topbar-content .cr-topbar-right > div > a {
+        margin: 0; }
+      .chatroom .cr-topbar .cr-topbar-content .cr-topbar-right > div.privacy.red {
+        background-color: red; }
+      .chatroom .cr-topbar .cr-topbar-content .cr-topbar-right > div.privacy.yellow {
+        background-color: yellow; }
+      .chatroom .cr-topbar .cr-topbar-content .cr-topbar-right > div.privacy.green {
+        background-color: green; }
+      .chatroom .cr-topbar .cr-topbar-content .cr-topbar-right > div.privacy a {
+        border-top: 1px solid black;
+        border-bottom: 5px solid black;
+        width: 100px;
+        line-height: 30px;
+        padding-left: 20px;
+        padding-right: 20px;
+        color: white;
+        display: block; }
+.chatroom .cr-bottom {
+  height: calc(100vh - 75px); }
+  .chatroom .cr-bottom .cr-filler {
+    height: 100%;
+    display: inline-block;
+    float: left;
+    position: relative;
+    z-index: 10; }
+  .chatroom .cr-bottom .cr-dynamic {
+    height: 100%;
+    display: inline-block;
+    margin-right: 1px; }
+    .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion,
+    .chatroom .cr-bottom .cr-dynamic .cr-dynamic-whiteboard,
+    .chatroom .cr-bottom .cr-dynamic .cr-dynamic-general {
+      height: 100%; }
+    .chatroom .cr-bottom .cr-dynamic .cr-dynamic-general {
+      background-color: blue; }
+      .chatroom .cr-bottom .cr-dynamic .cr-dynamic-general .ban-info {
+        margin-left: 10px;
+        margin-right: 10px; }
+        .chatroom .cr-bottom .cr-dynamic .cr-dynamic-general .ban-info .ban-img img {
+          display: inline-block;
+          height: 40px;
+          margin-right: 5px; }
+      .chatroom .cr-bottom .cr-dynamic .cr-dynamic-general .team-info {
+        margin-left: 10px;
+        margin-right: 10px; }
+    .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion {
+      position: relative;
+      background-color: pink; }
+      .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion .item-info,
+      .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion .basic-info,
+      .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion .dmg-info,
+      .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion .other-info {
+        margin-left: 10px;
+        margin-right: 10px; }
+      .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion .dmg-info .chart-container {
+        display: inline-block;
+        width: 48%; }
+      .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion .item-info .item-img {
+        display: inline-block;
+        padding-right: 5px; }
+        .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion .item-info .item-img img {
+          width: 40px;
+          height: 40px; }
+      .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion .other-info > div {
+        display: inline-block;
+        width: 50%; }
+      .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion .basic-info > div {
+        background-size: 45px;
+        background-repeat: no-repeat;
+        display: inline-block;
+        padding-left: 30px;
+        margin-right: 30px; }
+        .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion .basic-info > div.kda {
+          background-image: url(../img/score-icon.png); }
+        .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion .basic-info > div.cs {
+          background-image: url(../img/cs-icon.png); }
+        .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion .basic-info > div.gold {
+          background-image: url(../img/gold-icon.png); }
+        .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion .basic-info > div.lane {
+          padding-left: 0;
+          font-weight: 800; }
+        .chatroom .cr-bottom .cr-dynamic .cr-dynamic-champion .basic-info > div p {
+          font-size: 30px;
+          line-height: 30px; }
+    .chatroom .cr-bottom .cr-dynamic .cr-dynamic-whiteboard {
+      background-image: url("../img/minimap.jpg");
+      background-size: contain;
+      background-repeat: no-repeat; }
+      .chatroom .cr-bottom .cr-dynamic .cr-dynamic-whiteboard canvas {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0; }
+  .chatroom .cr-bottom .cr-chat {
+    height: 100%;
+    display: inline-block;
+    float: right;
+    background-color: blue;
+    position: relative;
+    z-index: 10; }
+    .chatroom .cr-bottom .cr-chat textarea {
+      resize: none;
+      height: inherit; }
+    .chatroom .cr-bottom .cr-chat #emote {
+      position: absolute;
+      height: 50px;
+      width: 50px;
+      background-color: yellow;
+      background-size: contain;
+      background-repeat: no-repeat;
+      opacity: 0;
+      bottom: 50px;
+      -webkit-animation-duration: 1s;
+      animation-duration: 1s;
+      -webkit-animation-fill-mode: both;
+      animation-fill-mode: both; }
+@-webkit-keyframes fadeOut {
+  0% {
+    opacity: 1; }
+  100% {
+    opacity: 0; } }
+@keyframes fadeOut {
+  0% {
+    opacity: 1; }
+  100% {
+    opacity: 0; } }
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0; }
+  100% {
+    opacity: 1; } }
+@keyframes fadeIn {
+  0% {
+    opacity: 0; }
+  100% {
+    opacity: 1; } }
+    .chatroom .cr-bottom .cr-chat .fadeOut {
+      -webkit-animation-name: fadeOut;
+      animation-name: fadeOut; }
+    .chatroom .cr-bottom .cr-chat .fadeIn {
+      -webkit-animation-name: fadeIn;
+      animation-name: fadeIn; }
+    .chatroom .cr-bottom .cr-chat .cr-chat-form {
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      background-color: green; }
+      .chatroom .cr-bottom .cr-chat .cr-chat-form input, .chatroom .cr-bottom .cr-chat .cr-chat-form button {
+        margin: 0;
+        padding: 0;
+        display: inline-block;
+        height: 50px; }
+      .chatroom .cr-bottom .cr-chat .cr-chat-form input {
+        width: 80%;
+        float: left; }
+      .chatroom .cr-bottom .cr-chat .cr-chat-form button {
+        width: 20%;
+        float: right; }
+
+#spectateStudent ul {
+  margin: 0 auto;
+  width: 480px; }
+  #spectateStudent ul li {
+    width: 240px;
+    border-top: 2px solid lightgrey; }
+    #spectateStudent ul li.active {
+      border-top: 2px solid black; }
+    #spectateStudent ul li a {
+      text-align: center;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      padding-left: 20px;
+      padding-right: 20px;
+      background-color: transparent; }
+      #spectateStudent ul li a:focus {
+        outline: none; }
+#spectateStudent #windows p {
+  margin-bottom: 10px; }
+#spectateStudent #windows .spectateImage {
+  height: 220px;
+  background: url(../img/spectate_message.gif); }
+#spectateStudent #mac p {
+  margin-bottom: 10px; }
+#spectateStudent #mac textarea {
+  resize: none;
+  height: 200px; }
+  #spectateStudent #mac textarea:focus {
+    border: none; }
+
+#spectateStudent {
+  width: 550px !important; }
+
+#askToToggle,
+#inGameCheck,
+#spectateStudent {
+  width: 400px; }
+  #askToToggle h4,
+  #inGameCheck h4,
+  #spectateStudent h4 {
+    text-align: center;
+    margin-bottom: 20px; }
+  #askToToggle a,
+  #inGameCheck a,
+  #spectateStudent a {
+    display: block; }
 
 body {
   overflow: hidden; }

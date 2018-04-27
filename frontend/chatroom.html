@@ -11,14 +11,102 @@
 		<script src="js/vendor/modernizr.js"></script>
 	</head>
 
-	<body>
+	<body onresize="resizeChat()">
 		<audio id="alert" src="audio/alert.mp3" preload="auto"></audio>
-		<div class="section large-6 medium-6 columns left">		
-			<textarea id = "chatArea" style=" resize: none; height: 70vh" readonly></textarea>
-			<input type = "text" id = "inputText" onkeypress="keypressHandle(event)" style="width:80vh"/>
-			<button onclick="sendMessage()">Send</button>
-		</div>		
-		<a class="button" href="#" onclick="openModal()">End Chat</a>
+
+
+		<!-- STYLING FOR CHATROOM -->
+		<div class="chatroom">
+				<!-- topbar -->
+				<div class="cr-topbar">
+					<div class="cr-topbar-content large-10 large-push-1">
+						<!-- options (stats, skills, items, map) -->
+						<ul class="cr-topbar-left tabs" data-tab>
+							<li class="tab-title cr-topbar-btn "><a id="cimg1" class="blue" href="#champion1"></a></li>
+							<li class="tab-title cr-topbar-btn "><a id="cimg2" class="blue" href="#champion2"></a></li>
+							<li class="tab-title cr-topbar-btn "><a id="cimg3" class="blue" href="#champion3"></a></li>
+							<li class="tab-title cr-topbar-btn "><a id="cimg4" class="blue" href="#champion4"></a></li>
+							<li class="tab-title cr-topbar-btn "><a id="cimg5" class="blue" href="#champion5"></a></li>
+							<li class="tab-title cr-topbar-btn "><a id="cimg6" class="red" href="#champion6"></a></li>
+							<li class="tab-title cr-topbar-btn "><a id="cimg7" class="red" href="#champion7"></a></li>
+							<li class="tab-title cr-topbar-btn "><a id="cimg8" class="red" href="#champion8"></a></li>
+							<li class="tab-title cr-topbar-btn "><a id="cimg9" class="red" href="#champion9"></a></li>
+							<li class="tab-title cr-topbar-btn "><a id="cimg10" class="red" href="#champion10"></a></li>
+							<li class="tab-title cr-topbar-btn cr-topbar-general"><a href="#general"></a></li>
+							<li class="tab-title cr-topbar-btn cr-topbar-whiteboard active"><a href="#whiteboard"></a></li>
+						</ul>
+
+						<!-- disconnect and public switch -->
+						<div class="cr-topbar-right">
+							<div>
+								<a class="button" href="#" onclick="openModal()">End Chat</a>
+							</div>
+							<div class="privacy red"> 
+								<a href="#" onclick="askToggle()">Private</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			
+				<div class="cr-bottom">
+					<div class="large-only large-1 cr-filler"></div>
+					<!-- dynamic area TABS -->
+					<div class="cr-dynamic tabs-content">
+						<div class="content cr-dynamic-champion" id="champion1"></div>
+						<div class="content cr-dynamic-champion" id="champion2"></div>
+						<div class="content cr-dynamic-champion" id="champion3"></div>
+						<div class="content cr-dynamic-champion" id="champion4"></div>
+						<div class="content cr-dynamic-champion" id="champion5"></div>
+						<div class="content cr-dynamic-champion" id="champion6"></div>
+						<div class="content cr-dynamic-champion" id="champion7"></div>
+						<div class="content cr-dynamic-champion" id="champion8"></div>
+						<div class="content cr-dynamic-champion" id="champion9"></div>
+						<div class="content cr-dynamic-champion" id="champion10"></div>
+						<div class="content cr-dynamic-general" id="general">
+							<div class="ban-info" id="ban-info">
+								<h4>Bans</h4>
+							</div>
+							<div class="team-info">
+								<h4>Teams</h4>
+								<table>
+									<thead>
+										<tr>
+											<th width="20%">Team</th>
+											<th width="11%">Win</th>
+											<th width="23%">Baron Kills</th>
+											<th width="23%">Dragon Kills</th>
+											<th width="23%">Rift Herald Kills</th>
+										</tr>
+									</thead>
+									<tbody id="team-body">
+										<tr id="blueTeam">
+											<td>Blue</td>
+										</tr>
+										<tr id="redTeam">
+											<td>Red</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						
+						</div>
+						<div class="content active cr-dynamic-whiteboard" id="whiteboard">
+							<canvas class="whiteboard"></canvas>	
+						</div>
+					</div>
+
+					<!-- chat area -->
+				 	<div class="cr-chat large-pull-1">
+						<textarea id="chatArea" readonly></textarea>
+						<div id="emote"></div>
+						<div class="cr-chat-form">
+							<input type="text" id="inputText" onkeypress="keypressHandle(event)"></input>
+						<button onclick="sendMessage()">Send</button>
+						</div>	
+					</div>
+				</div>
+			</div>
+		</div>
 
 		<!-- modal -->
 		<div id="endChat" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" data-options="close_on_background_click:false; close_on_esc: false;">
@@ -63,7 +151,50 @@
 			</form>
 		</div>
 
+		<!-- toggle privacy modal -->
+		<div id="askToToggle" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" data-options="close_on_background_click:false; close_on_esc: false;">
+			<div class="row">
+				<h4>Switch to Public Room?</h2>
+			</div>
+			<div class="row">
+				<a class="button" id="togglePublic" href="#" onclick="respondToggle(true)">Yes</a>
+				<a class="button" id="togglePrivate" href="#" onclick="respondToggle(false)">No</a>
+			</div>
+		</div>
 
+		<!-- get spectate game information -->
+		<div id="spectateStudent" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" data-options="close_on_background_click:false; close_on_esc: false;">
+			<div class="row">
+				<h4>Spectate Game</h2>
+			</div>
+			<ul class="tabs" data-tab>
+				<li class="tab-title active"><a href="#mac">Mac</a></li>
+				<li class="tab-title"><a href="#windows" onclick="serveWindows()">Windows</a></li>
+			</ul>
+			<div class="tabs-content">
+				<div class="content active" id="mac">
+					<p>Run <em>Terminal</em> and then paste</p>
+					<textarea id="serveMac" readonly>test</textarea>
+				</div>
+				<div class="content" id="windows">
+					<p>
+						A file should begin downloading in a moment. If not, click 
+						<a id="download" href="../img/minimap.jpg" download>download</a>
+					</p>
+					<div class="spectateImage"></div>
+				</div>
+			</div>	
+		</div>
+		
+		<!-- While in game -->
+		<div id="inGameCheck" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" data-options="close_on_background_click:false; close_on_esc: false;">
+			<div class="row">
+				<h4>When your game is completed...</h2>
+			</div>
+			<div class="row">
+				<a class="button" id="togglePrivate" href="#" onclick="gameOver()">Continue</a>
+			</div>
+		</div>
 	</body>
 	<script src="js/vendor/jquery.js"></script>
 	<script src="js/foundation.min.js"></script>
@@ -71,8 +202,27 @@
 	<script src="js/custom/check.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="js/custom/chat.js"></script>
+	<script src="js/custom/spectate.js"></script>
+	<script src="js/custom/parseGameData.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
 	<script>
 		$(document).foundation();
 	</script> 
+	<script>
+		//styling
+		$(".cr-dynamic").width($(".cr-dynamic").height());
+
+		var w = $(".cr-bottom").width() - $(".cr-dynamic").width() - (2*$(".cr-filler").width());
+		$(".cr-chat").width(w - 3);
+
+		function resizeChat() {
+			//styling
+			$(".cr-dynamic").width($(".cr-dynamic").height());
+
+			var w = $(".cr-bottom").width() - $(".cr-dynamic").width() - (2*$(".cr-filler").width());
+			$(".cr-chat").width(w - 3);
+		}
+	</script>
 </html>
 

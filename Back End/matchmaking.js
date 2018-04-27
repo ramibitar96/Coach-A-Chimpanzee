@@ -1,5 +1,6 @@
 // Imports
 const io = require('socket.io-client');
+const dbUtils = require('./dbUtils.js');
 
 var Rank = {
 	Any: 0,
@@ -99,9 +100,14 @@ function matchUsers() {
 		}
 
 		if (highestQuotient > 0) {
+			// Put them in the list of matched users
 			var mp = new MatchedPair(students.splice(studentIndex, 1)[0], coaches.splice(highestIndex, 1)[0]);
 			matchedUsers.push(mp);
 
+			// Update the previous partners in the database
+			dbUtils.set_previous_partners(mp.coach.name, mp.student.name);
+
+			// Tell the user they've found a match
 			var socket = io.connect('http://localhost:3000');
 			socket.emit('matchFound', mp.student.name);
 		} else {
@@ -138,6 +144,16 @@ function findPartner(username) {
 	return null;
 }
 
+function isUserCoach(username) {
+	for (var i = 0; i < matchedUsers.length; i++) {
+		if (matchedUsers[i].coach == username) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 function removeMatchedPair(username) {
 	for (var i = 0; i < matchedUsers.length; i++) {
 		var student = matchedUsers[i].student;
@@ -168,6 +184,7 @@ module.exports = {
 	addStudent,
 	addCoach,
 	findPartner,
+	isUserCoach,
 	removeMatchedPair,
 	isInQueue,
 	User

@@ -3,6 +3,7 @@ const sqlite = require('sqlite');
 const fs = require('fs');
 const strip = require('sql-strip-comments');
 const ErrorCodeEnum = require('./errorCodes.js');
+const riotUtils = require('./riotUtils.JS');
 
 var db;     // The connection to the SQLite database.
 
@@ -19,10 +20,14 @@ async function initializeDatabase()
 }
 
 // Returns the given user's uid.
+// If there is no such user, returns undefined.
 async function getUID(username)
 {
 	let query = "SELECT rowid FROM user WHERE user_name = ?;"
 	let queryResult = await db.get(query, username);
+
+	if (queryResult === undefined)
+		return undefined;
 
 	return queryResult.rowid;
 }
@@ -33,20 +38,15 @@ async function getUserPrefs(username)
 {
 	// Get the user id
 	// TODO: Refactor this so user id is passed as a parameter isntead.
-	let uidQuery = "SELECT rowid FROM user WHERE user_name = ?;";
-	let uidResults = await db.get(uidQuery, username);
-	let uid = uidResults.rowid;
+	let uid = await getUID(username);
 
-	// Query for the summoner name and rank
-	// TODO: Replace summoner_name and current_rank with a query to Riot's servers
+	// Query for current rank and misc stuff
 	let miscPrefsQuery = 
 	`
 		SELECT
 			user_id,
 			view_replay,
 			twitch_name,
-			summoner_name,
-			current_rank,
 			min_coach_rank,
 			max_coachee_rank
 		FROM 
@@ -55,22 +55,24 @@ async function getUserPrefs(username)
 			user_id = ?;
 	`;
 
-	let miscPrefs = await db.get(miscPrefsQuery, uid);
+	let miscPrefsPromise = db.get(miscPrefsQuery, uid);
+	let current_rank_promise = riotUtils.get_rank(username);
 
-	// TODO: What was I thinking?  Refactor this bullshit.
+	let miscPrefs = await miscPrefsPromise
+	let current_rank = await current_rank_promise;
+
+	// If misc prefs weren't found, they'll have these default values
 	let view_replay = null;
 	let twitch_name = null;
-	let summoner_name = null;
-	let current_rank = -1;
+	
 	let min_coach_rank = -1;
 	let max_coachee_rank = -1;
 
+	// If the misc prefs were found, get them
 	if (miscPrefs != undefined)
 	{
 		view_replay = Boolean(miscPrefs.view_replay);	// SQLite returns integers 0 and 1, so we need to cast to a bool
 		twitch_name = miscPrefs.twitch_name;
-		summoner_name = miscPrefs.summoner_name;
-		current_rank = miscPrefs.current_rank;
 		min_coach_rank = miscPrefs.min_coach_rank;
 		max_coachee_rank = miscPrefs.max_coachee_rank;
 	}
@@ -87,7 +89,6 @@ async function getUserPrefs(username)
 		user:
 		{
 			twitch_name: twitch_name,
-			summoner_name: summoner_name,
 			current_rank: current_rank
 		},
 
@@ -171,12 +172,10 @@ async function setUserPrefs(username, prefsData)
 			user_id,
 			view_replay,
 			twitch_name,
-			summoner_name,
-			current_rank,
 			min_coach_rank,
 			max_coachee_rank
 		)
-		VALUES (?, ?, ?, ?, ?, ?, ?);
+		VALUES (?, ?, ?, ?, ?);
 	`;
 
 	let miscPrefsPromise = db.run
@@ -185,8 +184,6 @@ async function setUserPrefs(username, prefsData)
 		uid,
 		prefsData.coach.view_replay,
 		prefsData.user.twitch_name,
-		prefsData.user.summoner_name,
-		prefsData.user.current_rank,
 		prefsData.student.min_coach_rank,
 		prefsData.coach.max_coachee_rank
 	);
@@ -305,9 +302,16 @@ async function add_review(student_uid, coach_uid, rating, text)
 }
 
 // Returns all reviews for the given user
-async function get_reviews(coach_uid)
+// If there is no such users, returns undefined
+async function get_reviews(coach_username)
 {
+	// Get the userid
 	// TODO: Error checking
+	let coach_uid = await getUID(coach_username);
+
+	// Error if the username doesn't exist
+	if (coach_uid === undefined)
+		return undefined;
 
 	// Grab the reviews from the database
 	let query = 
@@ -349,6 +353,23 @@ async function get_reviews(coach_uid)
 	return results;
 }
 
+// Records the pervious partners of a newly matched pair
+// TODO: Save this in the database instead of in memory
+let previousPartners = {};
+async function set_previous_partners(coach_username, student_username)
+{
+	console.log("updating last partners of " + coach_username + " and " + student_username);
+	previousPartners[coach_username] = student_username;
+	previousPartners[student_username] = coach_username;
+}
+
+// Retrieves the previous partner of the given user
+// TODO: retrieve this from database instead of memory
+async function get_previous_partner(username)
+{
+	return previousPartners[username];
+}
+
 // Executes the SQL script specified by filePath.
 // Returns a Promise<sqlite.Statement> when it's done.
 // filePath's type is string.  db's type is sqlite.Database
@@ -370,5 +391,7 @@ module.exports =
 	add_review,
 	get_reviews,
 	getUID,
+	set_previous_partners,
+	get_previous_partner,
     db
 }
