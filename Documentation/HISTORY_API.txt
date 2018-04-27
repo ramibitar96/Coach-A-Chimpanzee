@@ -1,0 +1,13 @@
+To get the data needed for history.html, send a GET request to localhost:3000/get_history
+
+It will reply with an array of JSON objects looking like this:
+{
+  		user1:    <string>
+  		user2: 	  <string>
+  		log:	  <string>	// The whole chat log all in one giant string LMAO
+  		draw_log:  <array of something, idk what>
+ 		game_data: <probably a JSON object from RIOT's API.>
+}
+
+If there's any kind of error on the server side, it will just send back null.
+Error codes are tedious.
