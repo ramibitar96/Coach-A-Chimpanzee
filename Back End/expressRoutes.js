@@ -345,6 +345,18 @@ module.exports = function(app)
         res.send(results);
     });
 
+    app.get('/get_history', async function(req, res)
+    {
+        try
+        {
+            res.send(await dbUtils.get_chat_sessions());
+        }
+        catch (e)
+        {
+            res.send(null);
+        }
+    });
+
     // Returns a webpage displaying the username of the currently-logged-in user.
     app.get('/whats_my_username', async function(req, res)
     {
