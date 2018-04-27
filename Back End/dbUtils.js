@@ -502,6 +502,7 @@ module.exports =
 	getUserPrefs,
 	setUserPrefs,
 	setProfileImg,
+	getProfileImg,
 	uploadReplayFile,
 	add_review,
 	get_reviews,
