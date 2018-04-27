@@ -83,7 +83,7 @@ function enterChatroom() {
 function enterChatroom(id) {
 	// Join chatroom
 	localStorage.setItem("queueType","2");
-	localStorage.setItem("chatroomNumber", id);
+	localStorage.setItem("chatroomNumber", document.getElementById("joinRoom").value);
 	window.location.assign("chatroom.html");
 }
 
