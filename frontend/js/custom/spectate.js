@@ -27,5 +27,8 @@ function serveMac() {
 }
 
 function serveWindows() {	
-	document.getElementById('download').click();
+	var d = document.getElementById("download");
+	//set file location
+	d.href = "../img/minimap.jpg";
+	d.click();
 }
