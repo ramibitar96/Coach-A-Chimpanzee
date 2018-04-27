@@ -311,6 +311,18 @@ function init(io)
             chatrooms[userChatrooms[username]].gameData = data;
             partnerSocket.emit('game_data', data);
         });
+		  
+			socket.on('replay_file', function(data)
+        {
+            let partnerName = getPartner(username);
+            if (partnerName == undefined) {
+                console.log("ERROR: no match for this user");
+                return;
+            }
+            let partnerSocket = userSockets[partnerName];
+				console.log("passing replay_file to partner");
+            partnerSocket.emit('replay_file', data);
+        });
 
         socket.on('match_over', function(data)
         {

@@ -488,6 +488,51 @@ function throttle(callback, delay) {
 				}
 			});
 
+			function getMatchId(filename) {
+				filename = filename.split("-")[1];
+				filename = filename.split(".")[0];
+				return filename;
+			}
+
+			function checkReplay() {
+				$.ajax({
+						type: "GET",
+						url: "http://localhost:3000/get_replays",
+						success: function(data) {
+							if (data.length == 0) { //no replay
+								socket.emit("end_chat", "end_chat");
+							}
+							else { //has replay
+								//emit match id
+								socket.emit("replay_file", getMatchId(data[0]));
+								
+								//display
+								displayReplay(getMatchId(data[0]));
+							}
+						}
+				});
+			}
+			
+			socket.on('replay_file', function(msg) { 
+				displayReplay(msg);
+			}
+
+			function displayReplay(match) {
+				$.ajax({
+						type: "GET",
+						url: "http://localhost:3000/get_match?gameid=" + match,
+						success: function(data) {
+							var json = JSON.stringify(data);
+							socket.emit("game_data", json);
+							parseGame(json);
+							$('#inGameCheck').foundation('reveal', 'close');
+							$('#spectateStudent').foundation('reveal', 'close');
+						}
+				});
+
+			}
+
+
 			function gameOver() {
 				if (debug) {
 					socket.emit("match_over","");	
@@ -504,41 +549,41 @@ function throttle(callback, delay) {
 								socket.emit("match_over","");	
 								$('#inGameCheck').foundation('reveal', 'close');
 							}
-							else {
-								alert("You are still in a game!");
+							else { //check if has replay
+								checkReplay();
 							}
 						}
 				});
-				}
+			}
 
-				socket.on('match_over', function(msg) {
-					$.ajax({
-							type: "GET",
-							url: "http://localhost:3000/get_match?gameid=" + gameId,
-							success: function(data) {
-								var json = JSON.stringify(data);
-								socket.emit("game_data", json);
-								parseGame(json);
-								$('#spectateStudent').foundation('reveal', 'close');
-							}
-					});
-				});
-
-				socket.on("game_data", function(msg) {
-					parseGame(msg);
-				});
-
-				function getCookie(cname) {
-					var name = cname + "=";
-					var ca = document.cookie.split(';');
-					for(var i = 0; i < ca.length; i++) {
-						var c = ca[i];
-						while (c.charAt(0) == ' ') {
-							c = c.substring(1);
+			socket.on('match_over', function(msg) {
+				$.ajax({
+						type: "GET",
+						url: "http://localhost:3000/get_match?gameid=" + gameId,
+						success: function(data) {
+							var json = JSON.stringify(data);
+							socket.emit("game_data", json);
+							parseGame(json);
+							$('#spectateStudent').foundation('reveal', 'close');
 						}
-						if (c.indexOf(name) == 0) {
-							return c.substring(name.length, c.length);
-						}
+				});
+			});
+
+			socket.on("game_data", function(msg) {
+				parseGame(msg);
+			});
+
+			function getCookie(cname) {
+				var name = cname + "=";
+				var ca = document.cookie.split(';');
+				for(var i = 0; i < ca.length; i++) {
+					var c = ca[i];
+					while (c.charAt(0) == ' ') {
+						c = c.substring(1);
 					}
-					return "";
+					if (c.indexOf(name) == 0) {
+						return c.substring(name.length, c.length);
+					}
 				}
+				return "";
+			}
