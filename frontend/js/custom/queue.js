@@ -37,6 +37,22 @@ socket.on('ama_list', function(msg)
 	}
 });
 
+function checkReplay() {
+	$.ajax({
+		type: "GET",
+		url: "http://localhost:3000/get_replays",
+		success: function(data) {
+			if (data.length == 0) { //no replay
+				alert("Please upload a replay file or get in game");			
+			}
+			else { //has replay
+				localStorage.setItem("queueType","0");
+				window.location.assign("chatroom.html");	
+			}
+		}
+	});
+}
+
 function queueStudent() {
 	//debug users are test and test2
 	if (user != "test" && user != "test2") {
@@ -50,8 +66,9 @@ function queueStudent() {
 					localStorage.setItem("queueType","0");
 					window.location.assign("chatroom.html");	
 				}
-				else { //if false no redirect
-					alert("You are not in a game");
+				else { //if false
+					//check if replay exists
+					checkReplay();
 				}
 			}
 		});
