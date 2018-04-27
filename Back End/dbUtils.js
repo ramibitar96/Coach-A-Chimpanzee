@@ -410,6 +410,21 @@ async function save_chat_session(chatroom)
 	);
 }
 
+/**
+ * Gets all recent chat sessions, sorted by their date/time.
+ * Returns them as an array of json objects in the following form:
+ * {
+ * 		user1:    <string>
+ * 		user2: 	  <string>
+ * 		drawLog:  <array of something, idk what>
+ * 		gameData: <probably a JSON object from RIOT's API.>
+ * }
+ */
+async function get_recent_chat_sessions()
+{
+	
+}
+
 // Executes the SQL script specified by filePath.
 // Returns a Promise<sqlite.Statement> when it's done.
 // filePath's type is string.  db's type is sqlite.Database
