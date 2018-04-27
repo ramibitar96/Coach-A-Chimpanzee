@@ -21,7 +21,7 @@ function serveFile(k, p, s) {
 }
 
 function serveMac() {
-	var text = 'cd /Applications/League\ of\ Legends.app/Contents/LoL/RADS/solutions/lol_game_client_sln/releases/ && cd $(ls -1vr -d */ | head -1) && cd deploy && chmod +x ./LeagueofLegends.app/Contents/MacOS/LeagueofLegends && riot_launched=true ./LeagueofLegends.app/Contents/MacOS/LeagueofLegends 8394 LoLLauncher "" "spectator ' + link + ' ' + key + ' ' + summonerId + ' ' + platformId + '"';
+	var text = 'cd /Applications/League\\ of\\ Legends.app/Contents/LoL/RADS/solutions/lol_game_client_sln/releases/ && cd $(ls -1vr -d */ | head -1) && cd deploy && chmod +x ./LeagueofLegends.app/Contents/MacOS/LeagueofLegends && riot_launched=true ./LeagueofLegends.app/Contents/MacOS/LeagueofLegends 8394 LoLLauncher "" "spectator ' + link + ' ' + key + ' ' + summonerId + ' ' + platformId + '"';
 
 	$("#serveMac").text(text);
 }

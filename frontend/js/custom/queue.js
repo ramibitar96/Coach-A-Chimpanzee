@@ -46,6 +46,7 @@ function checkReplay() {
 				alert("Please upload a replay file or get in game");			
 			}
 			else { //has replay
+				alert("has replay");
 				localStorage.setItem("queueType","0");
 				window.location.assign("chatroom.html");	
 			}
@@ -63,6 +64,7 @@ function queueStudent() {
 			success: function(data) {
 				//if true redirect
 				if (data["inGame"]) {
+					alert("in game");
 					localStorage.setItem("queueType","0");
 					window.location.assign("chatroom.html");	
 				}
