@@ -120,7 +120,7 @@ module.exports = function(app)
 			res.send({error_code: authResults.error_code});
 		}
 		//get the pfp and send it back
-		let results = await dbUtils.getPfp(authResults.username);
+		let results = await dbUtils.getProfileImg(authResults.username);
 		res.send(results);
 	});
   app.get('/get_replays',async function(req,res) 
