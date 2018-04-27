@@ -194,6 +194,22 @@ module.exports = function(app)
 				});
     });
 
+    app.post('/delete_replay', async function(req, res)
+    {
+        // Figure out what user it is.
+        let token = req.cookies.session_token;
+        let authResults = await auth.checkToken(token);
+
+        //send error code	
+        if (authResults.error_code != 0)
+        {
+            res.send({error_code: authResults.error_code});
+            return;
+        }
+
+        // TODO: Call dbUtils
+    });
+
 	// Sets the user preferences of the currently logged-in user.
 	app.post('/set_prefs', async function(req, res)
     {
