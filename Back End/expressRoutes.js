@@ -370,6 +370,7 @@ module.exports = function(app)
         }
         catch (e)
         {
+            console.log(e);
             res.send(null);
         }
     });
