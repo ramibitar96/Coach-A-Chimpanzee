@@ -47,7 +47,7 @@
 		<div class="profile-main push-2 large-8 medium-8">
 			<div class="basic-info row">
 				<div class="profile-image large-3 medium-3 columns">
-					<img src="./img/profile_temp.png" class="p-img"/>
+					<img id = "profileImage" class="p-img"/>
 				</div>
 				<div class="name large-9 medium-9 columns">
 					<h2 class="summoner_name"></h2>
@@ -75,6 +75,12 @@
 		<button type="submit">Upload Replay</button>
     </form>   
 
+    <!-- 
+	TODO TEST AND FIX
+    -->
+    <form action = "localhost:3000/delete_replay" method = "post">
+        <input type="submit" name="deleteReplay" value="delete" />
+    </form>
 
 
 		<div id="twitch-embed" class="twitch-embed columns row"></div>
