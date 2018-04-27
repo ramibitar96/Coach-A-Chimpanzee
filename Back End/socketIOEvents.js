@@ -224,7 +224,7 @@ function init(io)
         });
 
         // When a chat is being ended
-        socket.on('end_chat', function(msg)
+        socket.on('end_chat', async function(msg)
         {
             let partnerName = getPartner(username);
             let userSocket = userSockets[username];
@@ -252,7 +252,8 @@ function init(io)
 
             // Send chat log to database
             let chatroom = chatrooms[chatroomNumber];
-            dbUtils.save_chat_session(chatroom);
+            console.log("saving chatroom " + JSON.stringify(chatroom));
+            await dbUtils.save_chat_session(chatroom);
 
             // delete all applicable chatroom dictionary entries
             delete userChatrooms[username];
@@ -264,7 +265,7 @@ function init(io)
             }
         });
 
-        socket.on('end_ama', function(msg)
+        socket.on('end_ama', async function(msg)
         {
             if (chatrooms[userChatrooms[username]].user1 != username) {
                 return;
@@ -287,7 +288,7 @@ function init(io)
 
             // Send chat log to database
             let chatroom = chatrooms[chatroomNumber];
-            dbUtils.save_chat_session(chatroom);
+            await dbUtils.save_chat_session(chatroom);
 
             // delete all applicable chatroom dictionary entries
             delete userChatrooms[username];
