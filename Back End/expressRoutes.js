@@ -7,6 +7,7 @@ const matchmaking = require('./matchmaking.js');
 const riotUtils = require('./riotUtils.js');
 const ErrorCodeEnum = require('./errorCodes.js');
 const fs = require('fs');
+const rp = require('fs.realpath');
 const path = require('path');
 const formidable = require('formidable'),
 	http = require('http'),
@@ -121,6 +122,8 @@ module.exports = function(app)
 		}
 		//get the pfp and send it back
 		let results = await dbUtils.getProfileImg(authResults.username);
+		//console.log(path.resolve(results.img));
+		console.log(JSON.stringify(results));
 		res.send(results);
 	});
   app.get('/get_replays',async function(req,res) 
@@ -152,7 +155,7 @@ module.exports = function(app)
 				form.parse(req, function(err, fields, files) {
 					var op = files.profile_pic.path;
 					var name = files.profile_pic.name;
-					var np = './imgs/'+authResults.username + 
+					var np = '../frontend/imgs/'+authResults.username + 
 						name.substring(name.lastIndexOf("."));
 					//write the pfp to the server
 					fs.rename(op,np, function(err) {
@@ -183,8 +186,7 @@ module.exports = function(app)
 				form.parse(req, function(err, fields, files) {
 					var op = files.replay_file.path;
 					var name = files.replay_file.name;
-					var np = './replays/'+authResults.username + 
-						name.substring(name.lastIndexOf(".")-2);
+					var np = '../frontend/replays/'+ name;
 					//write the pfp to the server
 					fs.rename(op,np, function(err) {
 						if(err) throw err;
