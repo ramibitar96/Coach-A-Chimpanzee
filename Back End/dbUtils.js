@@ -370,6 +370,46 @@ async function get_previous_partner(username)
 	return previousPartners[username];
 }
 
+/**
+ * Creates an entry in the database for a chat session
+ * chatroom is of type "Chatroom" from socketIOEvents.js
+ */
+async function save_chat_session(chatroom)
+{
+	// Get user ids
+	let uid_1 = await getUID(chatroom.user1);
+	let uid_2 = await getUID(chatroom.user2);
+
+	// Stringify the json data that we can't natively store in the DB
+	let drawLog_str = JSON.stringify(chatroom.drawLog);
+	let gameData_str = JSON.stringify(chatroom.gameData);
+
+	// Put it in the database
+	let query =
+	`
+		INSERT INTO chat_session
+		(
+			user1_id,
+			user2_id,
+			creation_time,
+			log,
+			draw_log,
+			game_data
+		)
+		VALUES (?, ?, ?, ?, ?, ?);
+	`;
+
+	db.run
+	(
+		uid_1,
+		uid_2,
+		new Date(),
+		chatroom.log,
+		drawLog_str,
+		gameData_str
+	);
+}
+
 // Executes the SQL script specified by filePath.
 // Returns a Promise<sqlite.Statement> when it's done.
 // filePath's type is string.  db's type is sqlite.Database
